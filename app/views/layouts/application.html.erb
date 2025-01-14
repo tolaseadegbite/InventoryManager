@@ -24,8 +24,12 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
-    </main>
+    <%= render "shared/navbar" %>
+    <%= render "shared/sidebar" %>
+    <div class="p-4 sm:ml-64">
+      <div class="p-4 mt-14">
+        <%= yield %>
+      </div>
+    </div>
   </body>
 </html>
