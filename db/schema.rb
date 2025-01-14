@@ -44,7 +44,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_14_145321) do
   create_table "profiles", force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "name", null: false
-    t.integer "role", default: 0
+    t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_profiles_on_account_id"

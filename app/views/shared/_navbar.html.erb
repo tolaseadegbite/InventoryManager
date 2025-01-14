@@ -9,7 +9,7 @@
             </svg>
          </button>
         <%= link_to root_path do %>
-          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Afso Inventory Store</span>
+          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Afso Inventory</span>
         <% end %>
       </div>
       <div class="flex items-center">
@@ -31,25 +31,28 @@
               <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
             </button>
           </div>
-          <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+          <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 border" id="dropdown-user">
             <div class="px-4 py-3" role="none">
               <p class="text-sm text-gray-900 dark:text-white" role="none">
-                Neil Sims (Admin)
+                <%= current_account.profile.name %> (<%= current_account.profile.role %>)
               </p>
               <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                neil.sims@flowbite.com
+                <%= current_account.email %>
               </p>
             </div>
             <ul class="py-1" role="none">
               <li>
-                <%= link_to root_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" do %>
-                  Settings
+                <%= link_to rodauth.change_login_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" do %>
+                  Change email
                 <% end %>
               </li>
               <li>
-                <%= link_to root_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" do %>
-                  Logout
+                <%= link_to rodauth.change_password_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" do %>
+                  Change password
                 <% end %>
+              </li>
+              <li>
+                <%= link_to 'Sign out', rodauth.logout_path, data: { turbo_method: :post }, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
               </li>
             </ul>
           </div>
