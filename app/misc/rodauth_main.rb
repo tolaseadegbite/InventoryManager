@@ -3,7 +3,7 @@ require "sequel/core"
 class RodauthMain < Rodauth::Rails::Auth
   configure do
     # List of authentication features that are loaded.
-    enable :create_account, :verify_account, :verify_account_grace_period,
+    enable :create_account, :verify_account,
       :login, :logout, :remember,
       :reset_password, :change_password, :change_login, :verify_login_change,
       :close_account
@@ -121,14 +121,14 @@ class RodauthMain < Rodauth::Rails::Auth
     # end
 
     # Perform additional actions after the account is created.
-    # after_create_account do
-    #   Profile.create!(account_id: account_id, name: param("name"))
-    # end
+    after_create_account do
+      Profile.create!(account_id: account_id, name: param("name"), role: param("role"))
+    end
 
     # Do additional cleanup after the account is closed.
-    # after_close_account do
-    #   Profile.find_by!(account_id: account_id).destroy
-    # end
+    after_close_account do
+      Profile.find_by!(account_id: account_id).destroy
+    end
 
     # ==> Redirects
     # Redirect to home page after logout.
