@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_14_185551) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_14_211936) do
   create_table "account_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -39,6 +39,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_14_185551) do
     t.string "email", null: false
     t.string "password_hash"
     t.integer "categories_count", default: 0
+    t.integer "role", default: 1, null: false
     t.index ["email"], name: "index_accounts_on_email", unique: true, where: "status IN (1, 2)"
   end
 
@@ -55,7 +56,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_14_185551) do
   create_table "profiles", force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "name", null: false
-    t.integer "role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_profiles_on_account_id"

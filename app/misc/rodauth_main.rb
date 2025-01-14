@@ -116,13 +116,13 @@ class RodauthMain < Rodauth::Rails::Auth
 
     # ==> Hooks
     # Validate custom fields in the create account form.
-    # before_create_account do
-    #   throw_error_status(422, "name", "must be present") if param("name").empty?
-    # end
+    before_create_account do
+      throw_error_status(422, "name", "must be present") if param("name").empty?
+    end
 
     # Perform additional actions after the account is created.
     after_create_account do
-      Profile.create!(account_id: account_id, name: param("name"), role: 0)
+      Profile.create!(account_id: account_id, name: param("name"))
     end
 
     # Do additional cleanup after the account is closed.
