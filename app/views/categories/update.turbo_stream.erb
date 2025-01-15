@@ -2,4 +2,8 @@
   <%= render @category %>
 <% end %>
 
+<%= turbo_stream.update 'show_header' do %>
+  <%= render 'categories/components/show_header' %>
+<% end %>
+
 <%#= render_turbo_stream_flash_messages %>

@@ -50,8 +50,8 @@ class CategoriesController < ApplicationController
   def destroy
     @category.destroy
     respond_to do |format|
-      format.html { redirect_to @category, notice: "Category deleted successfully" }
-      format.turbo_stream { flash.now[:notice] = 'Category deleted successfully' }
+      format.html { redirect_to categories_url, notice: "Category deleted successfully" }
+      # format.turbo_stream { flash.now[:notice] = 'Category deleted successfully' }
     end
   end
 

@@ -23,7 +23,7 @@
 
     <div class="mb-7">
         <div class="flex gap-2 items-center justify-between mb-5 md:mb-2">
-            <h1 class="font-bold text-xl">Items <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= Item.count %></span></h1>
+            <h1 class="font-bold text-xl">Items <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'items/components/header_counter_badge' %></span></h1>
 
             <% if current_account.Admin? %>
                 <%= link_to new_item_path, class: "inline-flex whitespace-nowrap items-center gap-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800", data: { turbo_frame: :modal } do %>
@@ -45,7 +45,6 @@
         </div>
         <%= turbo_frame_tag "items" do %>
                 <%= render @items %>
-            </ul>
         <% end %>
     </div>
 </div>

@@ -4,4 +4,8 @@
 
 <%= turbo_stream.update Category.new, '' %>
 
+<%= turbo_stream.update 'header_counter_badge' do %>
+    <%= render 'categories/components/header_counter_badge' %>
+<% end %>
+
 <%#= render_turbo_stream_flash_messages %>

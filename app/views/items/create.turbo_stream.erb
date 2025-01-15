@@ -1,0 +1,11 @@
+<%= turbo_stream.prepend "items" do %>
+    <%= render @item %>
+<% end %>
+
+<%= turbo_stream.update Item.new, '' %>
+
+<%= turbo_stream.update 'header_counter_badge' do %>
+    <%= render 'items/components/header_counter_badge' %>
+<% end %>
+
+<%#= render_turbo_stream_flash_messages %>

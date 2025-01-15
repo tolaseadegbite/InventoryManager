@@ -24,8 +24,12 @@ class ItemsController < ApplicationController
     @item = current_account.items.build(item_params)
     
     if @item.save
-      redirect_to @item, notice: 'Item was successfully created.'
+      respond_to do |format|
+        format.html { redirect_to @item, notice: "Item was successfully created" }
+        format.turbo_stream { flash.now[:notice] = 'Item was successfully created' }
+      end
     else
+      flash.now[:alert] = "Failed to create item. Please check the errors below."
       render :new, status: :unprocessable_entity
     end
   end
@@ -36,14 +40,22 @@ class ItemsController < ApplicationController
 
   def update
     if @item.update(item_params)
-      redirect_to @item, notice: 'Item was successfully updated.'
+      respond_to do |format|
+        format.html { redirect_to @item, notice: "Item was successfully updated" }
+        format.turbo_stream { flash.now[:notice] = 'Item was successfully updated' }
+      end
     else
+      flash.now[:alert] = "Failed to update item. Please check the errors below."
       render :new, status: :unprocessable_entity
     end
   end
 
   def destroy
-    
+    @item.destroy
+    respond_to do |format|
+      format.html { redirect_to items_url, notice: "Item deleted successfully" }
+      # format.turbo_stream { flash.now[:notice] = 'Item deleted successfully' }
+    end
   end
 
   def add_quantity
