@@ -1,6 +1,6 @@
 class Item < ApplicationRecord
-  belongs_to :category, optional: true
-  belongs_to :account
+  belongs_to :category, counter_cache: :items_count, optional: true
+  belongs_to :account, counter_cache: :items_count
   has_many :inventory_actions, dependent: :destroy
   
   validates :name, presence: true, length: { minimum: 2, maximum: 100 }

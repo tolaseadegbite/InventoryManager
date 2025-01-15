@@ -1,6 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :authenticate!
   before_action :find_category, only: %w[show edit update destroy]
+  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
 
   def index
     @categories = Category.all.ordered
@@ -62,5 +63,11 @@ class CategoriesController < ApplicationController
 
   def find_category
     @category = Category.find(params[:id])
+  end
+
+  def require_admin
+    unless current_account.Admin?
+      redirect_to categories_path, alert: 'Unauthorized action.'
+    end
   end
 end
