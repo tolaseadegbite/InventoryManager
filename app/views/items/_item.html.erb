@@ -1,0 +1,22 @@
+<%= turbo_frame_tag item do %>
+    <ul class="flex justify-between items-center p-4 shadow-md rounded-3xl border mb-5">
+        <li class="w-1/4 font-semibold"><h1><%= link_to item.name, item, data: { turbo_frame: "_top" } %></h1></li>
+        <li class="w-1/4"><%= link_to item.quantity %></li>
+        <li class="w-1/4 text-orange-500"><%= link_to item.category.name || 'Not set' %></li>
+        <li class="inline-flex gap-2 items-center w-1/4">
+            <% if current_account.Admin? %>
+                <%= link_to edit_item_path(item), class: "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700", data: {action: "click->dialog#open", turbo_frame: :modal} do %>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                <% end %>
+            <% end %>
+
+            <%= link_to item_path(item), data: { turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "text-red-900 bg-red border border-red-300 focus:outline-none hover:bg-red-100 focus:ring-4 focus:ring-red-100 font-medium rounded-lg text-sm px-2 py-2 me-2 mb-2 dark:bg-red-800 dark:text-white dark:border-red-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-red-700" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+                </svg>
+            <% end %>
+        </li>
+    </ul>
+<% end %>

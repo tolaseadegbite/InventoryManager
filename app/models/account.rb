@@ -6,4 +6,5 @@ class Account < ApplicationRecord
   has_one :profile
 
   has_many :categories, dependent: :destroy
+  has_many :items, dependent: :destroy
 end

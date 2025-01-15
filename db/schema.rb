@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_14_211936) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_15_073918) do
   create_table "account_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -53,6 +53,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_14_211936) do
     t.index ["account_id"], name: "index_categories_on_account_id"
   end
 
+  create_table "inventory_actions", force: :cascade do |t|
+    t.integer "item_id", null: false
+    t.integer "account_id", null: false
+    t.string "action_type", null: false
+    t.integer "quantity", null: false
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_inventory_actions_on_account_id"
+    t.index ["item_id"], name: "index_inventory_actions_on_item_id"
+  end
+
+  create_table "items", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "quantity", default: 0
+    t.integer "category_id"
+    t.integer "account_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_items_on_account_id"
+    t.index ["category_id"], name: "index_items_on_category_id"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.integer "account_id", null: false
     t.string "name", null: false
@@ -66,5 +90,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_14_211936) do
   add_foreign_key "account_remember_keys", "accounts", column: "id"
   add_foreign_key "account_verification_keys", "accounts", column: "id"
   add_foreign_key "categories", "accounts"
+  add_foreign_key "inventory_actions", "accounts"
+  add_foreign_key "inventory_actions", "items"
+  add_foreign_key "items", "accounts"
+  add_foreign_key "items", "categories"
   add_foreign_key "profiles", "accounts"
 end

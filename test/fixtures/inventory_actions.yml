@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item: one
+  account: one
+  action_type: MyString
+  quantity: 1
+  notes: MyText
+
+two:
+  item: two
+  account: two
+  action_type: MyString
+  quantity: 1
+  notes: MyText
