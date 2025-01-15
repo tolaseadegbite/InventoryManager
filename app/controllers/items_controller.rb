@@ -14,7 +14,6 @@ class ItemsController < ApplicationController
     else
       @inventory_actions = @item.inventory_actions.includes(:account).where(account: current_account).ordered
     end
-    
   end
 
   def new

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_15_150606) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_15_153514) do
   create_table "account_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -41,6 +41,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_15_150606) do
     t.integer "categories_count", default: 0
     t.integer "role", default: 1, null: false
     t.integer "items_count", default: 0, null: false
+    t.integer "inventory_actions_count", default: 0, null: false
     t.index ["email"], name: "index_accounts_on_email", unique: true, where: "status IN (1, 2)"
   end
 
@@ -74,6 +75,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_15_150606) do
     t.integer "account_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "inventory_actions_count", default: 0, null: false
     t.index ["account_id"], name: "index_items_on_account_id"
     t.index ["category_id"], name: "index_items_on_category_id"
   end
