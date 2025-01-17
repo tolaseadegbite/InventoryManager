@@ -1,9 +1,0 @@
-<%= render 'layouts/modal_dialog' do %>
-  <div data-action="turbo:submit-end->dialog#submitEnd">
-    <h1 class="font-semibold text-xl sm:text-xl md:text-xl p-5 border-b">New item</h1>
-    <%= form_tag remove_quantity_item_path(@item), method: :post, class: "flex gap-2" do %>
-        <%= number_field_tag :quantity, nil, min: 1, max: @item.quantity, class: "rounded border p-2", required: true %>
-        <%= submit_tag "Remove from Stock", class: "bg-red-500 text-white px-4 py-2 rounded" %>
-    <% end %>
-  </div>
-<% end %>
