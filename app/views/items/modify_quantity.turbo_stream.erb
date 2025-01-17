@@ -1,0 +1,21 @@
+<%# Also update the item on the index page if it exists %>
+<%= turbo_stream.replace dom_id(@item) do %>
+  <%= render "item", item: @item %>
+<% end %>
+
+<%# Update the item info on the show page if it exists %>
+<%= turbo_stream.update "item_info_#{@item.id}" do %>
+  <%= render "item_info", item: @item %>
+<% end %>
+<%= turbo_stream.update "show_quantity_form" do %>
+  <%= render "items/components/show_quantity_form" %>
+<% end %>
+
+<%# Update the inventory history %>
+<%= turbo_stream.update "inventory_history_#{@item.id}" do %>
+  <%= render "inventory_history", inventory_actions: @inventory_actions %>
+<% end %>
+
+<%= turbo_stream.update "flash" do %>
+  <%= render "shared/flash", notice: "Quantity #{params[:action_type]}ed successfully." %>
+<% end %>

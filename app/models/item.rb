@@ -8,35 +8,26 @@ class Item < ApplicationRecord
   
   scope :ordered, -> { order(id: :desc) }
   
-  def add_quantity(amount, current_user)
-    return false if amount <= 0
-    
+  VALID_ACTIONS = %w[add remove].freeze
+
+  def modify_quantity(action, amount, current_account)
+    return false if amount.nil? || amount <= 0
+    return false if action == 'remove' && amount > quantity
+
     transaction do
-      increment!(:quantity, amount)
+      self.quantity = action == 'add' ? quantity + amount : quantity - amount
+      save!
+      
       inventory_actions.create!(
-        account: current_user,
-        action_type: 'add',
+        account: current_account,
+        action_type: action,
         quantity: amount
       )
     end
     true
-  rescue
-    false
-  end
-  
-  def remove_quantity(amount, current_user)
-    return false if amount <= 0 || amount > quantity
-    
-    transaction do
-      decrement!(:quantity, amount)
-      inventory_actions.create!(
-        account: current_user,
-        action_type: 'remove',
-        quantity: amount
-      )
-    end
-    true
-  rescue
+  rescue => e
+    Rails.logger.error "Failed to #{action} quantity: #{e.message}"
+    errors.add(:base, e.message)
     false
   end
 end

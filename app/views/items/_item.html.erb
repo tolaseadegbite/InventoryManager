@@ -5,14 +5,15 @@
         <li class="w-1/4"><%= item.category.present? ? link_to(item.category.name, category_path(item.category), class: " text-orange-500", data: { turbo_frame: "_top" }) : 'Not set' %></li>
         <li class="inline-flex gap-2 items-center w-1/4">
             <% if current_account.Admin? %>
-                <%= link_to edit_item_path(item), class: "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700", data: {action: "click->dialog#open", turbo_frame: :modal} do %>
+
+                <%= link_to quantity_modal_item_path(item, action_type: 'add'), data: { turbo_frame: :modal }, class: "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" do %>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
                 <% end %>
             <% end %>
 
-            <%= link_to item_path(item), data: { turbo_frame: "_top", turbo_method: :delete, turbo_confirm: "Are you sure?"}, class: "text-red-900 bg-red border border-red-300 focus:outline-none hover:bg-red-100 focus:ring-4 focus:ring-red-100 font-medium rounded-lg text-sm px-2 py-2 me-2 dark:bg-red-800 dark:text-white dark:border-red-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-red-700" do %>
+            <%= link_to quantity_modal_item_path(item, action_type: 'remove'), data: { turbo_frame: :modal }, class: "text-red-900 bg-red border border-red-300 focus:outline-none hover:bg-red-100 focus:ring-4 focus:ring-red-100 font-medium rounded-lg text-sm px-2 py-2 me-2 dark:bg-red-800 dark:text-white dark:border-red-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-red-700" do %>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                 </svg>

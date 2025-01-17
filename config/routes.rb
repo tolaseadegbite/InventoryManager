@@ -6,8 +6,8 @@ Rails.application.routes.draw do
   resources :categories
   resources :items do
     member do
-      post :add_quantity
-      post :remove_quantity
+      post :modify_quantity
+      get 'quantity_modal/:action_type', action: :quantity_modal, as: :quantity_modal
     end
   end
 

@@ -1,7 +1,8 @@
 class ItemsController < ApplicationController
   before_action :authenticate!
-  before_action :set_item, only: [:show, :edit, :update, :destroy, :add_quantity, :remove_quantity]
+  before_action :set_item, only: [:show, :edit, :update, :destroy, :modify_quantity, :quantity_modal]
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authorize_quantity_modification, only: [:modify_quantity]
 
   def index
     @items = Item.includes(:category, :account).ordered
@@ -58,21 +59,21 @@ class ItemsController < ApplicationController
     end
   end
 
-  def add_quantity
-    authorize_admin_action
-    
-    if @item.add_quantity(params[:quantity].to_i, current_account)
-      redirect_to @item, notice: 'Quantity was successfully added.'
-    else
-      redirect_to @item, alert: 'Failed to add quantity.'
-    end
+  def quantity_modal
+    @action = params[:action_type]
+    render :quantity_modal, layout: false
   end
 
-  def remove_quantity
-    if @item.remove_quantity(params[:quantity].to_i, current_account)
-      redirect_to @item, notice: 'Quantity was successfully removed.'
-    else
-      redirect_to @item, alert: 'Failed to remove quantity.'
+  def modify_quantity
+    action = params[:action_type]
+    quantity = params[:quantity].to_i
+    
+    success = @item.modify_quantity(action, quantity, current_account)
+    @inventory_actions = @item.inventory_actions.includes(:account).ordered if success
+
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to @item, notice: success ? "Quantity #{action}ed successfully." : "Failed to #{action} quantity." }
     end
   end
 
@@ -96,5 +97,10 @@ class ItemsController < ApplicationController
     unless current_account.Admin?
       redirect_to @item, alert: 'Unauthorized action.'
     end
+  end
+
+  def authorize_quantity_modification
+    return if params[:action_type] == 'remove' || current_account.Admin?
+    redirect_to @item, alert: 'Unauthorized action.'
   end
 end
