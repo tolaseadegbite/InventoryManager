@@ -56,6 +56,7 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+  gem 'letter_opener_web', '~> 3.0'
 end
 
 group :test do
@@ -65,11 +66,11 @@ group :test do
 end
 
 gem "rodauth-rails", "~> 2.0"
-
-gem "sequel-activerecord_connection", "~> 2.0"
 # Enables Sequel to use Active Record's database connection
 gem "sequel-activerecord_connection", "~> 2.0"
 # Used by Rodauth for password hashing
 gem "bcrypt", "~> 3.1"
 # Used by Rodauth for rendering built-in view and email templates
 gem "tilt", "~> 2.4"
+
+gem "noticed", "~> 2.6"

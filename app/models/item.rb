@@ -1,12 +1,21 @@
 class Item < ApplicationRecord
-  belongs_to :category, counter_cache: :items_count, optional: true
-  belongs_to :account, counter_cache: :items_count
-  has_many :inventory_actions, dependent: :destroy
+  after_save :check_stock_level, if: :should_check_stock?
   
   validates :name, presence: true, length: { minimum: 2, maximum: 100 }
   validates :quantity, numericality: { greater_than_or_equal_to: 0 }
+  validates :stock_threshold, numericality: { greater_than_or_equal_to: 0 }
+
+  belongs_to :category, counter_cache: :items_count, optional: true
+  belongs_to :account, counter_cache: :items_count
+  has_many :inventory_actions, dependent: :destroy
+  has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
+  has_many :notifications, through: :noticed_events, class_name: "Noticed::Notification"
   
   scope :ordered, -> { order(id: :desc) }
+  scope :low_stock, -> { 
+    joins(:account)
+    .where("items.quantity <= items.stock_threshold OR items.quantity <= accounts.global_stock_threshold") 
+  }
   
   VALID_ACTIONS = %w[add remove].freeze
 
@@ -29,5 +38,27 @@ class Item < ApplicationRecord
     Rails.logger.error "Failed to #{action} quantity: #{e.message}"
     errors.add(:base, e.message)
     false
+  end
+
+  private
+
+  def should_check_stock?
+    saved_change_to_quantity? || saved_change_to_stock_threshold?
+  end
+
+  def check_stock_level
+    return unless quantity.present?
+  
+    effective_threshold = [stock_threshold, account.global_stock_threshold].max
+    return unless quantity <= effective_threshold
+  
+    Account.Admin.find_each do |admin|
+      LowStockNotifier.with(
+        record_id: id, # Pass the ID instead of the full object
+        quantity: quantity,
+        threshold: effective_threshold,
+        account_id: admin.id
+      ).deliver_later(admin)
+    end
   end
 end
