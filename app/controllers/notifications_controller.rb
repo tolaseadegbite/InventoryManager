@@ -7,12 +7,12 @@ class NotificationsController < ApplicationController
   end
 
   def mark_read
-    @notification.mark_as_read!
+    @notification.mark_as_read
     redirect_back(fallback_location: notifications_path)
   end
 
   def mark_all_read
-    current_account.notifications.mark_as_read!
+    current_account.notifications.mark_as_read
     redirect_back(fallback_location: notifications_path)
   end
 
