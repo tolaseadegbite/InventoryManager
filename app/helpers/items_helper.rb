@@ -6,4 +6,13 @@ module ItemsHelper
       'Not set'
     end
   end
+
+  def low_stock?(item)
+    return false unless item.quantity.present?
+
+    # Determine the effective threshold dynamically
+    effective_threshold = [item.stock_threshold, item.account.global_stock_threshold].max
+
+    item.quantity <= effective_threshold
+  end
 end

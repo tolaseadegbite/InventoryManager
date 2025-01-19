@@ -11,10 +11,7 @@ class LowStockNotifier < Noticed::Event
     }
   end
 
-  required_param :record_id
-  required_param :quantity
-  required_param :threshold
-  required_param :account_id
+  required_param :record_id, :quantity, :threshold, :account_id
 
   notification_methods do
     def message

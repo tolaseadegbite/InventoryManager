@@ -6,4 +6,8 @@
   <%= render 'items/components/show_header' %>
 <% end %>
 
+<%= turbo_stream.update "item_info_#{@item.id}" do %>
+  <%= render "item_info", item: @item %>
+<% end %>
+
 <%#= render_turbo_stream_flash_messages %>

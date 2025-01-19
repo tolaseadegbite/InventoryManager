@@ -42,19 +42,29 @@ class Item < ApplicationRecord
 
   private
 
+  # Determine if stock level should be checked
   def should_check_stock?
     saved_change_to_quantity? || saved_change_to_stock_threshold?
   end
 
+  # Check stock levels and notify admins if stock is low
   def check_stock_level
     return unless quantity.present?
-  
+
+    # Calculate the effective threshold
     effective_threshold = [stock_threshold, account.global_stock_threshold].max
-    return unless quantity <= effective_threshold
-  
+
+    # Trigger notification if stock is below or equal to the threshold
+    if quantity <= effective_threshold
+      notify_admins_of_low_stock(effective_threshold)
+    end
+  end
+
+  # Notify admins of low stock levels
+  def notify_admins_of_low_stock(effective_threshold)
     Account.Admin.find_each do |admin|
       LowStockNotifier.with(
-        record_id: id, # Pass the ID instead of the full object
+        record_id: id,
         quantity: quantity,
         threshold: effective_threshold,
         account_id: admin.id

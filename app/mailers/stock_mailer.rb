@@ -1,5 +1,6 @@
 class StockMailer < ApplicationMailer
   def low_stock_alert(notification)
+    Rails.logger.debug "Notification argument: #{notification.inspect}"
     @notification = notification
     @item = Item.find_by(id: notification.params[:record_id])
     @recipient = notification.recipient

@@ -1,5 +1,5 @@
 <%= turbo_frame_tag item do %>
-    <ul class="flex justify-between items-center p-4 shadow-sm rounded-3xl border mb-5">
+    <ul class="<%= low_stock?(item) ? 'border border-red-400' : 'border' %> flex justify-between items-center p-4 shadow-sm rounded-3xl mb-5">
         <li class="w-1/4 font-semibold"><h1><%= link_to item.name, item, data: { turbo_frame: "_top" } %></h1></li>
         <li class="w-1/4"><%= item.quantity %></li>
         <li class="w-1/4"><%= item.category.present? ? link_to(item.category.name, category_path(item.category), class: " text-orange-500", data: { turbo_frame: "_top" }) : 'Not set' %></li>
