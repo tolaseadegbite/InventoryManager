@@ -1,6 +1,6 @@
 <% provide(:title, "Notifications") %>
 
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto">
   <div class="max-w-screen-lg mx-auto">
     <div class="bg-white rounded-lg shadow-md border">
       <div class="">
@@ -17,9 +17,9 @@
         <div class="space-y-4">
           <% @notifications.newest_first.each do |notification| %>
             
-            <div class="p-4 <%= notification.read? ? 'bg-white' : 'bg-blue-100' %>">
+            <div class="p-4 border-b <%= notification.read? ? 'bg-white' : 'bg-blue-100' %>">
               <div class="flex justify-between items-start">
-                <%= link_to notification.url do %>
+                <%= link_to mark_read_notification_path(notification), method: :post, data: { turbo: false } do %>
                   <div class="flex-1">
                     <p class="text-gray-800"><%= notification.message %></p>
                     <p class="text-sm text-gray-500 mt-1">

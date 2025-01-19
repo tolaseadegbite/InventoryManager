@@ -8,7 +8,7 @@
       <span class="font-medium">Low stock alert:</span>
         <ul class="mt-1.5 list-disc list-inside">
           <li><%= item.name %> has <%= pluralize(item.quantity, 'item') %> remaining</li>
-          <li>Threshold: <%= item.stock_threshold %></li>
+          <li>Threshold: <%= display_effective_threshold(item) %></li>
       </ul>
     </div>
   </div>
@@ -19,7 +19,7 @@
   <span>•</span>
   <div><span class="font-semibold">Quantity:</span> <%= item.quantity %></div>
   <span>•</span>
-  <div><span class="font-semibold">Stock Threshold:</span> <%= item.stock_threshold %></div>
+  <div><span class="font-semibold">Stock Threshold:</span> <%= display_effective_threshold(item) %></div>
   <span>•</span>
   <div><span class="font-semibold">Created by:</span> <span><%= item.account.profile.name || item.account.email %></span></div>
 </div>

@@ -4,6 +4,7 @@ class NotificationsController < ApplicationController
 
   def index
     @notifications = current_account.notifications.newest_first
+    current_account.notifications.unread.mark_as_read
   end
 
   def mark_read

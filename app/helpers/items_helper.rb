@@ -15,4 +15,12 @@ module ItemsHelper
 
     item.quantity <= effective_threshold
   end
+
+  def display_effective_threshold(item)
+    if item.stock_threshold&.positive?
+      "#{item.stock_threshold} (Item Threshold)"
+    else
+      "#{item.account.global_stock_threshold} (Global Threshold)"
+    end
+  end
 end

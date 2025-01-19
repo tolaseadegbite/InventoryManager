@@ -13,7 +13,7 @@
 
 <%# Update the inventory history %>
 <%= turbo_stream.update "inventory_history_#{@item.id}" do %>
-  <%= render "inventory_history", inventory_actions: @inventory_actions %>
+  <%= render "inventory_history", inventory_actions: @inventory_actions, item: @item %>
 <% end %>
 
 <%= turbo_stream.update "flash" do %>
