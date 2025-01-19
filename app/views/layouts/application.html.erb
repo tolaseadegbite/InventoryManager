@@ -29,6 +29,7 @@
     <div class="p-4 sm:ml-64">
       <div class="py-4 mt-14">
         <%= yield %>
+        <%= render partial: "shared/flash" %>
       </div>
     </div>
     <%= turbo_frame_tag :modal %>

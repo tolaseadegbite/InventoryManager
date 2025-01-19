@@ -9,7 +9,7 @@ class Item < ApplicationRecord
   belongs_to :account, counter_cache: :items_count
   has_many :inventory_actions, dependent: :destroy
   has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
-  has_many :notifications, through: :noticed_events, class_name: "Noticed::Notification"
+  has_many :notifications, through: :noticed_events, class_name: "Noticed::Notification", dependent: :destroy
   
   scope :ordered, -> { order(id: :desc) }
   scope :low_stock, -> { 
