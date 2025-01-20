@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_20_075635) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_18_201430) do
   create_table "account_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -71,7 +71,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_20_075635) do
   create_table "items", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
-    t.integer "quantity", default: 0, null: false
+    t.integer "quantity", null: false
     t.integer "category_id"
     t.integer "account_id", null: false
     t.datetime "created_at", null: false

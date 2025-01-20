@@ -3,16 +3,24 @@ module ItemsHelper
     if item.category.present?
       link_to item.category.name, category_path(item.category), class: "text-orange-500", data: { turbo_frame: "_top" }
     else
-      'Not set'
+      "Not set"
     end
   end
 
   def low_stock?(item)
-    return false unless item.quantity.present?
+    # Return false if item or its quantity is not present
+    return false unless item&.quantity.present?
 
     # Determine the effective threshold dynamically
-    effective_threshold = [item.stock_threshold, item.account.global_stock_threshold].max
+    effective_threshold = [
+      item.stock_threshold.presence || 0,
+      item.account.global_stock_threshold.presence || 0
+    ].max
 
+    # Return false if effective threshold is zero (no thresholds defined)
+    return false if effective_threshold.zero?
+
+    # Compare quantity with the effective threshold
     item.quantity <= effective_threshold
   end
 
