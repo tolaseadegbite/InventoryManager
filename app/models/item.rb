@@ -2,7 +2,7 @@ class Item < ApplicationRecord
   after_save :check_stock_level, if: :should_check_stock?
   
   validates :name, presence: true, length: { minimum: 2, maximum: 100 }
-  validates :quantity, numericality: { greater_than_or_equal_to: 0 }
+  validates :quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :stock_threshold, numericality: { greater_than_or_equal_to: 0 }
 
   belongs_to :category, counter_cache: :items_count, optional: true
