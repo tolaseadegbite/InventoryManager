@@ -1,0 +1,25 @@
+<aside id="logo-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
+   <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+      <ul class="space-y-2 font-medium">
+        <li>
+            <h1 class="text-xl font-semibold">Settings</h1>
+        </li>
+         <li class="">
+            <%= link_to settings_path, class: "inline-flex justify-between rounded-lg items-center w-full bg-gray-200 p-2 border-r-4 border-blue-700" do %>
+                Your account
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            <% end %>
+        </li>
+         <li class="">
+            <%= link_to '#', class: "inline-flex justify-between rounded-lg items-center w-full hover:bg-gray-200 p-2" do %>
+                Item settings and stock threshold
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                </svg>
+            <% end %>
+        </li>
+      </ul>
+   </div>
+</aside>

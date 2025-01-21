@@ -40,7 +40,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
-# gem "image_processing", "~> 1.2"
+gem "image_processing", "~> 1.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -72,5 +72,5 @@ gem "sequel-activerecord_connection", "~> 2.0"
 gem "bcrypt", "~> 3.1"
 # Used by Rodauth for rendering built-in view and email templates
 gem "tilt", "~> 2.4"
-
 gem "noticed", "~> 2.6"
+gem "active_storage_validations", "~> 1.4"

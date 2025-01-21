@@ -1,0 +1,9 @@
+<div class="relative inline-block">
+    <% if current_account.profile.avatar.attached? && current_account.profile.avatar.persisted? %>
+        <%= image_tag(current_account.profile.avatar, class: "w-20 h-20 object-cover rounded-full border-2 border-white", alt: "profile picture", data: { "profile-edit-form-target": "avatarPreview" }) %>
+    <% else %>
+        <%= image_tag('others/default avatar.png', class: "w-20 h-20 object-cover rounded-full border-2 border-white border-gray-800", alt: "profile picture", data: { "profile-edit-form-target": "avatarPreview" }) %>
+    <% end %>
+
+    <%= render 'settings/components/form_avatar_button' %>
+</div>

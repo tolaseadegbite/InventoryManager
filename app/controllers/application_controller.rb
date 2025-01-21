@@ -8,11 +8,15 @@ class ApplicationController < ActionController::Base
 
   def set_layout
     if rodauth.logged_in?
-      "application" # Layout for authentication-related pages
+      if rodauth.current_route.in?([:change_login, :change_password, :close_account])
+        "settings"
+      else
+        "application"
+      end
     elsif authentication_page?
-      "authentication" # Layout for authentication-related pages
+      "authentication"
     end
-  end
+  end  
 
 
 

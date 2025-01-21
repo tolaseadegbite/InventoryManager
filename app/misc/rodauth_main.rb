@@ -26,7 +26,7 @@ class RodauthMain < Rodauth::Rails::Auth
 
     # The secret key used for hashing public-facing tokens for various features.
     # Defaults to Rails `secret_key_base`, but you can use your own secret key.
-    # hmac_secret "6671427f7da1ba218273eca2b48706d26ee7f1a5a15f28ff2be2157d9aedf647796019e14ebb24102f9d354f2a63414f0a7193d725abe53239cef18b7e6551e7"
+    # hmac_secret "e610a81a16717734c1841fe2b2c0c63c352e363b61476d87017e931ee885d30c14f187a90bac31b4fa672310c28eef27ed5f4864a3cb7a388838f038d981d4e3"
 
     # Use path prefix for all routes.
     # prefix "/auth"
@@ -52,7 +52,7 @@ class RodauthMain < Rodauth::Rails::Auth
     # password_confirm_param "confirm_password"
 
     # Redirect back to originally requested location after authentication.
-    # login_return_to_requested_location? true
+    login_return_to_requested_location? true
     # two_factor_auth_return_to_requested_location? true # if using MFA
 
     # Autologin the user after they have reset their password.
@@ -62,7 +62,7 @@ class RodauthMain < Rodauth::Rails::Auth
     # delete_account_on_close? true
 
     # Redirect to the app from login and registration pages if already logged in.
-    # already_logged_in { redirect login_redirect }
+    already_logged_in { redirect login_redirect }
 
     # ==> Emails
     send_email do |email|
@@ -77,7 +77,7 @@ class RodauthMain < Rodauth::Rails::Auth
 
     # Override default flash messages.
     # create_account_notice_flash "Your account has been created. Please verify your account by visiting the confirmation link sent to your email address."
-    # require_login_error_flash "Login is required for accessing this page"
+    require_login_error_flash "Login is required for accessing this page"
     # login_notice_flash nil
 
     # ==> Validation
@@ -146,5 +146,30 @@ class RodauthMain < Rodauth::Rails::Auth
     # reset_password_deadline_interval Hash[hours: 6]
     # verify_login_change_deadline_interval Hash[days: 2]
     # remember_deadline_interval Hash[days: 30]
+
+    login_label "Email"
+
+    create_account_route "signup"
+
+    login_route "login"
+
+    change_password_route "settings/password"
+
+    change_login_route "settings/email"
+
+    close_account_route "settings/deactivate_account"
+
+    change_login_button "Submit"
+
+    close_account_button "Deactivate"
+
+    login_button "Log in"
+
+    create_account_button "Create account"
+
+    change_password_redirect "/settings/account"
+
+    change_login_redirect "/settings/account_information"
+    
   end
 end
