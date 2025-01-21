@@ -1,20 +1,34 @@
 <%= render 'layouts/modal_dialog' do %>
-  <div data-controller="modal form" data-action="turbo:submit-end->modal#submitEnd">
+  <div data-controller="modal form description" data-action="turbo:submit-end->modal#submitEnd">
     <h1 class="font-semibold text-xl p-5 border-b">
       <%= @action == 'add' ? 'Add Stock' : 'Remove Stock' %>
     </h1>
-    
+
     <%= form_with(url: modify_quantity_item_path(@item, action_type: @action),
-                method: :post,
-                class: "p-5",
-                data: { turbo: true }) do |f| %>
+                  method: :post,
+                  class: "p-5",
+                  data: { turbo: true }) do |f| %>
       <div class="mb-4">
+        <%= f.label :quantity, class: "block text-sm font-semibold" %>
         <%= f.number_field :quantity,
             min: 1,
             max: @action == 'remove' ? @item.quantity : nil,
             placeholder: 'Quantity',
             required: true,
-            class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-#{@action == 'add' ? 'green' : 'red'}-500 focus:ring-#{@action == 'add' ? 'green' : 'red'}-500" %>
+            class: "mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-#{@action == 'add' ? 'green' : 'red'}-500 focus:ring-#{@action == 'add' ? 'green' : 'red'}-500" %>
+      </div>
+
+      <div class="mb-4 text-sm">
+        <a href="#" data-action="click->description#toggle" data-description-target="toggleLink" class="text-blue-500 hover:underline">
+          Click to add description
+        </a>
+      </div>
+
+      <div class="mb-4 hidden" data-description-target="notesField">
+        <%= f.label :notes, class: "block text-sm font-semibold" %>
+        <%= f.text_area :notes,
+          placeholder: 'Add optional notes',
+          class: "mt-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-#{@action == 'add' ? 'green' : 'red'}-500 focus:ring-#{@action == 'add' ? 'green' : 'red'}-500" %>
       </div>
 
       <div class="flex justify-end gap-3">

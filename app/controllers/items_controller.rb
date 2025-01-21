@@ -66,15 +66,16 @@ class ItemsController < ApplicationController
   def modify_quantity
     action = params[:action_type]
     quantity = params[:quantity].to_i
-
-    success = @item.modify_quantity(action, quantity, current_account)
+    notes = params[:notes] # Extract notes from parameters
+  
+    success = @item.modify_quantity(action, quantity, current_account, notes) # Pass notes here
     @inventory_actions = @item.inventory_actions.includes(:account).ordered if success
-
+  
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to @item, notice: success ? "Quantity #{action}ed successfully." : "Failed to #{action} quantity." }
     end
-  end
+  end    
 
   private
 
