@@ -19,36 +19,29 @@
           <!-- Notifications -->
 
           <!-- User menu -->
-          <div>
-            <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
-              <span class="sr-only">Open user menu</span>
-              <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg" alt="user photo">
+          <div class="flex items-center space-x-3 avatar">
+            <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
+                <% if current_account.profile.avatar.attached? %>
+                    <%= image_tag(current_account.profile.avatar, class: "w-8 h-8 object-cover rounded-full", alt: "profile picture", data: { "profile-edit-form-target": "avatarPreview" }) %>
+                <% else %>
+                    <%= image_tag('others/default avatar.png', class: "w-8 h-8 object-cover rounded-full border-gray-800", alt: "profile picture", data: { "profile-edit-form-target": "avatarPreview" }) %>
+                <% end %>
             </button>
-          </div>
-          <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600 border" id="dropdown-user">
-            <div class="px-4 py-3" role="none">
-              <p class="text-sm text-gray-900 dark:text-white" role="none">
-                <%= current_account.profile.name %> (<%= current_account.role %>)
-              </p>
-              <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
-                <%= current_account.email %>
-              </p>
+            <!-- Dropdown menu -->
+            <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 border" id="user-dropdown">
+                <div class="px-4 py-3">
+                    <span class="block text-sm text-gray-900 dark:text-white"><%= current_account.profile.name %></span>
+                    <span class="block text-sm text-gray-500 truncate dark:text-gray-400"><%= current_account.email %></span>
+                </div>
+                <ul class="py-2 text-black/90">
+                  <li>
+                    <%= link_to 'Settings', settings_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
+                  </li>
+                  <li>
+                    <%= link_to 'Sign out', rodauth.logout_path, data: { turbo_method: :post }, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
+                  </li>
+                </ul>
             </div>
-            <ul class="py-1" role="none">
-              <li>
-                <%= link_to rodauth.change_login_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" do %>
-                  Change email
-                <% end %>
-              </li>
-              <li>
-                <%= link_to rodauth.change_password_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" do %>
-                  Change password
-                <% end %>
-              </li>
-              <li>
-                <%= link_to 'Sign out', rodauth.logout_path, data: { turbo_method: :post }, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
-              </li>
-            </ul>
           </div>
         </div>
       </div>
