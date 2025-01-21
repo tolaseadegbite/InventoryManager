@@ -31,6 +31,10 @@ class SettingsController < ApplicationController
     end
   end
 
+  def items
+    
+  end
+
   private
 
   def ensure_profile_exists
