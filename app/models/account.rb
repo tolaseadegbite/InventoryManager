@@ -1,7 +1,7 @@
 class Account < ApplicationRecord
   include Rodauth::Rails.model
   enum :status, { unverified: 1, verified: 2, closed: 3 }
-  enum :role, { Normal: 1, Admin: 2 }
+  enum :role, { normal: 1, admin: 2 }
 
   has_one :profile
 

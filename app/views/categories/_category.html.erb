@@ -4,7 +4,7 @@
             <%= link_to category.name, category, data: { turbo_frame: "_top" } %>
         </div>
         
-        <% if current_account.Admin? %>
+        <% if current_account.admin? %>
             <div>
                 <button id="dropdownMenuIconButton-<%= category.id %>" data-dropdown-toggle="dropdownDots-<%= category.id %>" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-700 bg-white rounded-full hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
                     <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">

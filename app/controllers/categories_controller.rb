@@ -1,7 +1,7 @@
 class CategoriesController < ApplicationController
   before_action :authenticate!
   before_action :find_category, only: %w[show edit update destroy]
-  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
+  before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
 
   def index
     @categories = Category.all.ordered
@@ -39,7 +39,7 @@ class CategoriesController < ApplicationController
     if @category.update(category_params)
       respond_to do |format|
         format.html { redirect_to @category, notice: "Category updated successfully" }
-        format.turbo_stream { flash.now[:notice] = 'Category updated successfully' }
+        format.turbo_stream { flash.now[:notice] = "Category updated successfully" }
       end
     else
       flash.now[:alert] = "Failed to update Category. Please check the errors below."
@@ -66,8 +66,8 @@ class CategoriesController < ApplicationController
   end
 
   def require_admin
-    unless current_account.Admin?
-      redirect_to categories_path, alert: 'Unauthorized action.'
+    unless current_account.admin?
+      redirect_to categories_path, alert: "Unauthorized action."
     end
   end
 end

@@ -6,12 +6,12 @@ class LowStockNotifier < Noticed::Event
       item = Item.find_by(id: params[:record_id]) # Load the record here
       return false unless item.present?
 
-      threshold = [item.stock_threshold, item.account.global_stock_threshold].max
+      threshold = [ item.stock_threshold, item.account.global_stock_threshold ].max
       item.quantity <= (threshold * 0.5)
     }
   end
 
-  required_param :record_id, :quantity, :threshold, :account_id
+  # required_params :record_id, :record, :quantity, :threshold
 
   notification_methods do
     def message
@@ -20,7 +20,8 @@ class LowStockNotifier < Noticed::Event
     end
 
     def url
-      Rails.application.routes.url_helpers.item_path(params[:record_id])
+      # Rails.application.routes.url_helpers.item_path(params[:record_id])
+      item_path(params[:record_id])
     end
   end
 end
