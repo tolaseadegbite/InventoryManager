@@ -76,3 +76,5 @@ gem "noticed", "~> 2.6"
 gem "active_storage_validations", "~> 1.4"
 
 gem "faker", "~> 3.5"
+
+gem "ransack", "~> 4.2"
