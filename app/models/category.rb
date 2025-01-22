@@ -1,6 +1,10 @@
 class Category < ApplicationRecord
   validates :name, presence: true, length: { minimum: 1 }
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["name"]
+  end
+
   belongs_to :account
   has_many :items, dependent: :destroy
 

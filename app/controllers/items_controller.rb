@@ -5,7 +5,10 @@ class ItemsController < ApplicationController
   before_action :authorize_quantity_modification, only: [ :modify_quantity ]
 
   def index
-    @items = Item.includes(:category, :account).ordered
+    # @items = Item.includes(:category, :account).ordered
+    @q = Item.ransack(params[:q])
+    # @items = @q.result(distinct: true)
+    @items = @q.result.includes(:category).ordered
   end
 
   def show

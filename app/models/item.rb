@@ -5,6 +5,14 @@ class Item < ApplicationRecord
   validates :quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :stock_threshold, numericality: { greater_than_or_equal_to: 0 }
 
+  def self.ransackable_attributes(auth_object = nil) 
+    ["name", "quantity", "category_id", "low_stock"] 
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["category"]
+  end
+
   belongs_to :category, counter_cache: :items_count, optional: true
   belongs_to :account, counter_cache: :items_count
   has_many :inventory_actions, dependent: :destroy

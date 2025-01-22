@@ -21,6 +21,20 @@
         </ol>
     </nav>
 
+    <%= search_form_for @q do |f| %>
+
+        # Search if the name field contains...
+
+        <%= f.label :name_cont %>
+        <%= f.search_field :name_cont %>
+        <%= f.label :category_name_cont %>
+        <%= f.search_field :category_name_cont %>
+        <%= f.label :low_stock_eq_cont %>
+        <%= f.select :low_stock_eq, [true, false], { include_blank: true } %>
+
+        <%= f.submit %>
+    <% end %>
+
     <div class="mb-7">
         <div class="flex gap-2 items-center justify-between mb-5 md:mb-2">
             <h1 class="font-bold text-xl">Items <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'items/components/header_counter_badge' %></span></h1>
@@ -39,9 +53,9 @@
     <div class="items container mx-auto">
         <!-- Header -->
         <div class="header hidden md:flex justify-between items-center bg-gray-100 px-4 py-3 border rounded-lg text-gray-600 font-semibold mb-6 shadow">
-            <div class="w-1/4 text-left"><h1>Name</h1></div>
-            <div class="w-1/4 text-center"><h2>Qty</h2></div>
-            <div class="w-1/4 text-center"><h2>Category</h2></div>
+            <div class="w-1/4 text-left"><h1><%= sort_link(@q, :name, default_order: :desc) %></h1></div>
+            <div class="w-1/4 text-center"><h1><%= sort_link(@q, :quantity, "Qty") %></h1></div>
+            <div class="w-1/4 text-center"><h1><%= sort_link(@q, :category_name, "Category") %></h1></div>
             <div class="w-1/4 text-center"><h2>Actions</h2></div>
         </div>
 
