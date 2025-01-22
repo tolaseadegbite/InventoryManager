@@ -24,15 +24,17 @@
 
 <div class="items">
     <% if @items.present? %>
-        <div class="header flex justify-between bg-white p-3 border-2 border-gray-400 text-gray-500 shadow-md rounded-3xl font-semibold mb-5">
-            <div class="text-md w-1/4"><h1>Name</h1></div>
-            <h2 class="text-md w-1/4">Qty</h2>
-            <h2 class="text-md w-1/4">Category</h2>
-            <h2 class="text-md w-1/4">Actions</h2>
+        <!-- Header -->
+        <div class="header hidden md:flex justify-between items-center bg-gray-100 px-4 py-3 border rounded-lg text-gray-600 font-semibold mb-6 shadow">
+            <div class="w-1/4 text-left"><h1>Name</h1></div>
+            <div class="w-1/4 text-center"><h2>Quantity</h2></div>
+            <div class="w-1/4 text-center"><h2>Category</h2></div>
+            <div class="w-1/4 text-center"><h2>Actions</h2></div>
         </div>
+
+        <!-- Items -->
         <%= turbo_frame_tag "items" do %>
-                <%= render @items %>
-            </ul>
+            <%= render @items %>
         <% end %>
     <% else %>
         <h1 class="font-bold text-xl">No items in this category</h1>
