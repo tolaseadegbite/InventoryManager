@@ -78,3 +78,5 @@ gem "active_storage_validations", "~> 1.4"
 gem "faker", "~> 3.5"
 
 gem "ransack", "~> 4.2"
+
+gem "pagy", "~> 9.3"
