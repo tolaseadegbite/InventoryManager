@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_22_134234) do
   create_table "account_login_change_keys", force: :cascade do |t|
     t.string "key", null: false
     t.string "login", null: false
@@ -106,8 +106,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
     t.datetime "updated_at", null: false
     t.integer "inventory_actions_count", default: 0, null: false
     t.integer "stock_threshold", default: 0
+    t.boolean "low_stock", default: false, null: false
     t.index ["account_id"], name: "index_items_on_account_id"
     t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["low_stock"], name: "index_items_on_low_stock"
   end
 
   create_table "noticed_events", force: :cascade do |t|

@@ -1,5 +1,5 @@
 class Item < ApplicationRecord
-  after_save :check_stock_level, if: :should_check_stock?
+  after_commit :update_stock_status, if: :should_check_stock?
 
   validates :name, presence: true, length: { minimum: 2, maximum: 100 }
   validates :quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
@@ -13,10 +13,7 @@ class Item < ApplicationRecord
   has_many :notification_mentions, as: :record, dependent: :destroy, class_name: "Noticed::Event"
 
   scope :ordered, -> { order(id: :desc) }
-  scope :low_stock, -> {
-    joins(:account)
-    .where("items.quantity <= items.stock_threshold OR items.quantity <= accounts.global_stock_threshold")
-  }
+  scope :low_stock, -> { where(low_stock: true) }
 
   VALID_ACTIONS = %w[add remove].freeze
 
@@ -25,7 +22,15 @@ class Item < ApplicationRecord
     return false if action == "remove" && amount > quantity
   
     transaction do
+      # Store the original quantity for comparison
+      original_quantity = quantity
+      
+      # Update the quantity
       self.quantity = action == "add" ? quantity + amount : quantity - amount
+      
+      # Force the quantity_changed? flag to be true if the value actually changed
+      send(:attribute_will_change!, 'quantity') if quantity != original_quantity
+      
       save!
   
       inventory_actions.create!(
@@ -42,30 +47,33 @@ class Item < ApplicationRecord
     false
   end    
 
-  private
-
-  # Determine if stock level should be checked
-  def should_check_stock?
-    saved_change_to_quantity? || saved_change_to_stock_threshold?
+  def effective_threshold
+    [stock_threshold, account.global_stock_threshold].max
   end
 
-  # Check stock levels and notify admins if stock is low
-  def check_stock_level
+  private
+
+  def should_check_stock?
+    return true if saved_change_to_quantity?
+    return true if saved_change_to_stock_threshold?
+    return true if account&.saved_change_to_global_stock_threshold?
+    false
+  end
+
+  def update_stock_status
     return unless quantity.present?
 
-    # Calculate the effective threshold
-    effective_threshold = [ stock_threshold, account.global_stock_threshold ].max
-
-    # Trigger notification if stock is below or equal to the threshold
-    if quantity <= effective_threshold
-      notify_admins_of_low_stock(effective_threshold)
+    current_low_stock = quantity <= effective_threshold
+    
+    if current_low_stock != low_stock
+      # Use update instead of update_column to ensure callbacks run
+      update(low_stock: current_low_stock)
+      notify_admins_of_stock_change if current_low_stock
     end
   end
 
-  # Notify admins of low stock levels
-  def notify_admins_of_low_stock(effective_threshold)
-    admins = Account.where(role: :admin)
-    admins.each do |admin|
+  def notify_admins_of_stock_change
+    Account.where(role: :admin).find_each do |admin|
       LowStockNotifier.with(
         record_id: id,
         record: self,

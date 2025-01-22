@@ -46,7 +46,7 @@ end
 
 # Create 100 items associated with the first account
 100.times do
-  Item.create!(
+  item = Item.create!(
     name: Faker::Commerce.product_name,
     description: Faker::Lorem.sentence,
     quantity: rand(0..100),
@@ -54,6 +54,10 @@ end
     account: accounts.first,
     stock_threshold: rand(0..20)
   )
+
+  # Set low_stock based on quantity and thresholds
+  effective_threshold = [item.stock_threshold, item.account.global_stock_threshold].max
+  item.update!(low_stock: item.quantity <= effective_threshold)
 end
 
 # Create inventory actions

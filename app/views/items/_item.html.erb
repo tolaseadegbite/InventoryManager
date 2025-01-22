@@ -1,5 +1,5 @@
 <%= turbo_frame_tag item do %>
-  <ul class="<%= low_stock?(item) ? 'border-2 border-red-500' : 'border border-gray-200' %> bg-white p-5 rounded-lg shadow-sm mb-5 hover:shadow-md transition-all">
+  <ul class="<%= item.low_stock ? 'border-2 border-red-500' : 'border border-gray-200' %> bg-white p-5 rounded-lg shadow-sm mb-5 hover:shadow-md transition-all">
     <!-- Mobile View -->
     <div class="block md:hidden">
       <li class="flex justify-between items-center mb-3">
