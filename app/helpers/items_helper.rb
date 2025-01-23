@@ -1,4 +1,6 @@
 module ItemsHelper
+  include Pagy::Frontend
+  
   def category_link(item)
     if item.category.present?
       link_to item.category.name, category_path(item.category), 

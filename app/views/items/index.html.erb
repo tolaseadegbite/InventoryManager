@@ -63,6 +63,10 @@
         <%= turbo_frame_tag "items" do %>
             <%= render @items %>
         <% end %>
+
+        <div class="my-5 mx-auto">
+            <%== pagy_nav(@pagy) %>
+        </div>
     </div>
 
 </div>

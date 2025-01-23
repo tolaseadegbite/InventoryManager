@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  include Pagy::Backend
   before_action :authenticate!
   before_action :set_item, only: [ :show, :edit, :update, :destroy, :modify_quantity, :quantity_modal ]
   before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
@@ -8,7 +9,7 @@ class ItemsController < ApplicationController
     # @items = Item.includes(:category, :account).ordered
     @q = Item.ransack(params[:q])
     # @items = @q.result(distinct: true)
-    @items = @q.result.includes(:category).ordered
+    @pagy, @items = pagy(@q.result.includes(:category).ordered, limit: 30)
   end
 
   def show
