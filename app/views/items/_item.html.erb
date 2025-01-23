@@ -4,7 +4,7 @@
     <div class="block md:hidden">
       <li class="flex justify-between items-center mb-3">
         <h2><span class="font-semibold text-gray-700">Name:</span></h2>
-        <%= link_to item.name, item, class: "text-gray-600 hover:text-gray-500 font-semibold", data: { turbo_frame: "_top" } %>
+        <%= link_to highlight(item.name, params.dig(:q, :name_cont)), item, class: "text-gray-600 hover:text-gray-500 font-semibold", data: { turbo_frame: "_top" } %>
       </li>
       <li class="flex justify-between items-center mb-3">
         <h2><span class="font-semibold text-gray-700">Quantity:</span></h2>

@@ -24,12 +24,10 @@
     <div class="mb-7">
         <div class="flex gap-2 items-center justify-between mb-5 md:mb-2">
             <h1 class="font-bold text-xl">Items <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'items/components/header_counter_badge' %></span></h1>
-
+            
             <div class="flex gap-2 items-center">
-                <div class="search-form">
-                    <%= search_form_for @q do |f| %>
-                        <%= f.search_field :name_cont, class: "text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
-                    <% end %>
+                <div class="hidden md:block">
+                    <%= render 'items/components/items_search_form' %>
                 </div>
                 <% if current_account.admin? %>
                     <%= link_to new_item_path, class: "inline-flex whitespace-nowrap items-center gap-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800", data: { turbo_frame: :modal } do %>
@@ -40,6 +38,9 @@
                     <% end %>
                 <% end %>
             </div>
+        </div>
+        <div class="block md:hidden">
+            <%= render 'items/components/items_search_form' %>
         </div>
     </div>
 
