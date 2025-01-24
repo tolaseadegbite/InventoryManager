@@ -44,7 +44,7 @@
         </div>-->
     </div>
 
-    <%= turbo_frame_tag :results do %>
+    <%= turbo_frame_tag :results, data: { turbo_action: 'advance' } do %>
 
         <div class="items container mx-auto">
             <!-- Header -->
