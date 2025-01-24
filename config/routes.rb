@@ -12,6 +12,9 @@ Rails.application.routes.draw do
       post :modify_quantity
       get 'quantity_modal/:action_type', action: :quantity_modal, as: :quantity_modal
     end
+    collection do
+      get :search_modal
+    end      
   end
 
   resources :notifications, only: [:index] do

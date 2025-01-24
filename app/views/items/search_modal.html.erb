@@ -1,0 +1,20 @@
+<%= render 'layouts/modal_dialog' do %>
+    <div data-controller="modal" data-action="turbo:submit-end->modal#submitEnd">
+        <%= search_form_for @q, url: items_path, method: :get, class: "search-form" do |form| %>
+            <div class="mb-6">
+                <%= form.label :name, class: "block text-sm font-semibold" %>
+                <%= form.search_field :name_cont, placeholder: "Search by name", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
+            </div>
+            <div class="mb-6">
+                <%= form.label :category, class: "block text-sm font-semibold" %>
+                <%= form.search_field :category_name_cont, placeholder: "Search by category", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
+            </div>
+            <div class="mb-6">
+                <%= form.label :low_stock, class: "block text-sm font-semibold" %>
+                <%= form.select :low_stock_eq, [true, false], { include_blank: "Select category" }, class: "mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 cursor-pointer" %>
+            </div>
+
+            <%= form.submit "Search", class: "w-full cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" %>
+        <% end %>
+    </div>
+<% end %>

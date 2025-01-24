@@ -81,6 +81,11 @@ class ItemsController < ApplicationController
     end
   end    
 
+  def search_modal
+    @q = Item.ransack(params[:q])
+    render layout: false
+  end
+
   private
 
   def set_item
