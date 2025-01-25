@@ -1,7 +1,10 @@
 <%= turbo_frame_tag category do %>
     <div class="category_card inline-flex items-center p-4 gap-2 justify-between border rounded-lg shadow-md">
         <div class="text-gray-800">
-            <%= link_to category.name, category, data: { turbo_frame: "_top" } %>
+            <%= link_to category, data: { turbo_frame: "_top" } do %>
+                <%= category.name %>
+                (<%= category.items_count %>)
+            <% end %>
         </div>
         
         <% if current_account.admin? %>

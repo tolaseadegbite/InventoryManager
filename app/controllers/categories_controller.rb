@@ -13,7 +13,7 @@ class CategoriesController < ApplicationController
     @total_items = @category.items_count
     @q = @category.items.ransack(params[:q])
     # @items = @q.result(distinct: true)
-    @pagy, @items = pagy(@q.result.includes(:category).ordered, limit: 30)
+    @pagy, @items = pagy(@q.result.includes(:category).ordered, limit: 10)
   end
 
   def new

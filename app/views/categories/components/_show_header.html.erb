@@ -1,4 +1,4 @@
-<div class="flex gap-2 items-center justify-between mb-5">
+<div class="flex gap-2 items-center justify-between mb-3">
     <h1 class="font-bold text-xl"><%= @category.name %> <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'categories/components/header_counter_badge' %></span></h1>
 
     <div class="flex gap-2 items-center">
@@ -26,6 +26,10 @@
         <% end %>
     </div>
 </div>
+
+<% if params[:page] %>
+    <h2 class="font-bold text-l mb-5">Page: <%= params[:page] %></h2>
+<% end %>
 
 <!-- mobile search form -->
 
