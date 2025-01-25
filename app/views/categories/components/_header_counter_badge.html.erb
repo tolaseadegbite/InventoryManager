@@ -1,1 +1,5 @@
-<%= Category.count %>
+<% if action_name == 'index' %>
+    <%= Category.count %>
+<% else %>
+    <%= @category.items_count %>
+<% end %>

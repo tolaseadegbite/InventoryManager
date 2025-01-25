@@ -9,22 +9,22 @@
     <%= search_form_for @q, url: item_path(item), data: { turbo_frame: :inventory_action_results, turbo_action: 'advance', controller: "debounce clear-form", "clear_form_target": "form", action: "input->debounce#submit" }, class: "search-form" do |form| %>
         <div class="grid md:grid-cols-2 md:gap-6">
             <div class="mb-6">
-            <%= form.label "Date range from", class: "block text-sm font-semibold" %>
-            <%= form.date_field :created_at_gteq, placeholder: "From", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
+                <%= form.label "Date range from", class: "block text-sm font-semibold" %>
+                <%= form.date_field :created_at_gteq, placeholder: "From", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
             </div>
             <div class="mb-6">
-            <%= form.label "to", class: "block text-sm font-semibold" %>
-            <%= form.date_field :created_at_lteq, placeholder: "To", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
+                <%= form.label "to", class: "block text-sm font-semibold" %>
+                <%= form.date_field :created_at_lteq, placeholder: "To", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
             </div>
         </div>
         <div class="grid md:grid-cols-2 md:gap-6">
             <div class="mb-6">
-            <%= form.label "Quantity range from", class: "block text-sm font-semibold" %>
-            <%= form.number_field :quantity_gteq, placeholder: "From", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
+                <%= form.label "Quantity range from", class: "block text-sm font-semibold" %>
+                <%= form.number_field :quantity_gteq, placeholder: "From", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
             </div>
             <div class="mb-6">
-            <%= form.label "to", class: "block text-sm font-semibold" %>
-            <%= form.number_field :quantity_lteq, placeholder: "To", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
+                <%= form.label "to", class: "block text-sm font-semibold" %>
+                <%= form.number_field :quantity_lteq, placeholder: "To", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
             </div>
         </div>
         <div class="mb-6">

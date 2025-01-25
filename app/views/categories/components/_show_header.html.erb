@@ -1,9 +1,12 @@
 <div class="flex gap-2 items-center justify-between mb-5">
-    <h1 class="font-bold text-xl"><%= @category.name %></h1>
+    <h1 class="font-bold text-xl"><%= @category.name %> <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'categories/components/header_counter_badge' %></span></h1>
 
     <div class="flex gap-2 items-center">
+
+        <!-- search form -->
+
         <div class="hidden md:block items-search">
-            <%= render 'categories/components/category_items_search_form' %>
+            <%= render 'items/components/items_search_form', url: category_path(@category) %>
         </div>
 
         <% if current_account.admin? %>
@@ -24,8 +27,10 @@
     </div>
 </div>
 
+<!-- mobile search form -->
+
 <div class="block md:hidden mb-5">
-    <%= render 'categories/components/mobile_category_items_search_form' %>
+     <%= render 'items/components/mobile_items_search_form', url: items_path %>
 </div>
 
 <%# if @category.description.present? %>

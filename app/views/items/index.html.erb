@@ -26,8 +26,11 @@
             <h1 class="font-bold text-xl">Items <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'items/components/header_counter_badge' %></span></h1>
             
             <div class="flex gap-2 items-center">
+
+                <!-- search form -->
+
                 <div class="hidden md:block items-search">
-                    <%= render 'items/components/items_search_form' %>
+                    <%= render 'items/components/items_search_form', url: items_path %>
                 </div>
                 <% if current_account.admin? %>
                     <%= link_to new_item_path, class: "inline-flex whitespace-nowrap items-center gap-1 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800", data: { turbo_frame: :modal } do %>
@@ -39,31 +42,36 @@
                 <% end %>
             </div>
         </div>
+
+        <!-- mobile search form -->
         <div class="block md:hidden mb-5">
-            <%= render 'items/components/mobile_items_search_form' %>
+            <%= render 'items/components/mobile_items_search_form', url: items_path %>
         </div>
     </div>
 
-    <%= turbo_frame_tag :results, data: { turbo_action: 'advance' } do %>
+    <% if @items.present? %>
+        <%= turbo_frame_tag :results, data: { turbo_action: 'advance' } do %>
 
-        <div class="items container mx-auto">
-            <!-- Header -->
-            <div class="header hidden md:flex justify-between items-center bg-gray-100 px-4 py-3 border rounded-lg text-gray-600 font-semibold mb-6 shadow">
-                <div class="w-1/4 text-left"><h1><%= sort_link(@q, :name, default_order: :desc) %></h1></div>
-                <div class="w-1/4 text-center"><h1><%= sort_link(@q, :quantity, "Qty") %></h1></div>
-                <div class="w-1/4 text-center"><h1><%= sort_link(@q, :category_name, "Category") %></h1></div>
-                <div class="w-1/4 text-center"><h2>Actions</h2></div>
+            <div class="items container mx-auto">
+                <!-- Header -->
+                <div class="header hidden md:flex justify-between items-center bg-gray-100 px-4 py-3 border rounded-lg text-gray-600 font-semibold mb-6 shadow">
+                    <div class="w-1/4 text-left"><h1><%= sort_link(@q, :name, default_order: :desc) %></h1></div>
+                    <div class="w-1/4 text-center"><h1><%= sort_link(@q, :quantity, "Qty") %></h1></div>
+                    <div class="w-1/4 text-center"><h1><%= sort_link(@q, :category_name, "Category") %></h1></div>
+                    <div class="w-1/4 text-center"><h2>Actions</h2></div>
+                </div>
+
+                <!-- Items -->
+                <%= turbo_frame_tag "items" do %>
+                    <%= render @items %>
+                <% end %>
+
+                <div class="my-5 mx-auto">
+                    <%== pagy_nav(@pagy) %>
+                </div>
             </div>
-
-            <!-- Items -->
-            <%= turbo_frame_tag "items" do %>
-                <%= render @items %>
-            <% end %>
-
-            <div class="my-5 mx-auto">
-                <%== pagy_nav(@pagy) %>
-            </div>
-        </div>
+        <% end %>
+    <% else %>
+        
     <% end %>
-
 </div>

@@ -49,8 +49,12 @@
             </div>
 
             <!-- Items -->
-            <%= turbo_frame_tag "items" do %>
-                <%= render @items %>
+            <% if @items.any? %>
+                <%= turbo_frame_tag "items" do %>
+                    <%= render @items %>
+                <% end %>
+            <% else %>
+                <p>No items</p>
             <% end %>
 
             <div class="my-5 mx-auto">
