@@ -21,8 +21,8 @@
         </ol>
     </nav>
 
-    <div class="mb-7">
-        <div class="flex gap-2 items-center justify-between mb-5 md:mb-2">
+    <div class="mb-">
+        <div class="flex gap-2 items-center justify-between mb-5 md:mb-5">
             <h1 class="font-bold text-xl">Items <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'items/components/header_counter_badge' %></span></h1>
             
             <div class="flex gap-2 items-center">
@@ -39,7 +39,7 @@
                 <% end %>
             </div>
         </div>
-        <div class="block md:hidden">
+        <div class="block md:hidden mb-5">
             <%= render 'items/components/mobile_items_search_form' %>
         </div>
     </div>

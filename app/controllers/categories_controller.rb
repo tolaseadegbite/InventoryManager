@@ -1,4 +1,5 @@
 class CategoriesController < ApplicationController
+  include Pagy::Backend
   before_action :authenticate!
   before_action :find_category, only: %w[show edit update destroy]
   before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
@@ -10,8 +11,9 @@ class CategoriesController < ApplicationController
 
   def show
     @total_items = @category.items_count
-    @items = @category.items.ordered
-    # @pagy, @items = pagy(@items, limit: 30)
+    @q = @category.items.ransack(params[:q])
+    # @items = @q.result(distinct: true)
+    @pagy, @items = pagy(@q.result.includes(:category).ordered, limit: 30)
   end
 
   def new
