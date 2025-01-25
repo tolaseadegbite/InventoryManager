@@ -49,29 +49,29 @@
         </div>
     </div>
 
-    <% if @items.present? %>
-        <%= turbo_frame_tag :results, data: { turbo_action: 'advance' } do %>
+    <%= turbo_frame_tag :results, data: { turbo_action: 'advance' } do %>
 
-            <div class="items container mx-auto">
-                <!-- Header -->
-                <div class="header hidden md:flex justify-between items-center bg-gray-100 px-4 py-3 border rounded-lg text-gray-600 font-semibold mb-6 shadow">
-                    <div class="w-1/4 text-left"><h1><%= sort_link(@q, :name, default_order: :desc) %></h1></div>
-                    <div class="w-1/4 text-center"><h1><%= sort_link(@q, :quantity, "Qty") %></h1></div>
-                    <div class="w-1/4 text-center"><h1><%= sort_link(@q, :category_name, "Category") %></h1></div>
-                    <div class="w-1/4 text-center"><h2>Actions</h2></div>
-                </div>
+        <div class="items container mx-auto">
+            <!-- Header -->
+            <div class="header hidden md:flex justify-between items-center bg-gray-100 px-4 py-3 border rounded-lg text-gray-600 font-semibold mb-6 shadow">
+                <div class="w-1/4 text-left"><h1><%= sort_link(@q, :name, default_order: :desc) %></h1></div>
+                <div class="w-1/4 text-center"><h1><%= sort_link(@q, :quantity, "Qty") %></h1></div>
+                <div class="w-1/4 text-center"><h1><%= sort_link(@q, :category_name, "Category") %></h1></div>
+                <div class="w-1/4 text-center"><h2>Actions</h2></div>
+            </div>
 
-                <!-- Items -->
+            <!-- Items -->
+            <% if @items.any? %>
                 <%= turbo_frame_tag "items" do %>
                     <%= render @items %>
                 <% end %>
+            <% else %>
+                <p>No items</p>
+            <% end %>
 
-                <div class="my-5 mx-auto">
-                    <%== pagy_nav(@pagy) %>
-                </div>
+            <div class="my-5 mx-auto">
+                <%== pagy_nav(@pagy) %>
             </div>
-        <% end %>
-    <% else %>
-        
+        </div>
     <% end %>
 </div>
