@@ -1,5 +1,10 @@
 class Account < ApplicationRecord
   include Rodauth::Rails.model
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["name"]
+  end
+  
   enum :status, { unverified: 1, verified: 2, closed: 3 }
   enum :role, { normal: 1, admin: 2 }
 

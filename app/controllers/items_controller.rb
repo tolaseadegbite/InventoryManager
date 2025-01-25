@@ -14,11 +14,13 @@ class ItemsController < ApplicationController
 
   def show
     # @inventory_actions = @item.inventory_actions.includes(:account).ordered
-    if current_account.admin?
-      @inventory_actions = @item.inventory_actions.includes(:account).ordered
-    else
-      @inventory_actions = @item.inventory_actions.includes(:account).where(account: current_account).ordered
-    end
+    # if current_account.admin?
+    #   @inventory_actions = @item.inventory_actions.includes(:account).ordered
+    # else
+    #   @inventory_actions = @item.inventory_actions.includes(:account).where(account: current_account).ordered
+    # end
+    @q = @item.inventory_actions.ransack(params[:q])
+    @inventory_actions = @q.result.includes(:account).ordered
   end
 
   def new
