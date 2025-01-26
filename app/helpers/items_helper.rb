@@ -15,7 +15,7 @@ module ItemsHelper
     if item.stock_threshold&.positive?
       "#{item.stock_threshold} (Item Threshold)"
     else
-      "#{item.account.global_stock_threshold} (Global Threshold)"
+      "#{item.user.global_stock_threshold} (Global Threshold)"
     end
   end
 end

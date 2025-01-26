@@ -14,7 +14,7 @@ class Item < ApplicationRecord
   end
 
   belongs_to :category, counter_cache: :items_count, optional: true
-  belongs_to :account, counter_cache: :items_count
+  belongs_to :user, counter_cache: :items_count
   has_many :inventory_actions, dependent: :destroy
   has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
   has_many :notifications, through: :noticed_events, class_name: "Noticed::Notification"
@@ -25,7 +25,7 @@ class Item < ApplicationRecord
 
   VALID_ACTIONS = %w[add remove].freeze
 
-  def modify_quantity(action, amount, current_account, notes = nil)
+  def modify_quantity(action, amount, current_user, notes = nil)
     return false if amount.nil? || amount <= 0
     return false if action == "remove" && amount > quantity
   
@@ -42,7 +42,7 @@ class Item < ApplicationRecord
       save!
   
       inventory_actions.create!(
-        account: current_account,
+        user: current_user,
         action_type: action,
         quantity: amount,
         notes: notes
@@ -56,7 +56,7 @@ class Item < ApplicationRecord
   end    
 
   def effective_threshold
-    [stock_threshold, account.global_stock_threshold].max
+    [stock_threshold, user.global_stock_threshold].max
   end
 
   private
@@ -64,7 +64,7 @@ class Item < ApplicationRecord
   def should_check_stock?
     return true if saved_change_to_quantity?
     return true if saved_change_to_stock_threshold?
-    return true if account&.saved_change_to_global_stock_threshold?
+    return true if user&.saved_change_to_global_stock_threshold?
     false
   end
 
@@ -81,7 +81,7 @@ class Item < ApplicationRecord
   end
 
   def notify_admins_of_stock_change
-    Account.where(role: :admin).find_each do |admin|
+    user.where(role: :admin).find_each do |admin|
       LowStockNotifier.with(
         record_id: id,
         record: self,

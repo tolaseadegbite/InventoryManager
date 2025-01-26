@@ -5,7 +5,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
       </svg>
-      <% unread_count = current_account.notifications.unread.count %>
+      <% unread_count = current_user.notifications.unread.count %>
       <span class="sr-only">Notifications</span>
       <% if unread_count > 0 %>
         <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full top-0.5 end-0.5 dark:border-gray-900"><%= unread_count %></div>
@@ -17,7 +17,7 @@
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
         <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
       </svg>
-      <% unread_count = current_account.notifications.unread.count %>
+      <% unread_count = current_user.notifications.unread.count %>
       <span class="sr-only">Notifications</span>
       <% if unread_count > 0 %>
         <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full top-0.5 end-0.5 dark:border-gray-900"><%= unread_count %></div>
@@ -38,8 +38,8 @@
         <% end %>
       </div>
 
-      <% if current_account.notifications.any? %>
-        <% current_account.notifications.newest_first.limit(10).each do |notification| %>
+      <% if current_user.notifications.any? %>
+        <% current_user.notifications.newest_first.limit(10).each do |notification| %>
           <%= link_to notification.url, 
               class: "block p-4 mb-2 hover:bg-gray-50 #{notification.read? ? 'bg-white' : 'bg-blue-100'}" do %>
             <p class="text-sm text-gray-800"><%= notification.message %></p>

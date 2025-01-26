@@ -6,7 +6,7 @@
 
 <!-- Dropdown menu -->
 <div id="dropdownInventorySearch" class="absolute w-96 border z-50 hidden bg-white divide-y divide-gray-100 rounded-3xl shadow dark:bg-gray-700 dark:divide-gray-600 p-4">
-    <%= search_form_for @q, url: item_path(item), data: { turbo_frame: :inventory_action_results, turbo_action: 'advance', controller: "debounce clear-form", "clear_form_target": "form", action: "input->debounce#submit" }, class: "search-form" do |form| %>
+    <%= search_form_for q, url: item_path(item), data: { turbo_frame: :inventory_action_results, turbo_action: 'advance', controller: "debounce clear-form", "clear_form_target": "form", action: "input->debounce#submit" }, class: "search-form" do |form| %>
         <div class="grid md:grid-cols-2 md:gap-6">
             <div class="mb-6">
                 <%= form.label "Date range from", class: "block text-sm font-semibold" %>
@@ -29,7 +29,7 @@
         </div>
         <div class="mb-6">
             <%= form.label "Performed by", class: "block text-sm font-semibold" %>
-            <%= form.select :account_id_eq, Profile.all.pluck(:name, :id), { include_blank: "Select account" }, class: "mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 cursor-pointer", id: "category_select" %>
+            <%= form.select :user_id_eq, Profile.all.pluck(:name, :id), { include_blank: "Select user" }, class: "mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 cursor-pointer", id: "category_select" %>
         </div>
         <div class="mb-6">
             <%= form.label "Action type", class: "block text-sm font-semibold" %>

@@ -5,7 +5,7 @@ class Category < ApplicationRecord
     ["name"]
   end
 
-  belongs_to :account
+  belongs_to :user
   has_many :items, dependent: :destroy
 
   scope :ordered, -> { order(id: :desc) }

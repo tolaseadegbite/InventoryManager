@@ -10,42 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_22_134234) do
-  create_table "account_login_change_keys", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "login", null: false
-    t.datetime "deadline", null: false
-  end
-
-  create_table "account_password_reset_keys", force: :cascade do |t|
-    t.string "key", null: false
-    t.datetime "deadline", null: false
-    t.datetime "email_last_sent", default: -> { "CURRENT_TIMESTAMP" }, null: false
-  end
-
-  create_table "account_remember_keys", force: :cascade do |t|
-    t.string "key", null: false
-    t.datetime "deadline", null: false
-  end
-
-  create_table "account_verification_keys", force: :cascade do |t|
-    t.string "key", null: false
-    t.datetime "requested_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.datetime "email_last_sent", default: -> { "CURRENT_TIMESTAMP" }, null: false
-  end
-
-  create_table "accounts", force: :cascade do |t|
-    t.integer "status", default: 1, null: false
-    t.string "email", null: false
-    t.string "password_hash"
-    t.integer "categories_count", default: 0
-    t.integer "role", default: 1, null: false
-    t.integer "items_count", default: 0, null: false
-    t.integer "inventory_actions_count", default: 0, null: false
-    t.integer "global_stock_threshold", default: 0
-    t.index ["email"], name: "index_accounts_on_email", unique: true, where: "status IN (1, 2)"
-  end
-
+ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -76,40 +41,39 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_22_134234) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "account_id", null: false
+    t.text "description", null: false
+    t.integer "user_id", null: false
     t.integer "items_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "description"
-    t.index ["account_id"], name: "index_categories_on_account_id"
+    t.index ["user_id"], name: "index_categories_on_user_id"
   end
 
   create_table "inventory_actions", force: :cascade do |t|
     t.integer "item_id", null: false
-    t.integer "account_id", null: false
+    t.integer "user_id", null: false
     t.string "action_type", null: false
     t.integer "quantity", null: false
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_inventory_actions_on_account_id"
     t.index ["item_id"], name: "index_inventory_actions_on_item_id"
+    t.index ["user_id"], name: "index_inventory_actions_on_user_id"
   end
 
   create_table "items", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
     t.integer "quantity", null: false
+    t.integer "stock_threshold", default: 0, null: false
+    t.boolean "low_stock", default: false, null: false
+    t.integer "inventory_actions_count", default: 0, null: false
     t.integer "category_id"
-    t.integer "account_id", null: false
+    t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "inventory_actions_count", default: 0, null: false
-    t.integer "stock_threshold", default: 0
-    t.boolean "low_stock", default: false, null: false
-    t.index ["account_id"], name: "index_items_on_account_id"
     t.index ["category_id"], name: "index_items_on_category_id"
-    t.index ["low_stock"], name: "index_items_on_low_stock"
+    t.index ["user_id"], name: "index_items_on_user_id"
   end
 
   create_table "noticed_events", force: :cascade do |t|
@@ -137,23 +101,43 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_22_134234) do
   end
 
   create_table "profiles", force: :cascade do |t|
-    t.integer "account_id", null: false
+    t.integer "user_id", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_profiles_on_account_id"
+    t.index ["user_id"], name: "index_profiles_on_user_id"
   end
 
-  add_foreign_key "account_login_change_keys", "accounts", column: "id"
-  add_foreign_key "account_password_reset_keys", "accounts", column: "id"
-  add_foreign_key "account_remember_keys", "accounts", column: "id"
-  add_foreign_key "account_verification_keys", "accounts", column: "id"
+  create_table "sessions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email_address", null: false
+    t.string "password_digest", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "categories_count", default: 0
+    t.integer "role", default: 0, null: false
+    t.integer "items_count", default: 0, null: false
+    t.integer "inventory_actions_count", default: 0, null: false
+    t.integer "global_stock_threshold", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email_address"], name: "index_users_on_email_address", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "categories", "accounts"
-  add_foreign_key "inventory_actions", "accounts"
+  add_foreign_key "categories", "users"
   add_foreign_key "inventory_actions", "items"
-  add_foreign_key "items", "accounts"
+  add_foreign_key "inventory_actions", "users"
   add_foreign_key "items", "categories"
-  add_foreign_key "profiles", "accounts"
+  add_foreign_key "items", "users"
+  add_foreign_key "profiles", "users"
+  add_foreign_key "sessions", "users"
 end

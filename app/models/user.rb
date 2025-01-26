@@ -1,5 +1,15 @@
-class Account < ApplicationRecord
-  include Rodauth::Rails.model
+class User < ApplicationRecord
+  has_secure_password
+  has_many :sessions, dependent: :destroy
+
+  normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+  ###################################################################################################
+
+  # Alias email_address to email
+  def email
+    email_address
+  end
 
   def self.ransackable_attributes(auth_object = nil)
     ["name"]

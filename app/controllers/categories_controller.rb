@@ -1,6 +1,6 @@
 class CategoriesController < ApplicationController
   include Pagy::Backend
-  before_action :authenticate!
+  
   before_action :find_category, only: %w[show edit update destroy]
   before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
 
@@ -21,7 +21,7 @@ class CategoriesController < ApplicationController
   end
 
   def create
-    @category = current_account.categories.build(category_params)
+    @category = current_user.categories.build(category_params)
 
     if @category.save
       respond_to do |format|
@@ -68,7 +68,7 @@ class CategoriesController < ApplicationController
   end
 
   def require_admin
-    unless current_account.admin?
+    unless current_user.admin?
       redirect_to categories_path, alert: "Unauthorized action."
     end
   end

@@ -2,14 +2,14 @@
 
 one:
   item: one
-  account: one
+  user: one
   action_type: MyString
   quantity: 1
   notes: MyText
 
 two:
   item: two
-  account: two
+  user: two
   action_type: MyString
   quantity: 1
   notes: MyText

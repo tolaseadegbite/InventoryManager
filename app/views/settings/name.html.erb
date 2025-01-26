@@ -17,7 +17,7 @@
                 <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                 </svg>
-                <%= link_to 'Account information', account_information_settings_path, class: "text-sm font-medium text-orange-700 hover:text-orange-600 dark:text-orange-400 dark:hover:text-white" %>
+                <%= link_to 'user information', user_information_settings_path, class: "text-sm font-medium text-orange-700 hover:text-orange-600 dark:text-orange-400 dark:hover:text-white" %>
                 </div>
             </li>
             <li aria-current="page">
@@ -34,7 +34,7 @@
     <h2 class="font-bold text-2xl mb-5">Change your name and avatar</h2>
 
     <div class="">
-        <%= form_with model: current_account.profile, url: update_profile_settings_path, method: :patch, data: { turbo_frame: "_top", controller: "profile-edit-form" }, class: "w-full" do |form| %>
+        <%= form_with model: current_user.profile, url: update_profile_settings_path, method: :patch, data: { turbo_frame: "_top", controller: "profile-edit-form" }, class: "w-full" do |form| %>
             <%= render "settings/components/form",  form: form do |f| %>
                 <div class="mb-6">
                     <%= f.label :select_avatar, class: "block text-sm font-semibold" %>
@@ -47,7 +47,7 @@
 
                 <div class="mb-6">
                     <%= f.label :name, class: "block text-sm font-semibold" %>
-                    <%= f.text_field :name, required: true, value: current_account.profile.name, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 #{rodauth.field_error('name') ? 'border-red-600 focus:ring-red-600 focus:border-red-600 dark:border-red-400 dark:focus:ring-red-400' : 'border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400'}" %>
+                    <%= f.text_field :name, required: true, value: current_user.profile.name, class: "mt-2 text-sm w-full px-3 py-2 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 #{rodauth.field_error('name') ? 'border-red-600 focus:ring-red-600 focus:border-red-600 dark:border-red-400 dark:focus:ring-red-400' : 'border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400'}" %>
                     <%= content_tag(:span, rodauth.field_error("name"), class: "block mt-1 text-red-600 text-xs dark:text-red-400", id: "name_error_message") if rodauth.field_error("name") %>
                 </div>
             <% end %>

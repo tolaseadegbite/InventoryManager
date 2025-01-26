@@ -40,7 +40,7 @@
 
   <div class="mt-10 max-w-screen-md mx-auto">
     <%= turbo_frame_tag "inventory_history_#{@item.id}" do %>
-      <%= render "inventory_history", inventory_actions: @inventory_actions, item: @item %>
+      <%= render "inventory_history", inventory_actions: @inventory_actions, item: @item, q: @q %>
     <% end %>
   </div>
 

@@ -5,11 +5,11 @@ one:
   description: MyText
   quantity: 1
   category: one
-  account: one
+  user: one
 
 two:
   name: MyString
   description: MyText
   quantity: 1
   category: two
-  account: two
+  user: two

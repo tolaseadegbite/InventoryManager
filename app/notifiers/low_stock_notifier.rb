@@ -6,7 +6,7 @@ class LowStockNotifier < Noticed::Event
       item = Item.find_by(id: params[:record_id]) # Load the record here
       return false unless item.present?
 
-      threshold = [ item.stock_threshold, item.account.global_stock_threshold ].max
+      threshold = [ item.stock_threshold, item.user.global_stock_threshold ].max
       item.quantity <= (threshold * 0.5)
     }
   end

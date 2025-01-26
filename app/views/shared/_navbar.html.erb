@@ -21,8 +21,8 @@
           <!-- User menu -->
           <div class="flex items-center space-x-3 avatar">
             <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom">
-                <% if current_account.profile.avatar.attached? %>
-                    <%= image_tag(current_account.profile.avatar, class: "w-8 h-8 object-cover rounded-full", alt: "profile picture", data: { "profile-edit-form-target": "avatarPreview" }) %>
+                <% if current_user.profile.avatar.attached? %>
+                    <%= image_tag(current_user.profile.avatar, class: "w-8 h-8 object-cover rounded-full", alt: "profile picture", data: { "profile-edit-form-target": "avatarPreview" }) %>
                 <% else %>
                     <%= image_tag('others/default avatar.png', class: "w-8 h-8 object-cover rounded-full border-gray-800", alt: "profile picture", data: { "profile-edit-form-target": "avatarPreview" }) %>
                 <% end %>
@@ -30,15 +30,15 @@
             <!-- Dropdown menu -->
             <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600 border" id="user-dropdown">
                 <div class="px-4 py-3">
-                    <span class="block text-sm text-gray-900 dark:text-white"><%= current_account.profile.name %></span>
-                    <span class="block text-sm text-gray-500 truncate dark:text-gray-400"><%= current_account.email %></span>
+                    <span class="block text-sm text-gray-900 dark:text-white"><%= current_user.profile.name %></span>
+                    <span class="block text-sm text-gray-500 truncate dark:text-gray-400"><%= current_user.email %></span>
                 </div>
                 <ul class="py-2 text-black/90">
                   <li>
                     <%= link_to 'Settings', settings_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
                   </li>
                   <li>
-                    <%= link_to 'Sign out', rodauth.logout_path, data: { turbo_method: :post }, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
+                    <%= link_to 'Sign out', session_path, method: :delete, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" %>
                   </li>
                 </ul>
             </div>

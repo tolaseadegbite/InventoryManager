@@ -1,26 +1,26 @@
 class ItemsController < ApplicationController
   include Pagy::Backend
-  before_action :authenticate!
+  
   before_action :set_item, only: [ :show, :edit, :update, :destroy, :modify_quantity, :quantity_modal ]
   before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
   before_action :authorize_quantity_modification, only: [ :modify_quantity ]
 
   def index
-    # @items = Item.includes(:category, :account).ordered
+    # @items = Item.includes(:category, :user).ordered
     @q = Item.ransack(params[:q])
     # @items = @q.result(distinct: true)
     @pagy, @items = pagy(@q.result.includes(:category).ordered, limit: 30)
   end
 
   def show
-    # @inventory_actions = @item.inventory_actions.includes(:account).ordered
-    # if current_account.admin?
-    #   @inventory_actions = @item.inventory_actions.includes(:account).ordered
+    # @inventory_actions = @item.inventory_actions.includes(:user).ordered
+    # if current_user.admin?
+    #   @inventory_actions = @item.inventory_actions.includes(:user).ordered
     # else
-    #   @inventory_actions = @item.inventory_actions.includes(:account).where(account: current_account).ordered
+    #   @inventory_actions = @item.inventory_actions.includes(:user).where(user: current_user).ordered
     # end
     @q = @item.inventory_actions.ransack(params[:q])
-    @inventory_actions = @q.result.includes(:account).ordered
+    @inventory_actions = @q.result.includes(:user).ordered
   end
 
   def new
@@ -28,7 +28,7 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item = current_account.items.build(item_params)
+    @item = current_user.items.build(item_params)
 
     if @item.save
       respond_to do |format|
@@ -74,8 +74,9 @@ class ItemsController < ApplicationController
     quantity = params[:quantity].to_i
     notes = params[:notes] # Extract notes from parameters
   
-    success = @item.modify_quantity(action, quantity, current_account, notes) # Pass notes here
-    @inventory_actions = @item.inventory_actions.includes(:account).ordered if success
+    success = @item.modify_quantity(action, quantity, current_user, notes) # Pass notes here
+    @inventory_actions = @item.inventory_actions.includes(:user).ordered if success
+    @q = @item.inventory_actions.ransack(params[:q])
   
     respond_to do |format|
       format.turbo_stream
@@ -99,19 +100,19 @@ class ItemsController < ApplicationController
   end
 
   def require_admin
-    unless current_account.admin?
+    unless current_user.admin?
       redirect_to items_path, alert: "Unauthorized action."
     end
   end
 
   def authorize_admin_action
-    unless current_account.admin?
+    unless current_user.admin?
       redirect_to @item, alert: "Unauthorized action."
     end
   end
 
   def authorize_quantity_modification
-    return if params[:action_type] == "remove" || current_account.admin?
+    return if params[:action_type] == "remove" || current_user.admin?
     redirect_to @item, alert: "Unauthorized action."
   end
 end

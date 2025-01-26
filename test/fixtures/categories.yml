@@ -2,10 +2,10 @@
 
 one:
   name: MyString
-  account: one
+  user: one
   items_count: 1
 
 two:
   name: MyString
-  account: two
+  user: two
   items_count: 1
