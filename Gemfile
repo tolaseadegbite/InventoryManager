@@ -73,7 +73,7 @@ gem "bcrypt", "~> 3.1"
 # Used by Rodauth for rendering built-in view and email templates
 gem "tilt", "~> 2.4"
 gem "noticed", "~> 2.6"
-gem "active_storage_validations", "~> 1.4"
+gem "active_storage_validations", "~> 2.0"
 
 gem "faker", "~> 3.5"
 
