@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <%= content_tag(:"turbo-frame", id: "categories", class: "flex gap-2 flex-wrap") do %>
+    <%= content_tag(:"turbo-frame", id: "categories", class: "grid grid-cols-1 md:grid-cols-2") do %>
         <%= render @categories %>
     <% end %>
 </div>

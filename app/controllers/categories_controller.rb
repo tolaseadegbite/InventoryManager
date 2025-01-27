@@ -38,6 +38,7 @@ class CategoriesController < ApplicationController
   end
 
   def update
+    @q = @category.items.ransack(params[:q])
     if @category.update(category_params)
       respond_to do |format|
         format.html { redirect_to @category, notice: "Category updated successfully" }

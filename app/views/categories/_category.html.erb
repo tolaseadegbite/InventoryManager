@@ -1,5 +1,5 @@
 <%= turbo_frame_tag category do %>
-    <div class="category_card inline-flex items-center p-4 gap-2 justify-between border rounded-lg shadow-md">
+    <div class="category_card flex items-center p-4 mb-5 md:me-5 justify-between border rounded-lg shadow">
         <div class="text-gray-800">
             <%= link_to category, data: { turbo_frame: "_top" } do %>
                 <%= category.name %>
