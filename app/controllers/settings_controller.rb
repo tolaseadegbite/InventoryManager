@@ -24,7 +24,7 @@ class SettingsController < ApplicationController
   def update_profile
     if @profile.update(profile_params)
       flash[:notice] = "Profile updated successfully."
-      redirect_to user_information_settings_path
+      redirect_to account_information_settings_path
     else
       flash.now[:alert] = @profile.errors.full_messages.join(", ")
       render :name, status: :unprocessable_entity

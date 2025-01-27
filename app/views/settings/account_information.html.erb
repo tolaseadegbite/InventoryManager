@@ -14,14 +14,14 @@
                     <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
                     </svg>
-                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">user information</span>
+                    <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Account information</span>
                 </div>
             </li>
         </ol>
     </nav>
 
     <div class="mb-5">
-        <h2 class="font-bold text-2xl">user information</h2>
+        <h2 class="font-bold text-2xl">Account information</h2>
     </div>
 
     <ul>
@@ -50,7 +50,7 @@
         </li>
 
         <li class="border-t">
-            <%= link_to rodauth.change_login_path, class: "inline-flex justify-between rounded-lg items-center w-full hover:bg-gray-100 px-6 p-2" do %>
+            <%= link_to '#', class: "inline-flex justify-between rounded-lg items-center w-full hover:bg-gray-100 px-6 p-2" do %>
 
             <div>
                 <p>Email</p>
@@ -66,10 +66,10 @@
         </li>
 
         <li class="border-t">
-            <%= link_to user_information_settings_path, class: "inline-flex justify-between rounded-lg items-center w-full hover:bg-gray-100 px-6 p-2" do %>
+            <%= link_to account_information_settings_path, class: "inline-flex justify-between rounded-lg items-center w-full hover:bg-gray-100 px-6 p-2" do %>
 
                 <div>
-                    <p>user creation</p>
+                    <p>Account creation</p>
                     <p class="text-sm text-gray-600"><%= current_user.profile.created_at.strftime("%b %d, %Y, %I:%M:%S %p")
                     %></p>
                 </div>

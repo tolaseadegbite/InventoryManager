@@ -81,7 +81,7 @@ class Item < ApplicationRecord
   end
 
   def notify_admins_of_stock_change
-    user.where(role: :admin).find_each do |admin|
+    User.where(role: :admin).find_each do |admin|
       LowStockNotifier.with(
         record_id: id,
         record: self,
