@@ -58,10 +58,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item.destroy
-    respond_to do |format|
-      format.html { redirect_to items_url, notice: "Item deleted successfully" }
-      # format.turbo_stream { flash.now[:notice] = 'Item deleted successfully' }
-    end
+    redirect_to items_url, notice: "Item deleted successfully", status: :see_other
   end
 
   def quantity_modal
@@ -83,6 +80,10 @@ class ItemsController < ApplicationController
       format.html { redirect_to @item, notice: success ? "Quantity #{action}ed successfully." : "Failed to #{action} quantity." }
     end
   end    
+
+  def confirm_delete
+    @item = Item.find(params[:id])
+  end
 
   def search_modal
     @q = Item.ransack(params[:q])
