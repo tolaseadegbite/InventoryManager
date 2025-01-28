@@ -1,7 +1,6 @@
 class ItemsController < ApplicationController
   include Pagy::Backend
-  
-  before_action :set_item, only: [ :show, :edit, :update, :destroy, :modify_quantity, :quantity_modal ]
+  before_action :set_item, only: [ :show, :edit, :update, :destroy, :modify_quantity, :quantity_modal, :confirm_delete ]
   before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
   before_action :authorize_quantity_modification, only: [ :modify_quantity ]
 
@@ -56,6 +55,9 @@ class ItemsController < ApplicationController
     end
   end
 
+  def confirm_delete
+  end
+
   def destroy
     @item.destroy
     redirect_to items_url, notice: "Item deleted successfully", status: :see_other
@@ -80,10 +82,6 @@ class ItemsController < ApplicationController
       format.html { redirect_to @item, notice: success ? "Quantity #{action}ed successfully." : "Failed to #{action} quantity." }
     end
   end    
-
-  def confirm_delete
-    @item = Item.find(params[:id])
-  end
 
   def search_modal
     @q = Item.ransack(params[:q])

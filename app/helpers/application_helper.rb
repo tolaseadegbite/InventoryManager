@@ -21,4 +21,11 @@ module ApplicationHelper
   def render_turbo_stream_flash_messages
     turbo_stream.prepend "flash", partial: "shared/flash"
   end
+
+  def delete_modal(resource, path)
+    render partial: 'shared/delete_modal', locals: {
+      resource: resource,
+      path: path
+    }
+  end
 end

@@ -1,7 +1,6 @@
 class CategoriesController < ApplicationController
   include Pagy::Backend
-  
-  before_action :find_category, only: %w[show edit update destroy]
+  before_action :find_category, only: %w[show edit update destroy confirm_delete]
   before_action :require_admin, only: [ :new, :create, :edit, :update, :destroy ]
 
   def index
@@ -48,6 +47,9 @@ class CategoriesController < ApplicationController
       flash.now[:alert] = "Failed to update Category. Please check the errors below."
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def confirm_delete
   end
 
   def destroy

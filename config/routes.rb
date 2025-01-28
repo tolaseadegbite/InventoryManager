@@ -7,10 +7,16 @@ Rails.application.routes.draw do
 
   root "items#index"
 
-  resources :categories
+  resources :categories do
+    member do
+      get :confirm_delete
+    end
+  end
 
   resources :items do
-    get 'confirm_delete', on: :member
+    member do
+      get :confirm_delete
+    end
     member do
       post :modify_quantity
       get 'quantity_modal/:action_type', action: :quantity_modal, as: :quantity_modal
