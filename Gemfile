@@ -66,7 +66,7 @@ group :test do
 end
 
 gem "noticed", "~> 2.6"
-gem "active_storage_validations", "~> 1.4"
+gem "active_storage_validations", "~> 2.0"
 
 gem "faker", "~> 3.5"
 
