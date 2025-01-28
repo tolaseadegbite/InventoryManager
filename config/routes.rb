@@ -1,12 +1,15 @@
 Rails.application.routes.draw do
-  resource :session
-  resources :passwords, param: :token
   get "up" => "rails/health#show", as: :rails_health_check
 
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
 
   root "items#index"
 
+  # Authentication
+  resource :session
+  resources :passwords, param: :token
+
+  # Others
   resources :categories do
     member do
       get :confirm_delete
@@ -35,6 +38,7 @@ Rails.application.routes.draw do
     end
   end
 
+  # Custom
   get "/help", to: "static_pages#help"
   get "/about", to: "static_pages#about"
 
