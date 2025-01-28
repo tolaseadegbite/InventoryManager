@@ -40,6 +40,9 @@ Rails.application.routes.draw do
   end
 
   # Custom
+  get '/sign_in', to: 'sessions#new'
+  get '/sign_up', to: 'registrations#new'
+
   get "/help", to: "static_pages#help"
   get "/about", to: "static_pages#about"
 
