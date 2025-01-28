@@ -45,11 +45,28 @@ class SettingsController < ApplicationController
     
   end
 
+  def global_stock_threshold
+    
+  end
+
+  def update_global_stock_threshold
+    if current_user.update(global_stock_threshold_params)
+      flash[:notice] = "Global stock threshold updated successfully."
+      redirect_to items_setting_path
+    else
+      flash.now[:alert] = current.errors.full_messages.join(", ")
+      render :global_stock_threshold, status: :unprocessable_entity
+    end
+  end
+
   private
 
-  # Add password change specific parameters
   def email_params
     params.require(:user).permit(:email_address, :current_password)
+  end
+  
+  def global_stock_threshold_params
+    params.require(:user).permit(:global_stock_threshold)
   end
 
   def ensure_profile_exists

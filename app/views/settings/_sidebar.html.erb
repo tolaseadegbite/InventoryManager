@@ -5,7 +5,7 @@
                 <h1 class="text-xl font-semibold">Settings</h1>
             </li>
             <li class="">
-                <%= link_to settings_path, class: "inline-flex justify-between rounded-lg items-center w-full #{controller.action_name == 'index' ? 'bg-gray-200 border-r-4 border-blue-700' : "" } hover:bg-gray-200 p-2" do %>
+                <%= link_to settings_path, class: "inline-flex justify-between rounded-lg items-center w-full #{controller.controller_name == 'settings' && controller.action_name != 'items' ? 'bg-gray-200 border-r-4 border-blue-700' : "" } hover:bg-gray-200 p-2" do %>
                     Your account
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
@@ -13,7 +13,7 @@
                 <% end %>
             </li>
             <li class="">
-                <%= link_to items_settings_path, class: "inline-flex justify-between rounded-lg items-center w-full #{controller.action_name == 'items' ? 'bg-gray-200 border-r-4 border-blue-700' : "" } hover:bg-gray-200 p-2" do %>
+                <%= link_to items_setting_path, class: "inline-flex justify-between rounded-lg items-center w-full #{controller.action_name == 'items' ? 'bg-gray-200 border-r-4 border-blue-700' : "" } hover:bg-gray-200 p-2" do %>
                     Item settings and stock threshold
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />

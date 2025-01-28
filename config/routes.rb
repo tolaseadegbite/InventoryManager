@@ -44,13 +44,20 @@ Rails.application.routes.draw do
   get "/about", to: "static_pages#about"
 
   get "/settings/", to: "settings#index", as: :settings
-  get "/settings/account", to: "settings#index", as: :account_settings
-  get "/settings/account_information", to: "settings#account_information", as: :account_information_settings
-  get "/settings/password", to: "settings#password", as: :password_settings
-  get "/settings/email", to: "settings#email", as: :email_settings
-  patch "/settings/email", to: "settings#update_email", as: :update_email_settings
-  get "/settings/name", to: "settings#name", as: :name_settings
-  patch "/settings/profile", to: "settings#update_profile", as: :update_profile_settings
-  get "/settings/deactivate_account", to: "settings#deactivate_account", as: :deactivate_account_settings
-  get "/settings/items", to: "settings#items", as: :items_settings
+
+  scope "/settings" do
+    get "/account", to: "settings#index", as: :account_settings
+    get "/account_information", to: "settings#account_information", as: :account_information_settings
+    get "/password", to: "settings#password", as: :password_settings
+    get "/email", to: "settings#email", as: :email_settings
+    patch "/email", to: "settings#update_email", as: :update_email_settings
+    get "/name", to: "settings#name", as: :name_settings
+    patch "/profile", to: "settings#update_profile", as: :update_profile_settings
+    get "/deactivate_account", to: "settings#deactivate_account", as: :deactivate_account_settings
+
+    get "/items", to: "settings#items", as: :items_setting
+    get "/items/global_stock_threshold", to: "settings#global_stock_threshold", as: :global_stock_threshold_settings
+    patch "/global_stock_threshold", to: "settings#update_global_stock_threshold", as: :update_global_stock_threshold_settings
+  end
+
 end
