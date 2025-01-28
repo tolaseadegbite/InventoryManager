@@ -48,7 +48,7 @@
         </li>
 
         <li class="">
-            <%= link_to password_settings_path, class: "inline-flex justify-between rounded-lg items-center w-full hover:bg-gray-200 p-3 px-8" do %>
+            <%= link_to edit_password_path(current_user.password_reset_token), class: "inline-flex justify-between rounded-lg items-center w-full hover:bg-gray-200 p-3 px-8" do %>
 
                 <div class="flex gap-5 items-center">
                     <span>

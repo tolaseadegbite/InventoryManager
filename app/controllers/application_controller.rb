@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 
   def set_layout
     if current_user
-        "application"
+      "application"
     else
       "authentication"
     end

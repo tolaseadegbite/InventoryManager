@@ -1,5 +1,4 @@
 class SettingsController < ApplicationController
-  
   before_action :ensure_profile_exists, only: [:name, :update_profile]
   layout 'settings'
 
@@ -10,9 +9,20 @@ class SettingsController < ApplicationController
   end
 
   def password
+    render 'passwords/edit'
   end
 
-  def email
+  def update_password
+    
+  end
+
+  def update_email
+    if current_user.update(email_params)
+      redirect_to account_information_settings_path, notice: "Email updated successfully!"
+    else
+      flash.now[:alert] = current_user.errors.full_messages.join(", ")
+      render :email, status: :unprocessable_entity    
+    end
   end
 
   def name
@@ -36,6 +46,11 @@ class SettingsController < ApplicationController
   end
 
   private
+
+  # Add password change specific parameters
+  def email_params
+    params.require(:user).permit(:email_address, :current_password)
+  end
 
   def ensure_profile_exists
     @profile = current_user.profile || current_user.create_profile
