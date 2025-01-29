@@ -65,17 +65,19 @@
             </div>
 
             <!-- Items -->
-            <% if @items.any? %>
-                <%= turbo_frame_tag "items" do %>
+            <%= turbo_frame_tag "items" do %>
+                <% if @items.any? %>
                     <%= render @items %>
+                <% else %>
+                    <p>No items</p>
                 <% end %>
-            <% else %>
-                <p>No items</p>
             <% end %>
         </div>
     <% end %>
 
-    <div class="my-5 mx-auto">
-        <%== pagy_nav(@pagy) %>
-    </div>
+    <% if @pagy.pages > 1 %>
+        <div class="my-5 mx-auto">
+            <%== pagy_nav(@pagy) %>
+        </div>
+    <% end %>
 </div>

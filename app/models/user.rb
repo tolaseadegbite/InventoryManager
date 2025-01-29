@@ -22,7 +22,7 @@ class User < ApplicationRecord
   end
   
   enum :status, { unverified: 0, verified: 1, closed: 2 }
-  enum :role, { normal: 0, admin: 1 }
+  enum :role, { regular: 0, admin: 1 }
 
   has_one :profile, dependent: :destroy
   accepts_nested_attributes_for :profile

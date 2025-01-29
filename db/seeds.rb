@@ -2,10 +2,7 @@
 Item.skip_callback(:commit, :after, :update_stock_status)
 
 # Clear existing data
-User.destroy_all
-Category.destroy_all
-Item.destroy_all
-InventoryAction.destroy_all
+[User, Category, Item, InventoryAction].each(&:destroy_all)
 
 # Helper method to generate random email
 def generate_email(name)
@@ -13,44 +10,42 @@ def generate_email(name)
 end
 
 # Create 10 verified users
-users = []
-10.times do |i|
-  email_address = i == 0 ? "tolase@test.com" : generate_email(Faker::Name.name)
-  password = i == 0 ? "foofoofoo" : "password"
-  global_stock_threshold = i == 0 ? 10 : rand(5..20)
+users = 10.times.map do |i|
+  email = i.zero? ? "tolase@test.com" : generate_email(Faker::Name.name)
+  password = i.zero? ? "foofoofoo" : "password"
+  global_threshold = i.zero? ? 10 : rand(5..20)
 
   user = User.create!(
-    email_address: email_address,
+    email_address: email,
     password_digest: BCrypt::Password.create(password),
     status: :verified,
-    role: i == 0 ? :admin : :normal,
-    global_stock_threshold: global_stock_threshold
+    role: i.zero? ? :admin : :regular,
+    global_stock_threshold: global_threshold
   )
 
-  # Create profile for the user
-  profile_name = i == 0 ? "Tolase" : Faker::Name.name
+  # Create profile
   Profile.create!(
     user: user,
-    name: profile_name
+    name: i.zero? ? "Tolase" : Faker::Name.name
   )
 
-  users << user
+  user
 end
 
-# Create eCommerce-related categories
+# Create eCommerce categories
 categories = ["Electronics", "Clothing", "Home & Kitchen", "Books", "Toys", 
-             "Sports", "Beauty", "Health", "Grocery", "Automotive"]
-categories.each do |category_name|
+              "Sports", "Beauty", "Health", "Grocery", "Automotive"]
+categories.each do |name|
   Category.create!(
-    name: category_name,
+    name: name,
     user: users.first,
     description: Faker::Lorem.sentence
   )
 end
 
-# Create 100 items associated with the first user
+# Create 100 items for the first user
 100.times do
-  item = Item.create!(
+  Item.create!(
     name: Faker::Commerce.product_name,
     description: Faker::Lorem.sentence,
     quantity: rand(0..100),
@@ -60,10 +55,10 @@ end
   )
 end
 
-# Create inventory actions
+# Perform inventory actions
 items = Item.all
 
-# First perform "remove" actions
+# Remove items
 users.each do |user|
   rand(5..15).times do
     item = items.sample
@@ -77,7 +72,7 @@ users.each do |user|
   end
 end
 
-# Then perform "add" actions with admin
+# Restock items as admin
 items.each do |item|
   amount = rand(10..50)
   item.modify_quantity(
@@ -88,29 +83,21 @@ items.each do |item|
   )
 end
 
-# Force some items to be low stock (20% of total items)
-low_stock_percentage = 0.2
-low_stock_count = (Item.count * low_stock_percentage).ceil
-low_stock_items = Item.all.sample(low_stock_count)
-
-low_stock_items.each do |item|
-  effective_threshold = [item.stock_threshold, item.user.global_stock_threshold].max
-  
-  # Ensure valid quantity range
-  max_low_quantity = [effective_threshold - 1, 0].max
-  new_quantity = rand(0..max_low_quantity)
-  
-  item.update_columns(quantity: new_quantity)
+# Correctly set low stock items using effective threshold
+low_stock_count = (Item.count * 0.2).ceil
+Item.all.sample(low_stock_count).each do |item|
+  effective_threshold = item.stock_threshold.zero? ? item.user.global_stock_threshold : item.stock_threshold
+  max_low_quantity = [effective_threshold - 1, 0].max # Ensure quantity is below threshold
+  item.update_columns(quantity: rand(0..max_low_quantity))
 end
 
-# Final update of all low_stock statuses
+# Update low_stock status for all items
 Item.find_each do |item|
-  effective_threshold = [item.stock_threshold, item.user.global_stock_threshold].max
-  current_low_stock = item.quantity <= effective_threshold
-  item.update_columns(low_stock: current_low_stock)
+  effective_threshold = item.stock_threshold.zero? ? item.user.global_stock_threshold : item.stock_threshold
+  item.update_columns(low_stock: item.quantity <= effective_threshold)
 end
 
-# Re-enable the after_commit callback
+# Re-enable callback
 Item.set_callback(:commit, :after, :update_stock_status)
 
 puts "Seeding completed successfully!"

@@ -56,16 +56,15 @@ class Item < ApplicationRecord
   end    
 
   def effective_threshold
-    [stock_threshold, user.global_stock_threshold].max
+    stock_threshold.zero? ? user.global_stock_threshold : stock_threshold
   end
 
   private
 
   def should_check_stock?
-    return true if saved_change_to_quantity?
-    return true if saved_change_to_stock_threshold?
-    return true if user&.saved_change_to_global_stock_threshold?
-    false
+    saved_change_to_quantity? ||
+    saved_change_to_stock_threshold? ||
+    (user.saved_change_to_global_stock_threshold? && stock_threshold.zero?) # Only check if item uses global
   end
 
   def update_stock_status
@@ -81,13 +80,11 @@ class Item < ApplicationRecord
   end
 
   def notify_admins_of_stock_change
-    User.where(role: :admin).find_each do |admin|
-      LowStockNotifier.with(
-        record_id: id,
-        record: self,
-        quantity: quantity,
-        threshold: effective_threshold
-      ).deliver_later(admin)
-    end
+    LowStockNotifier.with(
+      record_id: id,
+      record: self,
+      quantity: quantity,
+      threshold: effective_threshold
+    ).deliver_later(User.where(role: :admin))
   end
 end

@@ -2,7 +2,7 @@
 
 <div class="container mx-auto">
   <div class="max-w-screen-lg mx-auto">
-    <div class="bg-white rounded-3xl shadow-md border">
+    <div class="bg-white rounded-3xl shadow-md border pb-5">
       <div class="flex justify-between items-center p-4">
         <h1 class="text-2xl font-bold">Notifications</h1>
         <% if @notifications.unread.any? %>
@@ -13,37 +13,45 @@
         <% end %>
       </div>
 
-      <% @notifications.newest_first.each do |notification| %>
-        <div class="p-4 border-b <%= notification.read? ? 'bg-white' : 'bg-blue-100' %>">
-          <div class="flex justify-between items-start">
-            <%= link_to mark_read_notification_path(notification, redirect: true), 
-                data: { turbo_method: :post, turbo_action: "advance" } do %>
-              <div class="flex-1">
-                <p class="text-gray-800"><%= notification.message %></p>
-                <p class="text-sm text-gray-500">
-                  <%= time_ago_in_words(notification.created_at) %> ago
-                </p>
-              </div>
-            <% end %>
-            <% unless notification.read? %>
-              <%= button_to 'Mark as read',
-                  mark_read_notification_path(notification),
-                  method: :post,
-                  class: "text-sm text-blue-600 hover:text-blue-800" %>
-            <% end %>
+      <% if current_user.notifications.any? %>
+        <% @notifications.newest_first.each do |notification| %>
+          <div class="p-4 border-b <%= notification.read? ? 'bg-white' : 'bg-blue-100' %>">
+            <div class="flex justify-between items-start">
+              <%= link_to mark_read_notification_path(notification, redirect: true), 
+                  data: { turbo_method: :post, turbo_action: "advance" } do %>
+                <div class="flex-1">
+                  <p class="text-gray-800"><%= notification.message %></p>
+                  <p class="text-sm text-gray-500">
+                    <%= time_ago_in_words(notification.created_at) %> ago
+                  </p>
+                </div>
+              <% end %>
+              <% unless notification.read? %>
+                <%= button_to 'Mark as read',
+                    mark_read_notification_path(notification),
+                    method: :post,
+                    class: "text-sm text-blue-600 hover:text-blue-800" %>
+              <% end %>
+            </div>
           </div>
-        </div>
+        <% end %>
+
+        <% if @pagy.pages > 1 %>
+          <div class="my-5 ms-4 mx-auto">
+            <%== pagy_nav(@pagy) %>
+          </div>
+        <% end %>
+
+      <% else %>
+
+        <% if @notifications.empty? %>
+          <div class="text-center py-8">
+            <p class="text-gray-500">No notifications yet</p>
+          </div>
+        <% end %>
+
       <% end %>
     </div>
 
-    <div class="my-5 mx-auto">
-        <%== pagy_nav(@pagy) %>
-    </div>
-
-    <% if @notifications.empty? %>
-      <div class="text-center py-8">
-        <p class="text-gray-500">No notifications yet</p>
-      </div>
-    <% end %>
   </div>
 </div>
