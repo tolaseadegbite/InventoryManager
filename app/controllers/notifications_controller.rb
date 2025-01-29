@@ -14,10 +14,7 @@ class NotificationsController < ApplicationController
 
   def mark_read
     @notification.mark_as_read
-    
-    # Get the URL from the event
-    event = Noticed::Event.find(@notification.event_id)
-    redirect_to item_path(event.params[:record_id])
+    redirect_back(fallback_location: notifications_path)  # This just marks as read and stays on the page
   end
 
   def mark_all_read
