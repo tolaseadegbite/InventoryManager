@@ -30,9 +30,10 @@ Rails.application.routes.draw do
     end      
   end
 
-  resources :notifications, only: [:index] do
+  resources :notifications, only: [:index, :show] do
     member do
       post :mark_read
+      get :show
     end
     collection do
       post :mark_all_read

@@ -19,7 +19,8 @@
             
             <div class="p-4 border-b <%= notification.read? ? 'bg-white' : 'bg-blue-100' %>">
               <div class="flex justify-between items-start">
-                <%= link_to mark_read_notification_path(notification), method: :post, data: { turbo: false } do %>
+                <%= link_to mark_read_notification_path(notification), data: { turbo_method: :post, turbo_action: "advance" 
+              } do %>
                   <div class="flex-1">
                     <p class="text-gray-800"><%= notification.message %></p>
                     <p class="text-sm text-gray-500 mt-1">
