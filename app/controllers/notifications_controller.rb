@@ -14,7 +14,15 @@ class NotificationsController < ApplicationController
 
   def mark_read
     @notification.mark_as_read
-    redirect_back(fallback_location: notifications_path)  # This just marks as read and stays on the page
+    
+    if params[:redirect] == 'true'
+      # Get the URL from the event and redirect (for dropdown clicks)
+      event = Noticed::Event.find(@notification.event_id)
+      redirect_to item_path(event.params[:record_id])
+    else
+      # Just mark as read and stay on page (for mark as read button)
+      redirect_back(fallback_location: notifications_path)
+    end
   end
 
   def mark_all_read

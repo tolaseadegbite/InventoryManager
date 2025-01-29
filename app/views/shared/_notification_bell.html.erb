@@ -39,7 +39,7 @@
 
       <% if current_user.notifications.any? %>
         <% current_user.notifications.newest_first.limit(10).each do |notification| %>
-          <%= link_to mark_read_notification_path(notification),
+          <%= link_to mark_read_notification_path(notification, redirect: true), 
               data: { 
                 turbo_method: :post,
                 turbo_action: "advance" 
