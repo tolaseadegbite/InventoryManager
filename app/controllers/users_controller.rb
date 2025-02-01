@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   include Pagy::Backend
-  before_action :find_user, except: :index
+  before_action :find_user, only: %w[show edit update destroy confirm_delete]
 
   def index
     @q = User.ransack(params[:q])
@@ -13,13 +13,15 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @user.build_profile
   end
 
   def create
     @user = User.new(user_params)
-    @user.password = SecureRandom.hex(10) # Auto-generate a temp password
+    # @user.password = SecureRandom.hex(10) # Auto-generate a temp password
+    @user.password = 'Password' # Auto-generate a temp password
     if @user.save
-      PasswordsMailer.reset(user).deliver_later # Let them set their own password
+      PasswordsMailer.reset(@user).deliver_later # Let them set their own password
       redirect_to users_path, notice: "User created!"
     else
       render :new, status: :unprocessable_entity
@@ -38,6 +40,9 @@ class UsersController < ApplicationController
     end
   end
 
+  def confirm_delete
+  end
+
   def destroy
     @user.destroy
     redirect_to users_path, notice: "User successfully deleted!"
@@ -46,10 +51,10 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.expect([:email, :password_digest, :status, :role, :global_stock_threshold])
+    params.require(:user).permit(:email_address, :role, profile_attributes: [:id, :name])
   end
 
   def find_user
-    @user = User.find(params[:id])
+    @user = User.find(params[:id,])
   end
 end

@@ -1,0 +1,7 @@
+<div class="flex items-center flex-wrap gap-2 md:gap-5 mb-3">
+  <div><span class="font-semibold">Email:</span> <%= user.email %></div>
+  <span>•</span>
+  <div><span class="font-semibold">Role:</span> <%= user.role %></div>
+  <span>•</span>
+  <div><span class="font-semibold">Created on:</span> <span><%= user.created_at.strftime("%Y-%m-%d %H:%M") %></span></div>
+</div>

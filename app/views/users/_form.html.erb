@@ -1,0 +1,31 @@
+<div class="p-5">
+    <%= form_with(model: [user], data: { turbo_frame: :modal }, class: "w-full") do |form| %>
+        <%= render 'shared/errors', form: form %>
+        
+        <%= form.fields_for :profile do |profile_form| %>
+            <div class="mb-5">
+                <%= form.label :name, class: "block text-sm font-semibold" %>
+                <%= profile_form.text_field :name, required: true, autofocus: true, 
+                    autocomplete: "name", placeholder: "Enter user's name", 
+                    class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
+            </div>
+        <% end %>
+
+        <div class="mb-5">
+            <%= form.label :email, class: "block text-sm font-semibold" %>
+            <%= form.email_field :email_address, required: true, autocomplete: "email", 
+                placeholder: "Enter your user's email address",
+                class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
+        </div>
+
+        <div class="mb-5">
+            <%= form.label :role, class: "block text-sm font-semibold" %>
+            <%= form.select :role, 
+                User.roles.map { |k, v| [k.titleize, k] },  # Change v to k to pass the symbol
+                { include_blank: false }, 
+                class: "mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 cursor-pointer" %>
+        </div>
+
+        <%= form.submit "Save", class: "w-full px-8 py-3 cursor-pointer font-semibold text-sm rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 dark:bg-emerald-400 dark:hover:bg-emerald-500 dark:text-gray-900 dark:focus:ring-emerald-400 dark:focus:ring-offset-current" %>
+    <% end %>
+</div>

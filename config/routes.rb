@@ -11,7 +11,11 @@ Rails.application.routes.draw do
   resource :registrations, only: [:new, :create]
 
   # Others
-  resources :users
+  resources :users do
+    member do
+      get :confirm_delete
+    end
+  end
   
   resources :categories do
     member do
