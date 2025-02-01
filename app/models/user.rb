@@ -17,8 +17,12 @@ class User < ApplicationRecord
     email_address
   end
 
-  def self.ransackable_attributes(auth_object = nil)
-    ["name"]
+  def self.ransackable_attributes(auth_object = nil) 
+    ["email_address", "role", "created_at"] 
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    ["profile"]
   end
   
   enum :status, { unverified: 0, verified: 1, closed: 2 }
@@ -26,6 +30,8 @@ class User < ApplicationRecord
 
   has_one :profile, dependent: :destroy
   accepts_nested_attributes_for :profile
+
+  scope :ordered, -> { order(id: :desc) }
 
   has_many :categories, dependent: :destroy
   has_many :items, dependent: :destroy

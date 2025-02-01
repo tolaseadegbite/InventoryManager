@@ -2,6 +2,10 @@ class Profile < ApplicationRecord
   validates :name, presence: true, length: { minimum: 4, maximum: 50 }
   belongs_to :user
 
+  def self.ransackable_attributes(auth_object = nil)
+    ["name"]
+  end
+
   has_one_attached :avatar do |attachable|
     attachable.variant :display, resize_to_limit: [200, 200]
   end
