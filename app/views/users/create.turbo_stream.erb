@@ -1,0 +1,9 @@
+<%= turbo_stream.prepend "users" do %>
+    <%= render @user %>
+<% end %>
+
+<%= turbo_stream.update User.new, '' %>
+
+<%= turbo_stream.update 'header_counter_badge' do %>
+    <%= render 'users/components/header_counter_badge' %>
+<% end %>

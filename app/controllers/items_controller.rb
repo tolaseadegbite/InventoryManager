@@ -78,8 +78,8 @@ class ItemsController < ApplicationController
     @q = @item.inventory_actions.ransack(params[:q])
   
     respond_to do |format|
-      format.turbo_stream
-      format.html { redirect_to @item, notice: success ? "Quantity #{action}ed successfully." : "Failed to #{action} quantity." }
+      format.html { redirect_to @item, notice: success ? "Quantity #{action == 'add' ? 'added' : 'removed'} successfully." : "Failed to #{action} quantity." }
+      format.turbo_stream { flash.now[:notice] = success ? "Quantity #{action == 'add' ? 'added' : 'removed'} successfully." : "Failed to #{action} quantity." }
     end
   end    
 

@@ -1,0 +1,11 @@
+<%= turbo_stream.update @user do %>
+  <%= render @user %>
+<% end %>
+
+<%= turbo_stream.update 'show_header' do %>
+  <%= render 'users/components/show_header' %>
+<% end %>
+
+<%= turbo_stream.update "user_info_#{@user.id}" do %>
+  <%= render "users/components/user_info", user: @user %>
+<% end %>

@@ -18,11 +18,15 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    # @user.password = SecureRandom.hex(10) # Auto-generate a temp password
-    @user.password = 'Password' # Auto-generate a temp password
+    @user.password = 'Password' # Temporary password
     if @user.save
-      PasswordsMailer.reset(@user).deliver_later # Let them set their own password
-      redirect_to users_path, notice: "User created!"
+      PasswordsMailer.reset(@user).deliver_later
+      respond_to do |format|
+        format.html { redirect_to users_path, notice: "User created!" }
+        format.turbo_stream do
+          format.turbo_stream { flash.now[:notice] = "User updated!" }
+        end
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -32,9 +36,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.admin_action = current_user.admin? # Set the flag if admin is making the change
+    @user.admin_action = current_user.admin?
     if @user.update(user_params)
-      redirect_to @user, notice: "User updated successfully!"
+      respond_to do |format|
+        format.html { redirect_to @user, notice: "User updated!" }
+        format.turbo_stream { flash.now[:notice] = "User updated!" }
+      end
     else
       render :edit, status: :unprocessable_entity
     end
