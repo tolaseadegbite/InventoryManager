@@ -69,18 +69,34 @@ class Item < ApplicationRecord
 
   def update_stock_status
     return unless quantity.present?
-
+  
     current_low_stock = quantity <= effective_threshold
     
     if current_low_stock != low_stock
       # Use update instead of update_column to ensure callbacks run
       update(low_stock: current_low_stock)
-      notify_admins_of_stock_change if current_low_stock
+      
+      if current_low_stock
+        # Existing logic for notifying when item goes low in stock
+        notify_admins_of_stock_change
+      else
+        # New logic for notifying when item is no longer low in stock
+        notify_admins_of_stock_replenishment
+      end
     end
   end
 
   def notify_admins_of_stock_change
     LowStockNotifier.with(
+      record_id: id,
+      record: self,
+      quantity: quantity,
+      threshold: effective_threshold
+    ).deliver_later(User.where(role: :admin))
+  end
+
+  def notify_admins_of_stock_replenishment
+    StockReplenishmentNotifier.with(
       record_id: id,
       record: self,
       quantity: quantity,
