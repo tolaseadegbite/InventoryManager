@@ -8,9 +8,9 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   ###################################################################################################
-  attr_accessor :current_password  # Add this line to create a virtual attribute
+  attr_accessor :current_password, :admin_action
 
-  validate :validate_current_password, on: :update, if: :email_address_changed?
+  validate :validate_current_password, on: :update, if: :should_validate_current_password?
 
   # Alias email_address to email
   def email
@@ -40,9 +40,11 @@ class User < ApplicationRecord
 
   private
 
-  def validate_current_password
-    return unless email_address_changed?
+  def should_validate_current_password?
+    email_address_changed? && !admin_action
+  end
 
+  def validate_current_password
     if current_password.blank?
       errors.add(:current_password, "can't be blank")
     elsif !authenticate(current_password)

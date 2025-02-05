@@ -15,7 +15,7 @@
 
       <% if current_user.notifications.any? %>
         <% @notifications.newest_first.each do |notification| %>
-          <div class="p-4 border-b <%= notification.read? ? 'bg-white' : 'bg-blue-100' %>">
+          <div class="p-4 border-t <%= notification.read? ? 'bg-white' : 'bg-blue-100' %>">
             <div class="flex justify-between items-start">
               <%= link_to mark_read_notification_path(notification, redirect: true), 
                   data: { turbo_method: :post, turbo_action: "advance" } do %>

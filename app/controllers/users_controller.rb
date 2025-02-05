@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   include Pagy::Backend
   before_action :find_user, only: %w[show edit update destroy confirm_delete]
+  before_action :require_admin
 
   def index
     @q = User.ransack(params[:q])
@@ -8,7 +9,6 @@ class UsersController < ApplicationController
   end
 
   def show
-    
   end
 
   def new
@@ -29,10 +29,10 @@ class UsersController < ApplicationController
   end
 
   def edit
-    
   end
 
   def update
+    @user.admin_action = current_user.admin? # Set the flag if admin is making the change
     if @user.update(user_params)
       redirect_to @user, notice: "User updated successfully!"
     else
@@ -51,10 +51,16 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email_address, :role, profile_attributes: [:id, :name])
+    params.require(:user).permit(:email_address, :role, profile_attributes: [ :id, :name ])
   end
 
   def find_user
     @user = User.find(params[:id,])
+  end
+
+  def require_admin
+    unless current_user.admin?
+      redirect_to items_path, alert: "Unauthorized action."
+    end
   end
 end
