@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 gem "rails",                                "8.0.1"
-gem "active_storage_validations",           "1.4.0"
+gem "active_storage_validations",           "2.0.2"
 gem "bcrypt",                               "3.1.20"
 gem "bootsnap",                             "1.18.4", require: false
 gem "faker",                                "3.5.1"
