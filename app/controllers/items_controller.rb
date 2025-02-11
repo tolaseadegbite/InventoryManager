@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   include Pagy::Backend
   before_action :set_inventory
+  # before_action :set_category, only: [:show]
   before_action :set_item, only: [:show, :edit, :update, :destroy, :modify_quantity, :quantity_modal, :confirm_delete]
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
   before_action :authorize_quantity_modification, only: [:modify_quantity]
@@ -91,6 +92,10 @@ class ItemsController < ApplicationController
 
   def set_inventory
     @inventory = Inventory.find(params[:inventory_id])
+  end
+
+  def set_category
+    @category = Category.find(params[:category_id])
   end
 
   def set_item

@@ -4,7 +4,6 @@ class NotificationsController < ApplicationController
   before_action :set_notification, only: [:show, :mark_read]
 
   def index
-    # @notifications = current_user.notifications.newest_first
     @pagy, @notifications = pagy(current_user.notifications.includes(:event).newest_first, limit: 10)
   end
 
@@ -19,7 +18,7 @@ class NotificationsController < ApplicationController
     if params[:redirect] == 'true'
       # Get the URL from the event and redirect (for dropdown clicks)
       event = Noticed::Event.find(@notification.event_id)
-      redirect_to item_path(event.params[:record_id])
+      redirect_to inventory_item_path(event.params[:inventory_id], event.params[:record_id])
     else
       # Just mark as read and stay on page (for mark as read button)
       redirect_back(fallback_location: notifications_path)

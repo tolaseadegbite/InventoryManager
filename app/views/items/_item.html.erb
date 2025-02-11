@@ -39,7 +39,7 @@
         <%= item.quantity %>
       </li>
       <li class="w-1/4 text-center truncate">
-        <%= item.category.present? ? link_to(item.category.name, inventory_category_path(@inventory, item.category), class: "text-orange-500 hover:underline", data: { turbo_frame: "_top" }) : '<span class="text-gray-400">Not set</span>'.html_safe %>
+        <%= item.category.present? ? link_to(item.category.name, inventory_category_path(@inventory, item.category), class: "text-orange-500 hover:underline", data: { turbo_frame: "_top" }) : '<span class="text-gray-400 text-">Not set</span>'.html_safe %>
       </li>
       <li class="w-1/4 flex justify-center gap-2">
         <% if current_user.admin? %>

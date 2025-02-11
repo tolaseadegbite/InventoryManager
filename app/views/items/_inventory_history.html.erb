@@ -24,7 +24,13 @@
               <td class="p-2"><%= action.created_at.strftime("%Y-%m-%d %H:%M") %></td>
               <td class="p-2"><%= action.action_type.titleize %></td>
               <td class="p-2"><%= action.quantity %></td>
-              <td class="p-2"><%= action.notes || '-' %></td>
+              <td class="p-2">
+                <% if action.notes.present? %>
+                  <%= action.notes || '-' %>
+                <% else %>
+                  <p class="mb-3 text-gray-600 italic dark:text-gray-400 text-sm">-</p>
+                <% end %>
+              </td>
               <td class="p-2"><%= action.user.profile.name || action.user.email %></td>
             </tr>
           <% end %>

@@ -24,4 +24,8 @@
   <div><span class="font-semibold">Created by:</span> <span><%= item.user.profile.name || item.user.email %></span></div>
 </div>
 
-<p class=""><%= item.description %></p>
+<% if item.description.present? %>
+  <p class="mb-3 text-gray-600 italic dark:text-gray-400"><%= item.description %></p>
+<% else %>
+  <p class="mb-3 text-gray-600 italic dark:text-gray-400">No description</p>
+<% end %>

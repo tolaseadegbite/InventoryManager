@@ -85,7 +85,9 @@ class Item < ApplicationRecord
       record_id: id,
       record: self,
       quantity: quantity,
-      threshold: effective_threshold
+      threshold: effective_threshold,
+      inventory_id: inventory_id,
+      inventory_name: inventory.name
     ).deliver_later(User.where(role: :admin))
   end
 
@@ -94,7 +96,9 @@ class Item < ApplicationRecord
       record_id: id,
       record: self,
       quantity: quantity,
-      threshold: effective_threshold
+      threshold: effective_threshold,
+      inventory_id: inventory_id,
+      inventory_name: inventory.name
     ).deliver_later(User.where(role: :admin))
   end
 end
