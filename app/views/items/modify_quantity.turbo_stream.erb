@@ -1,14 +1,14 @@
 <%# Also update the item on the index page if it exists %>
 <%= turbo_stream.replace dom_id(@item) do %>
-  <%= render "item", item: @item %>
+  <%= render "item", inventory: @intentory, item: @item %>
 <% end %>
 
 <%# Update the item info on the show page if it exists %>
 <%= turbo_stream.update "item_info_#{@item.id}" do %>
-  <%= render "item_info", item: @item %>
+  <%= render "item_info", inventory: @inventory, item: @item %>
 <% end %>
 <%= turbo_stream.update "show_quantity_form" do %>
-  <%= render "items/components/show_quantity_form", item: @item %>
+  <%= render "items/components/show_quantity_form", inventory: @inventory, item: @item %>
 <% end %>
 
 <%# Update the inventory history %>

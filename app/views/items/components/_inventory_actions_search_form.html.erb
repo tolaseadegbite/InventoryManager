@@ -6,7 +6,7 @@
 
 <!-- Dropdown menu -->
 <div id="dropdownInventorySearch" class="absolute w-96 border z-50 hidden bg-white divide-y divide-gray-100 rounded-3xl shadow dark:bg-gray-700 dark:divide-gray-600 p-4">
-    <%= search_form_for q, url: item_path(item), data: { turbo_frame: :inventory_action_results, turbo_action: 'advance', controller: "debounce clear-form", "clear_form_target": "form", action: "input->debounce#submit" }, class: "search-form" do |form| %>
+    <%= search_form_for q, url: inventory_item_path(inventory, item), data: { turbo_frame: :inventory_action_results, turbo_action: 'advance', controller: "debounce clear-form", "clear_form_target": "form", action: "input->debounce#submit" }, class: "search-form" do |form| %>
         <div class="grid md:grid-cols-2 md:gap-6">
             <div class="mb-6">
                 <%= form.label "Date range from", class: "block text-sm font-semibold" %>

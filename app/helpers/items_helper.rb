@@ -11,9 +11,9 @@ module ItemsHelper
     end
   end
 
-  def display_effective_threshold(item)
+  def display_effective_threshold(inventory, item)
     if item.stock_threshold.zero?
-      "#{item.user.global_stock_threshold} (Global)"
+      "#{inventory.global_stock_threshold} (Global)"
     else
       "#{item.stock_threshold} (Custom)"
     end
