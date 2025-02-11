@@ -5,7 +5,7 @@ class Category < ApplicationRecord
     ["name"]
   end
 
-  belongs_to :user
+  belongs_to :inventory, counter_cache: :categories_count
   has_many :items, dependent: :destroy
 
   scope :ordered, -> { order(id: :desc) }

@@ -24,7 +24,7 @@
                 <%= form.label :name, class: "block text-sm font-semibold" %>
                 <%= form.search_field :name_cont, placeholder: "Search by name", class: "mt-2 text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400" %>
             </div>
-            <% if request.path == items_path %>
+            <% if request.path == inventory_items_path(@inventory) %>
                 <div class="mb-6">
                     <%= form.label "Category", class: "block text-sm font-semibold" %>
                     <%= form.select :category_id_eq, Category.all.pluck(:name, :id), { include_blank: "Select category" }, class: "mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 cursor-pointer", id: "category_select" %>

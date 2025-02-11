@@ -4,7 +4,7 @@
     <div class="block md:hidden">
       <li class="flex justify-between items-center mb-3">
         <h2><span class="font-semibold text-gray-700">Name:</span></h2>
-        <%= link_to highlight(item.name, params.dig(:q, :name_cont)), item, class: "text-gray-600 hover:text-gray-500 font-semibold", data: { turbo_frame: "_top" } %>
+        <%= link_to highlight(item.name, params.dig(:q, :name_cont)), inventory_item_path(@inventory, item), class: "text-gray-600 hover:text-gray-500 font-semibold", data: { turbo_frame: "_top" } %>
       </li>
       <li class="flex justify-between items-center mb-3">
         <h2><span class="font-semibold text-gray-700">Quantity:</span></h2>
@@ -12,17 +12,17 @@
       </li>
       <li class="flex justify-between items-center mb-3">
         <h2><span class="font-semibold text-gray-700">Category:</span></h2>
-        <%= item.category.present? ? link_to(item.category.name, category_path(item.category), class: "text-orange-500 hover:underline", data: { turbo_frame: "_top" }) : '<span class="text-gray-400">Not set</span>'.html_safe %>
+        <%= item.category.present? ? link_to(item.category.name, inventory_category_path(@inventory, item.category), class: "text-orange-500 hover:underline", data: { turbo_frame: "_top" }) : '<span class="text-gray-400">Not set</span>'.html_safe %>
       </li>
       <li class="flex justify-end gap-3 mt-4">
         <% if current_user.admin? %>
-          <%= link_to quantity_modal_item_path(item, action_type: 'add'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-green-100 text-green-600 hover:bg-green-200 px-4 py-2 rounded-lg shadow-sm transition-all" do %>
+          <%= link_to quantity_modal_inventory_item_path(@inventory, item, action_type: 'add'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-green-100 text-green-600 hover:bg-green-200 px-4 py-2 rounded-lg shadow-sm transition-all" do %>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
           <% end %>
         <% end %>
-        <%= link_to quantity_modal_item_path(item, action_type: 'remove'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-lg shadow-sm transition-all" do %>
+        <%= link_to quantity_modal_inventory_item_path(@inventory, item, action_type: 'remove'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-red-100 text-red-600 hover:bg-red-200 px-4 py-2 rounded-lg shadow-sm transition-all" do %>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
           </svg>
@@ -33,23 +33,23 @@
     <!-- Desktop View -->
     <div class="hidden md:flex justify-between items-center">
       <li class="w-1/4 font-semibold text-gray-800 truncate">
-        <%= link_to highlight(item.name, params.dig(:q, :name_cont)), item, class: "text-gray-600 hover:text-gray-500 font-semibold", data: { turbo_frame: "_top" } %>
+        <%= link_to highlight(item.name, params.dig(:q, :name_cont)), inventory_item_path(@inventory, item), class: "text-gray-600 hover:text-gray-500 font-semibold", data: { turbo_frame: "_top" } %>
       </li>
       <li class="w-1/4 text-center text-gray-600">
         <%= item.quantity %>
       </li>
       <li class="w-1/4 text-center truncate">
-        <%= item.category.present? ? link_to(item.category.name, category_path(item.category), class: "text-orange-500 hover:underline", data: { turbo_frame: "_top" }) : '<span class="text-gray-400">Not set</span>'.html_safe %>
+        <%= item.category.present? ? link_to(item.category.name, inventory_category_path(@inventory, item.category), class: "text-orange-500 hover:underline", data: { turbo_frame: "_top" }) : '<span class="text-gray-400">Not set</span>'.html_safe %>
       </li>
       <li class="w-1/4 flex justify-center gap-2">
         <% if current_user.admin? %>
-          <%= link_to quantity_modal_item_path(item, action_type: 'add'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-green-100 text-green-600 hover:bg-green-200 px-3 py-2 rounded-lg shadow-sm transition-all" do %>
+          <%= link_to quantity_modal_inventory_item_path(@inventory, item, action_type: 'add'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-green-100 text-green-600 hover:bg-green-200 px-3 py-2 rounded-lg shadow-sm transition-all" do %>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
           <% end %>
         <% end %>
-        <%= link_to quantity_modal_item_path(item, action_type: 'remove'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-red-100 text-red-600 hover:bg-red-200 px-3 py-2 rounded-lg shadow-sm transition-all" do %>
+        <%= link_to quantity_modal_inventory_item_path(@inventory, item, action_type: 'remove'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-red-100 text-red-600 hover:bg-red-200 px-3 py-2 rounded-lg shadow-sm transition-all" do %>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
           </svg>

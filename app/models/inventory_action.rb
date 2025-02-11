@@ -10,6 +10,7 @@ class InventoryAction < ApplicationRecord
     ["user"]
   end
 
+  belongs_to :inventory, counter_cache: :inventory_actions_count
   belongs_to :item, counter_cache: :inventory_actions_count
   belongs_to :user, counter_cache: :inventory_actions_count
   

@@ -1,41 +1,46 @@
 Rails.application.routes.draw do
+  root "static_pages#home"
   get "up" => "rails/health#show", as: :rails_health_check
-
   mount LetterOpenerWeb::Engine, at: "/letter_opener" if Rails.env.development?
-
-  root "items#index"
 
   # Authentication
   resource :session
   resources :passwords, param: :token
   resource :registrations, only: [:new, :create]
 
-  # Others
+  # Inventory resources
+  resources :inventories do
+    member do
+      get 'dashboard'
+      get :confirm_delete
+    end
+    
+    resources :categories do   # Removed shallow: true
+      member do
+        get :confirm_delete
+      end
+    end
+
+    resources :items do
+      member do
+        get :confirm_delete
+        post :modify_quantity
+        get 'quantity_modal/:action_type', action: :quantity_modal, as: :quantity_modal
+      end
+      collection do
+        get :search_modal
+      end
+    end
+  end
+
+  # User management
   resources :users do
     member do
       get :confirm_delete
     end
   end
-  
-  resources :categories do
-    member do
-      get :confirm_delete
-    end
-  end
 
-  resources :items do
-    member do
-      get :confirm_delete
-    end
-    member do
-      post :modify_quantity
-      get 'quantity_modal/:action_type', action: :quantity_modal, as: :quantity_modal
-    end
-    collection do
-      get :search_modal
-    end      
-  end
-
+  # Notifications
   resources :notifications, only: [:index, :show] do
     member do
       post :mark_read
@@ -46,15 +51,17 @@ Rails.application.routes.draw do
     end
   end
 
-  # Custom
+  # Authentication routes
   get '/sign_in', to: 'sessions#new'
   get '/sign_up', to: 'registrations#new'
 
+  # Static pages
+  get "/home", to: "static_pages#help"
   get "/help", to: "static_pages#help"
   get "/about", to: "static_pages#about"
 
+  # Settings routes
   get "/settings/", to: "settings#index", as: :settings
-
   scope "/settings" do
     get "/account", to: "settings#index", as: :account_settings
     get "/account_information", to: "settings#account_information", as: :account_information_settings
@@ -69,5 +76,4 @@ Rails.application.routes.draw do
     get "/items/global_stock_threshold", to: "settings#global_stock_threshold", as: :global_stock_threshold_settings
     patch "/global_stock_threshold", to: "settings#update_global_stock_threshold", as: :update_global_stock_threshold_settings
   end
-
 end

@@ -33,6 +33,7 @@ class User < ApplicationRecord
 
   scope :ordered, -> { order(id: :desc) }
 
+  has_many :inventories, dependent: :destroy
   has_many :categories, dependent: :destroy
   has_many :items, dependent: :destroy
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"

@@ -4,15 +4,17 @@ class Item < ApplicationRecord
   validates :name, presence: true, length: { minimum: 2, maximum: 100 }
   validates :quantity, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :stock_threshold, numericality: { greater_than_or_equal_to: 0 }
+  validates :inventory_id, presence: true
 
   def self.ransackable_attributes(auth_object = nil) 
-    ["name", "quantity", "category_id", "low_stock"] 
+    ["name", "quantity", "category_id", "low_stock", "inventory_id"] 
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["category"]
+    ["category", "inventory"]
   end
 
+  belongs_to :inventory, counter_cache: :items_count
   belongs_to :category, counter_cache: :items_count, optional: true
   belongs_to :user, counter_cache: :items_count
   has_many :inventory_actions, dependent: :destroy
@@ -30,18 +32,13 @@ class Item < ApplicationRecord
     return false if action == "remove" && amount > quantity
   
     transaction do
-      # Store the original quantity for comparison
       original_quantity = quantity
-      
-      # Update the quantity
       self.quantity = action == "add" ? quantity + amount : quantity - amount
-      
-      # Force the quantity_changed? flag to be true if the value actually changed
       send(:attribute_will_change!, 'quantity') if quantity != original_quantity
-      
       save!
   
       inventory_actions.create!(
+        inventory: inventory,
         user: current_user,
         action_type: action,
         quantity: amount,
@@ -56,7 +53,7 @@ class Item < ApplicationRecord
   end    
 
   def effective_threshold
-    stock_threshold.zero? ? user.global_stock_threshold : stock_threshold
+    stock_threshold.zero? ? inventory.global_stock_threshold : stock_threshold
   end
 
   private
@@ -64,7 +61,7 @@ class Item < ApplicationRecord
   def should_check_stock?
     saved_change_to_quantity? ||
     saved_change_to_stock_threshold? ||
-    (user.saved_change_to_global_stock_threshold? && stock_threshold.zero?) # Only check if item uses global
+    (inventory.saved_change_to_global_stock_threshold? && stock_threshold.zero?)
   end
 
   def update_stock_status
@@ -73,14 +70,11 @@ class Item < ApplicationRecord
     current_low_stock = quantity <= effective_threshold
     
     if current_low_stock != low_stock
-      # Use update instead of update_column to ensure callbacks run
       update(low_stock: current_low_stock)
       
       if current_low_stock
-        # Existing logic for notifying when item goes low in stock
         notify_admins_of_stock_change
       else
-        # New logic for notifying when item is no longer low in stock
         notify_admins_of_stock_replenishment
       end
     end

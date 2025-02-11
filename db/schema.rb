@@ -41,15 +41,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
 
   create_table "categories", force: :cascade do |t|
     t.string "name", null: false
-    t.text "description", null: false
-    t.integer "user_id", null: false
+    t.text "description"
+    t.integer "inventory_id", null: false
     t.integer "items_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_categories_on_user_id"
+    t.index ["inventory_id"], name: "index_categories_on_inventory_id"
+  end
+
+  create_table "inventories", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description"
+    t.integer "global_stock_threshold", default: 0, null: false
+    t.integer "categories_count", default: 0
+    t.integer "items_count", default: 0
+    t.integer "inventory_actions_count", default: 0
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_inventories_on_user_id"
   end
 
   create_table "inventory_actions", force: :cascade do |t|
+    t.integer "inventory_id", null: false
     t.integer "item_id", null: false
     t.integer "user_id", null: false
     t.string "action_type", null: false
@@ -57,6 +71,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["inventory_id", "item_id"], name: "index_inventory_actions_on_inventory_and_item"
+    t.index ["inventory_id"], name: "index_inventory_actions_on_inventory_id"
     t.index ["item_id"], name: "index_inventory_actions_on_item_id"
     t.index ["user_id"], name: "index_inventory_actions_on_user_id"
   end
@@ -69,10 +85,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
     t.boolean "low_stock", default: false, null: false
     t.integer "inventory_actions_count", default: 0, null: false
     t.integer "category_id"
+    t.integer "inventory_id", null: false
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_items_on_category_id"
+    t.index ["inventory_id", "category_id"], name: "index_items_on_inventory_and_category"
+    t.index ["inventory_id"], name: "index_items_on_inventory_id"
     t.index ["user_id"], name: "index_items_on_user_id"
   end
 
@@ -121,11 +140,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
     t.string "email_address", null: false
     t.string "password_digest", null: false
     t.integer "status", default: 0, null: false
+    t.integer "inventories_count", default: 0
     t.integer "categories_count", default: 0
     t.integer "role", default: 0, null: false
     t.integer "items_count", default: 0, null: false
     t.integer "inventory_actions_count", default: 0, null: false
-    t.integer "global_stock_threshold", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
@@ -133,10 +152,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "categories", "users"
+  add_foreign_key "categories", "inventories"
+  add_foreign_key "inventories", "users"
+  add_foreign_key "inventory_actions", "inventories"
   add_foreign_key "inventory_actions", "items"
   add_foreign_key "inventory_actions", "users"
   add_foreign_key "items", "categories"
+  add_foreign_key "items", "inventories"
   add_foreign_key "items", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "sessions", "users"

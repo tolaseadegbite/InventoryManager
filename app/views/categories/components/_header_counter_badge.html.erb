@@ -1,5 +1,5 @@
 <% if action_name == 'index' %>
-    <%= Category.count %>
+    <%= @inventory.categories_count %>
 <% else %>
     <%= @category.items_count %>
 <% end %>

@@ -1,0 +1,7 @@
+<%= turbo_stream.append "inventories" do %>
+    <%= render @inventory %>
+<% end %>
+
+<%= turbo_stream.update 'header_counter_badge' do %>
+    <%= render 'inventories/components/header_counter_badge' %>
+<% end %>

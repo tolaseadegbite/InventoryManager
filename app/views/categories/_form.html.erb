@@ -1,5 +1,5 @@
 <div class="p-5">
-    <%= form_with(model: [category], data: { turbo_frame: :modal, action: "turbo:submit-end->dialog#submitEnd" }, class: "w-full") do |form| %>
+    <%= form_with(model: [inventory, category], class: "w-full") do |form| %>
         <%= render 'shared/errors', form: form %>
         
         <div class="mb-6">
