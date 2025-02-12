@@ -3,11 +3,16 @@ class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
 
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  # validates :password, presence: true
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
+
+
+
   ###################################################################################################
+
+
+
   attr_accessor :current_password, :admin_action
 
   validate :validate_current_password, on: :update, if: :should_validate_current_password?
@@ -26,19 +31,30 @@ class User < ApplicationRecord
   end
   
   enum :status, { unverified: 0, verified: 1, closed: 2 }
-  enum :role, { regular: 0, admin: 1 }
+
+  enum :role, {
+    manager: 0,
+    item_administrator: 1,
+    editor: 2,
+    viewer: 3
+  }
+
+  validates :role, presence: true
+
+  # Add role permissions concern
+  # include HasRolePermissions
 
   has_one :profile, dependent: :destroy
   accepts_nested_attributes_for :profile
-
-  scope :ordered, -> { order(id: :desc) }
-
+  
   has_many :inventories, dependent: :destroy
   has_many :categories, dependent: :destroy
   has_many :items, dependent: :destroy
   has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
   has_many :notification_mentions, as: :record, dependent: :destroy, class_name: "Noticed::Event"
 
+  scope :ordered, -> { order(id: :desc) }
+  
   private
 
   def should_validate_current_password?

@@ -1,0 +1,41 @@
+<div class="mt-5 border rounded-lg">
+    <ul>
+        <li>
+            <div class="flex gap-20 border-b p-4">
+                <span class="font-semibold w-32">
+                    Name
+                </span>
+
+                <span>
+                    <%= @inventory.name %>
+                </span>
+            </div>
+        </li>
+        <li>
+            <div class="flex gap-20 border-b p-4">
+                <span class="font-semibold w-32">
+                    Description
+                </span>
+
+                <span>
+                    <% if @inventory.description.present? %>
+                    <%= @inventory.description %>
+                    <% else %>
+                    <p>Nil</p>
+                    <% end %>
+                </span>
+            </div>
+        </li>
+        <li>
+            <div class="flex gap-20 p-4">
+                <span class="font-semibold w-32">
+                    Global threshold
+                </span>
+
+                <span>
+                    <%= @inventory.global_stock_threshold %>
+                </span>
+            </div>
+        </li>
+    </ul>
+</div>

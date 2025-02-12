@@ -36,7 +36,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user.admin_action = current_user.admin?
+    @user.admin_action = current_user.manager?
     if @user.update(user_params)
       respond_to do |format|
         format.html { redirect_to @user, notice: "User updated!" }
@@ -66,7 +66,7 @@ class UsersController < ApplicationController
   end
 
   def require_admin
-    unless current_user.admin?
+    unless current_user.manager?
       redirect_to items_path, alert: "Unauthorized action."
     end
   end

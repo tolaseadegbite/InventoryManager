@@ -2,8 +2,8 @@
   <%= render @inventory %>
 <% end %>
 
-<%= turbo_stream.update 'show_header' do %>
-  <%= render 'inventories/components/show_header' %>
+<%= turbo_stream.update 'inventory_profile' do %>
+  <%= render 'inventories/components/profile' %>
 <% end %>
 
 <%= render_turbo_stream_flash_messages %>

@@ -244,6 +244,8 @@ GEM
     public_suffix (6.0.1)
     puma (6.6.0)
       nio4r (~> 2.0)
+    pundit (2.4.0)
+      activesupport (>= 3.0.0)
     raabro (1.4.0)
     racc (1.8.1)
     rack (3.1.9)
@@ -438,6 +440,7 @@ DEPENDENCIES
   pagy (= 9.3.3)
   propshaft
   puma (= 6.6.0)
+  pundit (~> 2.4)
   rails (= 8.0.1)
   ransack (= 4.3.0)
   rubocop-rails-omakase

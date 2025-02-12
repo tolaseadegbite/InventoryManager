@@ -88,7 +88,7 @@ class Item < ApplicationRecord
       threshold: effective_threshold,
       inventory_id: inventory_id,
       inventory_name: inventory.name
-    ).deliver_later(User.where(role: :admin))
+    ).deliver_later(User.where(role: :manager))
   end
 
   def notify_admins_of_stock_replenishment
@@ -99,6 +99,6 @@ class Item < ApplicationRecord
       threshold: effective_threshold,
       inventory_id: inventory_id,
       inventory_name: inventory.name
-    ).deliver_later(User.where(role: :admin))
+    ).deliver_later(User.where(role: :manager))
   end
 end
