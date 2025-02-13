@@ -1,0 +1,2 @@
+module InventoryInvitationsHelper
+end

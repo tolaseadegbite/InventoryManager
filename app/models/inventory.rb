@@ -10,6 +10,9 @@ class Inventory < ApplicationRecord
   has_many :inventory_users, dependent: :destroy
   has_many :members, through: :inventory_users, source: :user
 
+  has_many :inventory_invitations, dependent: :destroy
+  has_many :pending_invitations, -> { where(status: :pending) }, class_name: 'InventoryInvitation'
+
   def add_member(user, role = :viewer)
     inventory_users.create(user: user, role: role)
   end

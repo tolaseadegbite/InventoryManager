@@ -1,0 +1,32 @@
+<%= form_with(model: [@inventory, @invitation], class: "p-5") do |form| %>
+  <%= render 'shared/errors', form: form %>
+
+  <div class="mb-4">
+    <%= form.label :recipient_id, class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= form.select :recipient_id, 
+        User.includes(:profile).map { |u| [u.profile&.name || u.email, u.id] },
+        { prompt: "Select a user" },
+        class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline cursor-pointer" %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :role, class: "block text-gray-700 text-sm font-bold mb-2" %>
+    <%= form.select :role, 
+        InventoryInvitation.roles.keys.map { |role| [role.titleize, role] },
+        { prompt: "Select a role" },
+        class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline cursor-pointer" %>
+    
+    <div class="mt-2 text-sm text-gray-600">
+      <h3 class="font-semibold">Role Permissions:</h3>
+      <ul class="mt-1 list-disc list-inside">
+        <li><strong>Admin:</strong> Can manage inventory settings and members</li>
+        <li><strong>Editor:</strong> Can add, edit, and remove items</li>
+        <li><strong>Viewer:</strong> Can view inventory and items</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-2">
+    <%= form.submit "Send Invitation", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" %>
+  </div>
+<% end %>
