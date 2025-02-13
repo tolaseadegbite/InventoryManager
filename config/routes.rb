@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       get :confirm_delete
     end
     
-    resources :categories do   # Removed shallow: true
+    resources :categories do
       member do
         get :confirm_delete
       end
@@ -27,8 +27,15 @@ Rails.application.routes.draw do
         post :modify_quantity
         get 'quantity_modal/:action_type', action: :quantity_modal, as: :quantity_modal
       end
+      
       collection do
         get :search_modal
+      end
+    end
+
+    resources :inventory_users do
+      member do
+        get :confirm_delete
       end
     end
   end

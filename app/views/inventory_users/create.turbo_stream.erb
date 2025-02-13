@@ -1,0 +1,7 @@
+<%= turbo_stream.prepend "inventory_users" do %>
+    <%= render @inventory_user %>
+<% end %>
+
+<%= turbo_stream.update 'header_counter_badge' do %>
+    <%= render 'inventory_users/components/header_counter_badge' %>
+<% end %>

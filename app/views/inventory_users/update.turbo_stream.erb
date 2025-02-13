@@ -1,0 +1,11 @@
+<%= turbo_stream.update @inventory_user do %>
+  <%= render @inventory_user %>
+<% end %>
+
+<%= turbo_stream.update 'show_header' do %>
+  <%= render 'inventory_users/components/show_header' %>
+<% end %>
+
+<%= turbo_stream.update "user_info_#{@inventory_user.user.id}" do %>
+  <%= render "inventory_users/components/user_info", inventory_user: @inventory_user %>
+<% end %>

@@ -1,31 +1,31 @@
 class InventoryPolicy < ApplicationPolicy
+  def show?
+    user.manager? || record.members.include?(user)
+  end
+  
+  def update?
+    user.manager? || record.inventory_users.admin.exists?(user_id: user.id)
+  end
+
+  def update_member?
+    update?  # Use same permissions as update
+  end
+  
+  def add_member?
+    update?
+  end
+  
+  def remove_member?
+    update?
+  end
+  
   class Scope < Scope
     def resolve
-      scope.where(user_id: user.id)
+      if user.manager?
+        scope.all
+      else
+        scope.joins(:inventory_users).where(inventory_users: { user_id: user.id })
+      end
     end
-  end
-
-  def show?
-    record.user_id == user.id
-  end
-
-  def create?
-    user.can_manage_inventory?
-  end
-
-  def update?
-    show? && user.can_manage_inventory?
-  end
-
-  def destroy?
-    show? && user.manager?
-  end
-
-  def dashboard?
-    show?
-  end
-
-  def confirm_delete?
-    destroy?
   end
 end

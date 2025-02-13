@@ -37,5 +37,16 @@
                 </span>
             </div>
         </li>
+        <li>
+            <div class="flex gap-20 p-4">
+                <span class="font-semibold w-32">
+                    Inventory users
+                </span>
+
+                <span>
+                    <%= link_to @inventory.members.count, inventory_inventory_users_path(@inventory), class: "underline" %>
+                </span>
+            </div>
+        </li>
     </ul>
 </div>

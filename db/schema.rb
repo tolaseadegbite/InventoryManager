@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_12_130311) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -75,6 +75,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
     t.index ["inventory_id"], name: "index_inventory_actions_on_inventory_id"
     t.index ["item_id"], name: "index_inventory_actions_on_item_id"
     t.index ["user_id"], name: "index_inventory_actions_on_user_id"
+  end
+
+  create_table "inventory_users", force: :cascade do |t|
+    t.integer "inventory_id", null: false
+    t.integer "user_id", null: false
+    t.integer "role", default: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["inventory_id", "user_id"], name: "index_inventory_users_on_inventory_id_and_user_id", unique: true
+    t.index ["inventory_id"], name: "index_inventory_users_on_inventory_id"
+    t.index ["user_id"], name: "index_inventory_users_on_user_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -157,6 +168,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_21_113241) do
   add_foreign_key "inventory_actions", "inventories"
   add_foreign_key "inventory_actions", "items"
   add_foreign_key "inventory_actions", "users"
+  add_foreign_key "inventory_users", "inventories"
+  add_foreign_key "inventory_users", "users"
   add_foreign_key "items", "categories"
   add_foreign_key "items", "inventories"
   add_foreign_key "items", "users"

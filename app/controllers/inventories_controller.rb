@@ -2,11 +2,16 @@ class InventoriesController < ApplicationController
   before_action :set_inventory, only: %i[ show edit update destroy dashboard confirm_delete ]
 
   def index
-    @inventories = current_user.inventories.ordered
+    @current_tab = params[:tab] || 'owned'
+    
+    @inventories = if @current_tab == 'owned'
+      policy_scope(Inventory).owned_by(Current.user)
+    else
+      policy_scope(Inventory).associated_with(Current.user)
+    end
   end
 
   def show
-    # psideba
   end
 
   def new
@@ -61,7 +66,7 @@ class InventoriesController < ApplicationController
 
   private
     def set_inventory
-      @inventory = current_user.inventories.find(params.expect(:id))
+      @inventory = Inventory.find(params.expect(:id))
     end
 
     def inventory_params

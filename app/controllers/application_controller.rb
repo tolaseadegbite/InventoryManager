@@ -1,10 +1,7 @@
 class ApplicationController < ActionController::Base
   # Pundit
-  # include Pundit::Authorization
-  # after_action :verify_authorized, except: :index, unless: :devise_controller?
-  # after_action :verify_policy_scoped, only: :index, unless: :devise_controller?
-  
-  # rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  include Pundit::Authorization
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
 
   
   include Authentication
@@ -41,7 +38,7 @@ class ApplicationController < ActionController::Base
   end
 
   def controller_with_inventory_association?
-    %w[items categories].include?(controller_name)
+    %w[items categories inventory_users].include?(controller_name)
   end
 
   def inventory_show_page?
@@ -53,6 +50,15 @@ class ApplicationController < ActionController::Base
   end
 
   def set_accordion_inventories
-    @accordion_inventories = current_user.inventories.ordered
+    if current_user
+      @accordion_inventories = current_user.inventories.ordered
+    end
+  end
+
+  # Pundit
+
+  def user_not_authorized
+    flash[:alert] = "You are not authorized to perform this action."
+    redirect_back(fallback_location: root_path)
   end
 end

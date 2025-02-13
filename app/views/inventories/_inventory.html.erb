@@ -5,8 +5,9 @@
         <%= link_to dashboard_inventory_path(inventory), data: { turbo_frame: "_top" } do %>
           <h5 class="mb-2 text-md font-bold tracking-tight text-gray-900 hover:text-gray-700 dark:text-white"><%= inventory.name %></h5>
         <% end %>
+
         <% if inventory.description.present? %>
-          <p class="mb-3 italic text-gray-800 dark:text-gray-400 text-sm"><%= inventory.description.truncate(100) %></p>
+          <p class="mb-3 italic text-gray-800 dark:text-gray-400 text-sm"><%= inventory.description.truncate(40) %></p>
         <% else %>
           <p class="mb-3 text-gray-600 italic dark:text-gray-400 text-sm">No description</p>
         <% end %>
@@ -44,22 +45,40 @@
         </div>
       <% end %>
     </div>
+    
+    <% if inventory.user != current_user %>
+      <div class="mb-5">
+        <%= inventory_owner_badge(inventory) %>
+      </div>
+    <% end %>
 
     <div class="flex justify-between">
-      <%= link_to dashboard_inventory_path(inventory), data: { turbo_frame: "_top" }, class: "inline-flex items-center text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" do %>
+      <%= link_to dashboard_inventory_path(inventory), data: { turbo_frame: "_top" }, class: "inline-flex items-center gap-2 text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" do %>
         Show inventory
-        <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
         </svg>
       <% end %>
 
       <div class="flex -space-x-4 rtl:space-x-reverse">
-        <img class="w-8 h-8 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHNob3R8ZW58MHx8MHx8fDA%3D" alt="">
-        <img class="w-8 h-8 border-2 border-white rounded-full dark:border-gray-800" src="https://plus.unsplash.com/premium_photo-1689629870780-5d0e655383e6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzd8fGhlYWRzaG90fGVufDB8fDB8fHww" alt="">
-        <img class="w-8 h-8 border-2 border-white rounded-full dark:border-gray-800" src="https://images.unsplash.com/photo-1624395213043-fa2e123b2656?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDR8fGhlYWRzaG90fGVufDB8fDB8fHww" alt="">
-        <a class="flex items-center justify-center w-8 h-8 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" href="#">+99</a>
+        <% if inventory.members.count > 0 %>
+          <% inventory.members.first(3).each do |member| %>
+            <% if member.profile.avatar.attached? %>
+              <%= image_tag(member.profile.avatar, class: "w-8 h-8 border-2 border-white rounded-full dark:border-gray-800", alt: "inventory user picture") %>
+            <% else %>
+              <%= image_tag('others/default avatar.png', class: "w-8 h-8 object-cover rounded-full border-gray-800", alt: "profile picture", data: { "profile-edit-form-target": "avatarPreview" }) %>
+            <% end %>
+          <% end %>
+          <% if inventory.members.count > 3 %>
+            <%= link_to inventory_inventory_users_path(inventory), data: { turbo_frame: "_top" }, class: "flex items-center justify-center w-8 h-8 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800" do %>
+              + <%= inventory.members.count - 3 %>
+            <% end %>
+          <% end %>
+        <% else %>
+          <%= image_tag(inventory.user.profile.avatar, class: "w-8 h-8 object-cover rounded-full", alt: "inventory user picture") %>
+        <% end %>
       </div>
     </div>
-    
+
   </div>
 <% end %>

@@ -41,9 +41,6 @@ class User < ApplicationRecord
 
   validates :role, presence: true
 
-  # Add role permissions concern
-  # include HasRolePermissions
-
   has_one :profile, dependent: :destroy
   accepts_nested_attributes_for :profile
   
