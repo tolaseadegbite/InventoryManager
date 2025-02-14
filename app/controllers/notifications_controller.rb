@@ -14,13 +14,10 @@ class NotificationsController < ApplicationController
 
   def mark_read
     @notification.mark_as_read
-    
+  
     if params[:redirect] == 'true'
-      # Get the URL from the event and redirect (for dropdown clicks)
-      event = Noticed::Event.find(@notification.event_id)
-      redirect_to inventory_item_path(event.params[:inventory_id], event.params[:record_id])
+      redirect_to @notification.url # Dynamically uses the notifier's URL
     else
-      # Just mark as read and stay on page (for mark as read button)
       redirect_back(fallback_location: notifications_path)
     end
   end
