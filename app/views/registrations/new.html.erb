@@ -8,6 +8,8 @@
     <div class="flex-1 space-y-4">
 
       <%= form_with url: registrations_url, model: @user, method: :post, class: "contents" do |form| %>
+        <%= render 'shared/errors', form: form %>
+        
         <%= form.fields_for :profile do |profile_form| %>
             <div class="my-5">
             <%= profile_form.text_field :name, required: true, autofocus: true, 

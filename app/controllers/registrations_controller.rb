@@ -11,23 +11,23 @@ class RegistrationsController < ApplicationController
     @user = User.new(user_params)
     if @user.save
       start_new_session_for @user
-      redirect_to root_path, notice: "You've successfully signed up to Afso Inventory. Welcome!"
+      redirect_to root_path, notice: "You've successfully signed up to Inventorify. Welcome!"
     else
       populate_flash_with_errors(@user)
       render :new, status: :unprocessable_entity
     end
   end
 
-  def create
-    @user = User.new(user_params.except(:current_password)) # Remove virtual attributes
-    if @user.save
-      start_new_session_for @user
-      redirect_to root_path, notice: "Welcome!"
-    else
-      populate_flash_with_errors(@user)
-      render :new
-    end
-  end
+  # def create
+  #   @user = User.new(user_params.except(:current_password))
+  #   if @user.save
+  #     start_new_session_for @user
+  #     redirect_to root_path, notice: "Welcome!"
+  #   else
+  #     populate_flash_with_errors(@user)
+  #     render :new
+  #   end
+  # end
 
   private
 

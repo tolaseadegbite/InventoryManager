@@ -25,6 +25,8 @@ class InventoryInvitation < ApplicationRecord
   
   def notify_recipient
     InventoryInvitationNotifier.with(
+      record_id: id,
+      record: self,
       invitation: self,
       inventory: inventory,
       role: role
@@ -35,13 +37,21 @@ class InventoryInvitation < ApplicationRecord
     if accepted?
       inventory.add_member(recipient, role)
       InventoryInvitationAcceptedNotifier.with(
+        record_id: id,
+        record: self,
+        invitation: self,
         inventory: inventory,
-        user: recipient
+        user: recipient,
+        role: role
       ).deliver_later(sender)
     elsif declined?
       InventoryInvitationDeclinedNotifier.with(
+        record_id: id,
+        record: self,
+        invitation: self,
         inventory: inventory,
-        user: recipient
+        user: recipient,
+        role: role
       ).deliver_later(sender)
     end
   end

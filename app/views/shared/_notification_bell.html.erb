@@ -24,7 +24,7 @@
       <% end %>
     </button>
   </div>
-
+  
   <!-- Notifications dropdown menu -->
   <div id="notificationDropdown" class="absolute right-0 mt-2 w-80 bg-white rounded-3xl shadow-md hidden border pt-5 pb-4" data-controller="">
     <div class="max-h-96 overflow-y-auto">
@@ -39,21 +39,46 @@
 
       <% if current_user.notifications.any? %>
         <% current_user.notifications.newest_first.limit(10).each do |notification| %>
-          <%= link_to mark_read_notification_path(notification, redirect: true), 
+          <% if notification.event&.record&.is_a?(InventoryInvitation) && notification.event.record.pending? %>
+            <div class="block p-4 <%= notification.read? ? 'bg-white' : 'bg-blue-100' %> hover:bg-gray-50">
+              <div class="flex flex-col space-y-2">
+                <p class="text-sm text-gray-800"><%= notification.message %></p>
+                
+                <div class="flex space-x-2 mt-2">
+                  <%= button_to accept_inventory_invitation_path(notification.event.record),
+                    method: :post,
+                    class: "px-3 py-1.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" do %>
+                    Accept
+                  <% end %>
+                  
+                  <%= button_to decline_inventory_invitation_path(notification.event.record),
+                    method: :post,
+                    class: "px-3 py-1.5 text-sm font-medium text-red-600 bg-white border border-red-600 rounded-lg hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-500" do %>
+                    Decline
+                  <% end %>
+                </div>
+                
+                <p class="text-xs text-gray-500">
+                  <%= time_ago_in_words(notification.created_at) %> ago
+                </p>
+              </div>
+            </div>
+          <% else %>
+            <%= link_to mark_read_notification_path(notification, redirect: true),
               data: { 
                 turbo_method: :post,
-                turbo_action: "advance" 
+                turbo_action: "advance"
               },
               class: "block p-4 hover:bg-gray-50 #{notification.read? ? 'bg-white' : 'bg-blue-100'}" do %>
-            <p class="text-sm text-gray-800"><%= notification.message %></p>
-            <p class="text-xs text-gray-500 mt-1">
-              <%= time_ago_in_words(notification.created_at) %> ago
-            </p>
+              <p class="text-sm text-gray-800"><%= notification.message %></p>
+              <p class="text-xs text-gray-500 mt-1">
+                <%= time_ago_in_words(notification.created_at) %> ago
+              </p>
+            <% end %>
           <% end %>
         <% end %>
-        
-        <%= link_to notifications_path, 
-            class: "block text-center text-sm text-blue-600 hover:text-blue-800 pt-4 border-t" do %>
+
+        <%= link_to notifications_path, class: "block text-center text-sm text-blue-600 hover:text-blue-800 pt-4 border-t" do %>
           View all notifications
         <% end %>
       <% else %>

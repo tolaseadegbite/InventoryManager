@@ -21,15 +21,13 @@ class InventoryInvitationsController < ApplicationController
   def accept
     authorize @invitation, :respond?
     @invitation.accepted!
-    redirect_to inventory_path(@invitation.inventory),
-      notice: "You have joined the inventory"
+    redirect_to inventory_path(@invitation.inventory), notice: "You have joined the inventory"
   end
 
   def decline
     authorize @invitation, :respond?
     @invitation.declined!
-    redirect_to root_path,
-      notice: "You have declined the invitation"
+    redirect_to root_path, notice: "You have declined the invitation"
   end
 
   private
