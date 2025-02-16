@@ -107,13 +107,13 @@ class ItemsController < ApplicationController
   end
 
   def require_admin
-    unless current_user.manager?
+    unless current_user.admin?
       redirect_to inventory_items_path(@inventory), alert: "Unauthorized action."
     end
   end
 
   def authorize_quantity_modification
-    return if params[:action_type] == "remove" || current_user.manager?
+    return if params[:action_type] == "remove" || current_user.admin?
     redirect_to inventory_item_path(@inventory, @item), alert: "Unauthorized action."
   end
 end

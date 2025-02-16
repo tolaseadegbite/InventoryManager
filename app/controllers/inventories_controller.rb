@@ -1,5 +1,6 @@
 class InventoriesController < ApplicationController
   before_action :set_inventory, only: %i[ show edit update destroy dashboard confirm_delete ]
+  before_action :authorize_inventory, only: %i[ show edit update destroy dashboard confirm_delete ]
 
   def index
     @current_tab = params[:tab] || 'owned'
@@ -71,5 +72,9 @@ class InventoriesController < ApplicationController
 
     def inventory_params
       params.expect(inventory: [ :name, :description, :global_stock_threshold ])
+    end
+
+    def authorize_inventory
+      authorize @inventory
     end
 end

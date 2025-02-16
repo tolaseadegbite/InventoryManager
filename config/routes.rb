@@ -33,7 +33,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :inventory_invitations, only: [:new, :create]
+    resources :inventory_invitations, only: [:new, :create, :destroy] do
+      member do
+        get :confirm_delete
+      end
+    end
 
     resources :inventory_users do
       member do

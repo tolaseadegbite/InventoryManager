@@ -1,0 +1,5 @@
+<%= turbo_stream.append "invitations" do %>
+  <%= render partial: "invitation", locals: { invitation: @invitation } %>
+<% end %>
+
+<%= render_turbo_stream_flash_messages %>

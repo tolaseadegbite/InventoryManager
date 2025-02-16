@@ -3,7 +3,7 @@ class CreateInventoryUsers < ActiveRecord::Migration[8.0]
     create_table :inventory_users do |t|
       t.references :inventory, null: false, foreign_key: true
       t.references :user, null: false, foreign_key: true
-      t.integer :role, default: 2
+      t.integer :role, default: 3
 
       t.timestamps
 

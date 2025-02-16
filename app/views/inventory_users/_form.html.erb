@@ -1,5 +1,5 @@
 <div class="p-5">
-    <%= form_with(model: [@inventory, @inventory_user], data: { turbo_frame: :modal }, class: "w-full") do |form| %>
+    <%= form_with(model: [@inventory, @inventory_user], data: { turbo: :false }, class: "w-full") do |form| %>
         <%= render 'shared/errors', form: form %>
         
         <%= form.fields_for :profile do |profile_form| %>

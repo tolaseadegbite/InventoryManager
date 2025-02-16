@@ -81,7 +81,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_13_005235) do
     t.integer "inventory_id", null: false
     t.integer "sender_id", null: false
     t.integer "recipient_id", null: false
-    t.integer "role", default: 2, null: false
+    t.integer "role", default: 3, null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -94,7 +94,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_13_005235) do
   create_table "inventory_users", force: :cascade do |t|
     t.integer "inventory_id", null: false
     t.integer "user_id", null: false
-    t.integer "role", default: 2
+    t.integer "role", default: 3
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["inventory_id", "user_id"], name: "index_inventory_users_on_inventory_id_and_user_id", unique: true

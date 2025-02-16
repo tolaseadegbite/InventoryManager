@@ -10,7 +10,7 @@ def generate_email(name)
 end
 
 # Define roles array
-roles = [:item_administrator, :editor, :viewer]
+roles = [:regular, :admin]
 
 # Create 10 users
 users = 10.times.map do |i|
@@ -21,7 +21,7 @@ users = 10.times.map do |i|
     email_address: email,
     password_digest: BCrypt::Password.create(password),
     status: :verified,
-    role: i.zero? ? :manager : roles.sample
+    role: i.zero? ? :admin : roles.sample
   )
 
   # Create profile

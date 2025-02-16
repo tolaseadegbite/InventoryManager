@@ -1,4 +1,4 @@
-<%= form_with(model: [@inventory, @invitation], class: "p-5") do |form| %>
+<%= form_with(model: [@inventory, @invitation], data: { turbo: false }, class: "p-5") do |form| %>
   <%= render 'shared/errors', form: form %>
 
   <div class="mb-4">
@@ -19,9 +19,9 @@
     <div class="mt-2 text-sm text-gray-600">
       <h3 class="font-semibold">Role Permissions:</h3>
       <ul class="mt-1 list-disc list-inside">
-        <li><strong>Admin:</strong> Can manage inventory settings and members</li>
-        <li><strong>Editor:</strong> Can add, edit, and remove items</li>
-        <li><strong>Viewer:</strong> Can view inventory and items</li>
+        <li><strong>Manager:</strong> Has full control over the inventory, including managing users, items, and inventory settings.</li>
+        <li><strong>Item Administrator:</strong>  Has control over managing items within the inventory, including adding, editing, and removing items.</li>
+        <li><strong>Viewer:</strong> Has read-only access to the inventory and can view items and inventory details, but cannot make any changes.</li>
       </ul>
     </div>
   </div>

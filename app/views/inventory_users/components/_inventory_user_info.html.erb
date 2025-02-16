@@ -1,7 +1,7 @@
 <div class="flex items-center flex-wrap gap-2 md:gap-5 mb-3">
   <div><span class="font-semibold">Email:</span> <%= inventory_user.user.email %></div>
   <span>•</span>
-  <div><span class="font-semibold">Role:</span> <%= inventory_user.role.capitalize %></div>
+  <div><span class="font-semibold">Role:</span> <%= inventory_user.role.titleize %></div>
   <span>•</span>
   <div><span class="font-semibold">Created on:</span> <span><%= inventory_user.user.created_at.strftime("%Y-%m-%d %H:%M") %></span></div>
 </div>

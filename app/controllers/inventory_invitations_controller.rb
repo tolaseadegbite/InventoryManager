@@ -1,6 +1,6 @@
 class InventoryInvitationsController < ApplicationController
   before_action :set_inventory, except: [:accept, :decline]
-  before_action :set_invitation, only: [:accept, :decline]
+  before_action :set_invitation, only: [:accept, :decline, :destroy, :confirm_delete]
 
   def new
     @invitation = @inventory.inventory_invitations.new
@@ -11,9 +11,9 @@ class InventoryInvitationsController < ApplicationController
     @invitation.sender = Current.user
     
     if @invitation.save
-      redirect_to inventory_inventory_users_path(@inventory),
-        notice: "Invitation sent successfully"
+      redirect_to inventory_inventory_users_path(@inventory, tab: 'invitations'), notice: "Invitation sent successfully"
     else
+      flash.now[:alert] = "Failed to create invitation. Please check the errors below."
       render :new, status: :unprocessable_entity
     end
   end
@@ -28,6 +28,14 @@ class InventoryInvitationsController < ApplicationController
     authorize @invitation, :respond?
     @invitation.declined!
     redirect_to root_path, notice: "You have declined the invitation"
+  end
+
+  def destroy
+    @invitation.destroy
+    redirect_to inventory_inventory_users_path(@inventory, tab: 'invitations'), notice: "You have canceled the invitation"
+  end
+
+  def confirm_delete
   end
 
   private

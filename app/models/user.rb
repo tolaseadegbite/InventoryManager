@@ -33,10 +33,8 @@ class User < ApplicationRecord
   enum :status, { unverified: 0, verified: 1, closed: 2 }
 
   enum :role, {
-    manager: 0,
-    item_administrator: 1,
-    editor: 2,
-    viewer: 3
+    regular: 0,
+    admin: 1
   }
 
   validates :role, presence: true

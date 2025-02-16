@@ -33,7 +33,7 @@
 
     <div class="mb-">
         <div class="flex gap-2 items-center justify-between mb-5">
-            <h1 class="font-bold text-xl">Inventory users <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'inventory_users/components/header_counter_badge' %></span></h1>
+            <h1 class="font-bold text-xl">Inventory users</h1>
             
             <div class="flex gap-2 items-center">
                 <% if policy(@inventory).add_member? %>
@@ -48,25 +48,8 @@
         </div>
     </div>
 
-    <%= turbo_frame_tag :results, data: { turbo_action: 'advance' } do %>
+    <div id="inventories_tab">
+        <%= render 'inventory_users/components/inventory_users_tab' %>
+    </div>
 
-        <div class="items container mx-auto">
-            <!-- Header -->
-            <div class="header hidden md:flex justify-between items-center bg-gray-100 px-4 py-3 border rounded-lg text-gray-600 font-semibold mb-6 shadow">
-                <div class="w-1/4 text-left"><h1>Name</h1></div>
-                <div class="w-1/4 text-center"><h1>Email</h1></div>
-                <div class="w-1/4 text-center"><h1>Role</h1></div>
-                <div class="w-1/4 text-center"><h1>Added on</h1></div>
-            </div>
-
-            <!-- Items -->
-            <%= turbo_frame_tag "inventory_users" do %>
-                <% if @inventory_users.any? %>
-                    <%= render @inventory_users %>
-                <% else %>
-                    <p>No users in this inventory</p>
-                <% end %>
-            <% end %>
-        </div>
-    <% end %>
 </div>

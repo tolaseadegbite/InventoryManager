@@ -3,7 +3,9 @@ class InventoryUsersController < ApplicationController
   before_action :set_inventory_user, only: [:show, :edit, :update, :destroy, :confirm_delete]
 
   def index
-    @inventory_users = @inventory.inventory_users.includes(user: :profile)
+    @current_tab = params[:tab] || 'users'
+    @users = @inventory.inventory_users.includes(:user, user: :profile).order(id: :desc)
+    @pending_invitations = @inventory.inventory_invitations.includes(:recipient, recipient: :profile).pending.order(created_at: :desc)
   end
 
   def show
@@ -48,7 +50,6 @@ class InventoryUsersController < ApplicationController
   def destroy
     authorize @inventory, :remove_member?
     @inventory_user.destroy
-    
     redirect_to inventory_inventory_users_path(@inventory), notice: "User removed from inventory"
   end
   

@@ -75,7 +75,7 @@ class CategoriesController < ApplicationController
   end
 
   def require_admin
-    unless current_user.manager?
+    unless current_user.admin?
       redirect_to inventory_categories_path(@inventory), alert: "Unauthorized action."
     end
   end
