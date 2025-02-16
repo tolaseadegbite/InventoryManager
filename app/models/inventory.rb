@@ -1,3 +1,4 @@
+# app/models/inventory.rb
 class Inventory < ApplicationRecord
   validates :name, presence: true
 
@@ -12,6 +13,8 @@ class Inventory < ApplicationRecord
 
   has_many :inventory_invitations, dependent: :destroy
   has_many :pending_invitations, -> { where(status: :pending) }, class_name: 'InventoryInvitation'
+
+  after_create :add_creator_as_manager
 
   def add_member(user, role = :viewer)
     inventory_users.create(user: user, role: role)
@@ -30,4 +33,13 @@ class Inventory < ApplicationRecord
       .where.not(user_id: user.id)
       .distinct
   }
+
+  private
+
+  def add_creator_as_manager
+    inventory_users.create!(
+      user: user,
+      role: :manager
+    )
+  end
 end

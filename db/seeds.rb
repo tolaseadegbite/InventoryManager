@@ -2,7 +2,7 @@
 Item.skip_callback(:commit, :after, :update_stock_status)
 
 # Clear existing data
-[User, Inventory, Category, Item, InventoryAction].each(&:destroy_all)
+[User, Inventory, Category, Item, InventoryAction, InventoryUser].each(&:destroy_all)
 
 # Helper method to generate random email
 def generate_email(name)
@@ -52,6 +52,19 @@ users[1..].each do |user|
     global_stock_threshold: rand(5..20),
     user: user
   )
+end
+
+# Add some users as members to various inventories with different roles
+inventories.each do |inventory|
+  # Skip the first few users to ensure not everyone is in every inventory
+  random_users = users.reject { |u| u == inventory.user }.sample(rand(2..4))
+  
+  random_users.each do |user|
+    inventory.inventory_users.create!(
+      user: user,
+      role: [:item_administrator, :viewer].sample
+    )
+  end
 end
 
 # Create eCommerce categories
@@ -164,3 +177,8 @@ puts "Total categories: #{Category.count}"
 puts "Total items: #{Item.count}"
 puts "Total inventory actions: #{InventoryAction.count}"
 puts "Low stock items: #{Item.where(low_stock: true).count}"
+puts "Total inventory users: #{InventoryUser.count}"
+puts "Users by role:"
+puts "  Managers: #{InventoryUser.where(role: :manager).count}"
+puts "  Item Administrators: #{InventoryUser.where(role: :item_administrator).count}"
+puts "  Viewers: #{InventoryUser.where(role: :viewer).count}"
