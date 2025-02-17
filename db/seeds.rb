@@ -35,9 +35,10 @@ end
 
 # Create 5 inventories for the first (manager) user
 manager_user = users.first
-inventories = 5.times.map do
+inventory_names = ["Main Warehouse", "Secondary Warehouse", "Office Supplies", "Electronics Store", "Bookstore"]
+inventories = 5.times.map do |i|
   Inventory.create!(
-    name: "#{manager_user.profile.name}'s Inventory #{rand(1..1000)}",
+    name: inventory_names[i],
     description: Faker::Lorem.sentence,
     global_stock_threshold: rand(5..20),
     user: manager_user
@@ -46,8 +47,9 @@ end
 
 # Create 1 inventory for each of the remaining users
 users[1..].each do |user|
+  inventory_name = ["#{user.profile.name}'s Inventory", "Personal Warehouse", "Office Storage"].sample
   inventories << Inventory.create!(
-    name: "#{user.profile.name}'s Inventory",
+    name: inventory_name,
     description: Faker::Lorem.sentence,
     global_stock_threshold: rand(5..20),
     user: user

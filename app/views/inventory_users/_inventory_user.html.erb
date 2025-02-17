@@ -6,9 +6,9 @@
         <div class="flex items-center">
           <div class="h-10 w-10 flex-shrink-0">
             <% if inventory_user.user.profile.avatar.attached? %>
-              <%= image_tag(inventory_user.user.profile.avatar, class: "w-8 h-8 border-2 border-white rounded-full dark:border-gray-800", alt: "inventory user avatar") %>
+              <%= image_tag(inventory_user.user.profile.avatar, class: "w-10 h-10 border-2 border-white rounded-full dark:border-gray-800", alt: "inventory user avatar") %>
             <% else %>
-              <%= image_tag('others/default avatar.png', class: "w-8 h-8 object-cover rounded-full border-gray-800", alt: "inventory user avatar") %>
+              <%= image_tag('others/default avatar.png', class: "w-10 h-10 object-cover rounded-full border-gray-800", alt: "inventory user avatar") %>
             <% end %>
           </div>
           <div class="ml-4">
