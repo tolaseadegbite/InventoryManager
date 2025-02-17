@@ -13,7 +13,6 @@ export default class extends Controller {
       persist: false,
       createOnBlur: true,
       create: false,
-      placeholder: "Select a user",
       render: {
         option: function(data, escape) {
           return `<div class="py-2 px-3 hover:bg-blue-50">

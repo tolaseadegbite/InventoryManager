@@ -4,7 +4,7 @@
         
         <%= form.fields_for :profile do |profile_form| %>
             <div class="mb-5">
-                <%= form.select :user_id, User.includes(:profile).map { |u| [u.profile&.name || u.email, u.id] }, { prompt: "Select a user" }, class: "text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400 cursor-pointer disable" %>
+                <%= form.select :user_id, User.includes(:profile).map { |u| [u.profile&.name || u.email, u.id] }, { prompt: "Select a user" }, disabled: !form.object.new_record?, class: "text-sm w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400 cursor-pointer" %>
             </div>
         <% end %>
         
