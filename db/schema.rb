@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_13_005235) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_17_133331) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -85,9 +85,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_13_005235) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["inventory_id", "recipient_id"], name: "index_inventory_invitations_on_inventory_id_and_recipient_id", unique: true
-    t.index ["inventory_id"], name: "index_inventory_invitations_on_inventory_id"
-    t.index ["recipient_id"], name: "index_inventory_invitations_on_recipient_id"
+    t.index ["inventory_id", "recipient_id"], name: "index_inventory_invitations_on_inventory_id_and_recipient_id"
     t.index ["sender_id"], name: "index_inventory_invitations_on_sender_id"
   end
 

@@ -6,8 +6,8 @@ class InventoryInvitation < ApplicationRecord
   enum :status, { pending: 0, accepted: 1, declined: 2 }
   enum :role, InventoryUser.roles
   
-  validates :recipient_id, uniqueness: { scope: :inventory_id, message: "has already been invited to this inventory" }
-  validate :not_already_member
+  # Remove the uniqueness validation to allow multiple invitations
+  validate :validate_invitation_status
   
   after_create_commit :notify_recipient
   after_update_commit :process_response, if: :saved_change_to_status?
@@ -15,9 +15,32 @@ class InventoryInvitation < ApplicationRecord
   has_many :notifications, through: :noticed_events, class_name: "Noticed::Notification"
   has_many :notification_mentions, as: :record, dependent: :destroy, class_name: "Noticed::Event"
   
+  # Scopes for better invitation management
+  scope :active, -> { where(status: :pending) }
+  scope :for_recipient, ->(user) { where(recipient: user) }
+  scope :latest_for_recipient, ->(user) { 
+    for_recipient(user)
+      .order(created_at: :desc)
+      .select('DISTINCT ON (inventory_id) *')
+  }
+  
   private
   
-  def not_already_member
+  def validate_invitation_status
+    return unless recipient_id && inventory_id
+
+    # Check for pending invitations
+    pending_invitation = inventory.inventory_invitations
+      .active
+      .for_recipient(recipient)
+      .where.not(id: id)
+      .exists?
+
+    if pending_invitation
+      errors.add(:recipient, "already has a pending invitation to this inventory")
+    end
+
+    # Check if user is currently a member
     if inventory.inventory_users.exists?(user_id: recipient_id)
       errors.add(:recipient, "is already a member of this inventory")
     end

@@ -34,6 +34,19 @@ class Inventory < ApplicationRecord
       .distinct
   }
 
+  def can_invite?(user)
+    return false if user.nil?
+    
+    # Check if there's any pending invitation
+    !inventory_invitations.active.for_recipient(user).exists? &&
+      # Check if user is not already a member
+      !inventory_users.exists?(user_id: user.id)
+  end
+
+  def latest_invitation_for(user)
+    inventory_invitations.for_recipient(user).order(created_at: :desc).first
+  end
+
   private
 
   def add_creator_as_manager
