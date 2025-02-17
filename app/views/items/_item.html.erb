@@ -1,5 +1,5 @@
 <%= turbo_frame_tag item do %>
-  <ul class="<%= item.low_stock ? 'border-2 border-red-500' : 'border border-gray-200' %> bg-white p-5 rounded-lg shadow-sm mb-5 hover:shadow-md transition-all">
+  <ul class="<%= item.low_stock ? 'border-2 border-red-500' : 'border border-gray-200' %> bg-white px-5 py-3 rounded-lg shadow-sm mb-5 hover:shadow-md transition-all">
     <!-- Mobile View -->
     <div class="block md:hidden">
       <li class="flex justify-between items-center mb-3">
@@ -32,13 +32,13 @@
 
     <!-- Desktop View -->
     <div class="hidden md:flex justify-between items-center">
-      <li class="w-1/4 font-semibold text-gray-800 truncate">
-        <%= link_to highlight(item.name, params.dig(:q, :name_cont)), inventory_item_path(@inventory, item), class: "text-gray-600 hover:text-gray-500 font-semibold", data: { turbo_frame: "_top" } %>
+      <li class="w-1/4 text-gray-800 truncate">
+        <%= link_to highlight(item.name, params.dig(:q, :name_cont)), inventory_item_path(@inventory, item), class: "text-gray-600 hover:text-gray-500 font-semibold text-sm", data: { turbo_frame: "_top" } %>
       </li>
-      <li class="w-1/4 text-center text-gray-600">
+      <li class="w-1/4 text-center text-gray-600 text-sm">
         <%= item.quantity %>
       </li>
-      <li class="w-1/4 text-center truncate">
+      <li class="w-1/4 text-center truncate text-sm">
         <%= item.category.present? ? link_to(item.category.name, inventory_category_path(@inventory, item.category), class: "text-orange-500 hover:underline", data: { turbo_frame: "_top" }) : '<span class="text-gray-400 text-">Not set</span>'.html_safe %>
       </li>
       <li class="w-1/4 flex justify-center gap-2">

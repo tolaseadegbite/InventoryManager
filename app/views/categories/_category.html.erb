@@ -1,7 +1,7 @@
 <%= turbo_frame_tag category do %>
     <div class="category_card flex items-center p-4 justify-between border rounded-lg shadow">
         <div class="text-gray-800">
-            <%= link_to inventory_category_path(@inventory, category), data: { turbo_frame: "_top" } do %>
+            <%= link_to inventory_category_path(@inventory, category), class: "text-sm font-semibold", data: { turbo_frame: "_top" } do %>
                 <%= category.name %>
                 (<%= category.items_count %>)
             <% end %>

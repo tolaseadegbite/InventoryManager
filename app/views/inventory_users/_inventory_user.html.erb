@@ -12,7 +12,7 @@
             <% end %>
           </div>
           <div class="ml-4">
-            <div class="text-sm font-medium text-gray-900">
+            <div class="text-sm text-gray-900 font-semibold">
               <%= inventory_user.user.profile.name %>
             </div>
             <div class="text-sm text-gray-500">
@@ -30,7 +30,13 @@
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
       <%= inventory_user.created_at.strftime("%b %d, %Y") %>
     </td>
-    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+    <td class="flex justify-end px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+      <%= link_to edit_inventory_inventory_user_path(@inventory, inventory_user), class: "text-gray-900 bg-white border border-gray-900 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700", data: {action: "click->dialog#open", turbo_frame: :modal} do %>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+        </svg>
+      <% end %>
+
       <%# if policy(inventory_user).destroy? %>
         <%= link_to confirm_delete_inventory_inventory_user_path(@inventory, inventory_user), data: { turbo_frame: :modal }, class: "inline-flex text-gray-900 bg-white border border-gray-900 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" do %>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">

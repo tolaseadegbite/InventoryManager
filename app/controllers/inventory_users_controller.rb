@@ -12,23 +12,23 @@ class InventoryUsersController < ApplicationController
     
   end
 
-  def new
-    @inventory_user = InventoryUser.new
-  end
+  # def new
+  #   @inventory_user = InventoryUser.new
+  # end
   
-  def create
-    authorize @inventory, :add_member?
+  # def create
+  #   authorize @inventory, :add_member?
     
-    @user = User.find(inventory_user_params[:user_id])
-    @inventory_user = @inventory.inventory_users.build(inventory_user_params)
+  #   @user = User.find(inventory_user_params[:user_id])
+  #   @inventory_user = @inventory.inventory_users.build(inventory_user_params)
     
-    if @inventory_user.save
-      redirect_to inventory_inventory_users_path(@inventory), 
-        notice: "User successfully added to inventory"
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
+  #   if @inventory_user.save
+  #     redirect_to inventory_inventory_users_path(@inventory), 
+  #       notice: "User successfully added to inventory"
+  #   else
+  #     render :new, status: :unprocessable_entity
+  #   end
+  # end
 
   def edit
     authorize @inventory, :update_member?
