@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       member do
         get :confirm_delete
       end
+      resource :permission, controller: 'inventory_user_permissions'
     end
   end
 

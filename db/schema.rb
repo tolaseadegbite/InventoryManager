@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_17_133331) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_19_193020) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -47,6 +47,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_17_133331) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["inventory_id"], name: "index_categories_on_inventory_id"
+  end
+
+  create_table "category_permissions", force: :cascade do |t|
+    t.integer "inventory_user_id", null: false
+    t.integer "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_category_permissions_on_category_id"
+    t.index ["inventory_user_id", "category_id"], name: "index_category_permissions_on_inventory_user_and_category", unique: true
+    t.index ["inventory_user_id"], name: "index_category_permissions_on_inventory_user_id"
   end
 
   create_table "inventories", force: :cascade do |t|
@@ -176,6 +186,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_17_133331) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "categories", "inventories"
+  add_foreign_key "category_permissions", "categories"
+  add_foreign_key "category_permissions", "inventory_users"
   add_foreign_key "inventories", "users"
   add_foreign_key "inventory_actions", "inventories"
   add_foreign_key "inventory_actions", "items"

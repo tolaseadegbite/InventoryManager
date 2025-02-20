@@ -1,0 +1,2 @@
+module InventoryUserPermissionsHelper
+end
