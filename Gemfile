@@ -19,8 +19,8 @@ gem "solid_cable"
 gem "solid_queue"
 gem "sqlite3",                              "2.5.0"
 gem "stimulus-rails",                       "1.3.4"
-gem "tailwindcss-rails", "~> 3.3"
-gem "tailwindcss-ruby", "~> 3.4" # only necessary with tailwindcss-rails <= 3.3.0
+gem "tailwindcss-rails", "~> 4.1"
+gem "tailwindcss-ruby", "~> 4.0" # only necessary with tailwindcss-rails <= 3.3.0
 gem "thruster", require: false
 gem "turbo-rails"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
