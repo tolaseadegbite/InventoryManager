@@ -13,14 +13,14 @@
     <div class="mt-2 text-sm text-gray-600">
       <h3 class="font-semibold">Role Permissions:</h3>
       <ul class="mt-1 list-disc list-inside">
-        <li><strong>Manager:</strong>Has full control over the inventory, including managing users, items, and inventory settings.</li>
-        <li><strong>Item Administrator:</strong>Has control over managing items within the inventory, including adding, editing, and removing items.</li>
-        <li><strong>Viewer:</strong>Has read-only access to the inventory and can view items and inventory details, but cannot make any changes.</li>
+        <li><strong>Manager:</strong>Has full control over the inventory, including managing users, categories, items, inventory actions, and inventory settings.</li>
+        <li><strong>Item Administrator:</strong>Has control over managing items within the inventory and permitted categories, including adding, editing, and removing items.</li>
+        <li><strong>Viewer:</strong>Has read-only access to the inventory and can view items, inventory actions and inventory details, but cannot make any changes.</li>
       </ul>
     </div>
   </div>
 
   <div class="flex items-center justify-end gap-2">
-    <%= form.submit "Send Invitation", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" %>
+    <%= form.submit "Send Invitation", class: "w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer" %>
   </div>
 <% end %>

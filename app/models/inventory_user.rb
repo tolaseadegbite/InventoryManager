@@ -7,12 +7,6 @@ class InventoryUser < ApplicationRecord
   has_many :category_permissions, dependent: :destroy
   has_many :permitted_categories, through: :category_permissions, source: :category
   
-  # enum :role, {
-  #   admin: 0,
-  #   editor: 1,
-  #   viewer: 2
-  # }
-
   enum :role, {
     manager: 0,
     item_administrator: 1,
@@ -24,6 +18,12 @@ class InventoryUser < ApplicationRecord
   def can_access_category?(category)
     return true if manager?
     permitted_categories.include?(category)
+  end
+
+  scope :with_permitted_categories, -> { includes(:permitted_categories) }
+  
+  def permitted_category_ids
+    permitted_categories.pluck(:id)
   end
   
   private

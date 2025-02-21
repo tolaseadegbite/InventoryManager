@@ -49,4 +49,6 @@
   <%= turbo_frame_tag "user_info_#{@inventory_user.user.id}" do %>
     <%= render "inventory_users/components/inventory_user_info", inventory_user: @inventory_user %>
   <% end %>
+
+  <%= render 'inventory_users/components/inventory_users_show_tab' %>
 </div>

@@ -9,7 +9,8 @@ class InventoryUsersController < ApplicationController
   end
 
   def show
-    
+    @current_tab = params[:tab] || 'activities'
+    @permitted_categories = @inventory_user.permitted_categories.ordered
   end
 
   # def new

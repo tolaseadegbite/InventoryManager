@@ -1,41 +1,8 @@
-<div class="container">
-  <div class="max-w-3xl mx-auto">
-    <h1 class="text-2xl font-bold mb-6">
+<%= render 'layouts/modal_dialog' do %>
+  <div data-action="turbo:submit-end->dialog#submitEnd">
+    <h1 class="font-semibold text-xl sm:text-xl md:text-xl p-5 border-b">
       Manage Category Permissions for <%= @inventory_user.user.profile&.name || @inventory_user.user.email %>
     </h1>
-    
-    <%= form_with(url: inventory_inventory_user_permission_path(@inventory, @inventory_user), method: :patch, class: "space-y-6") do |f| %>
-      
-        <div data-controller="category-selector">
-            <div class="mb-4 cursor-pointer">
-                <%= f.check_box :all_categories, 
-                    class: "form-checkbox cursor-pointer",
-                    data: { 
-                    category_selector_target: "allCheckbox",
-                    action: "change->category-selector#toggleVisibility"
-                    } %>
-                <%= f.label :all_categories, "Grant access to all categories", class: "ml-2 cursor-pointer" %>
-            </div>
-            
-            <div id="category-selector" data-category-selector-target="selector">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">
-                  Select Categories
-                </label>
-                <%= f.select :category_ids, 
-                  @categories.map { |c| [c.name, c.id] }, 
-                  { selected: @inventory_user.permitted_categories.pluck(:id) }, 
-                  { 
-                    multiple: true, 
-                    class: "w-full", 
-                    data: { 
-                      controller: "tom-select-multiple", "tom-select-multiple-placeholder-value": "Select categories..." 
-                    } 
-                  } 
-                %>
-            </div>
-        </div>
-      
-      <%= f.submit "Update Permissions", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" %>
-    <% end %>
+    <%= render 'form' %>
   </div>
-</div>
+<% end %>

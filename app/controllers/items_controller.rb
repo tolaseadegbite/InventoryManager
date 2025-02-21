@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy, :modify_quantity, :quantity_modal, :confirm_delete]
   before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
   before_action :authorize_quantity_modification, only: [:modify_quantity]
-  before_action :check_category_permission, except: [:index, :show]
+  # before_action :check_category_permission, except: [:index, :show]
 
   def index
     @q = @inventory.items.ransack(params[:q])
@@ -123,8 +123,7 @@ class ItemsController < ApplicationController
     category = @item&.category || Category.find_by(id: params[:item][:category_id])
     
     unless inventory_user&.can_access_category?(category)
-      redirect_to inventory_path(@inventory), 
-                  alert: "You don't have permission to manage items in this category"
+      redirect_to inventory_path(@inventory), alert: "You don't have permission to manage items in this category"
     end
   end
 end
