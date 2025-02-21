@@ -17,7 +17,7 @@ gem "ransack",                              "4.3.0"
 gem "solid_cache"
 gem "solid_cable"
 gem "solid_queue"
-gem "sqlite3",                              "2.5.0"
+gem "sqlite3",                              "2.6.0"
 gem "stimulus-rails",                       "1.3.4"
 gem "tailwindcss-rails", "~> 3.3"
 gem "tailwindcss-ruby", "~> 3.4" # only necessary with tailwindcss-rails <= 3.3.0
