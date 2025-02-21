@@ -4,7 +4,7 @@ class InventoryUsersController < ApplicationController
 
   def index
     @current_tab = params[:tab] || 'users'
-    @users = @inventory.inventory_users.includes(:user, user: :profile).order(id: :desc)
+    @users = @inventory.inventory_users.includes(:user, user: :profile).order(id: :asc)
     @pending_invitations = @inventory.inventory_invitations.includes(:recipient, recipient: :profile).pending.order(created_at: :desc)
   end
 

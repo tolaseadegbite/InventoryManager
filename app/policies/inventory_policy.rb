@@ -1,26 +1,26 @@
 class InventoryPolicy < ApplicationPolicy
   def show?
-    user.admin? || record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
   end
 
   def edit?
-    user.admin? || record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
   end
 
   def update?
-    user.admin? || record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
   end
 
   def destroy?
-    user.admin? || record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
   end
 
   def dashboard?
-    user.admin? || record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
   end
 
   def confirm_delete?
-    user.admin? || record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
   end
 
   def update_member?

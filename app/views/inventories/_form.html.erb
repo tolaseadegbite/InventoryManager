@@ -17,6 +17,6 @@
       <%= form.number_field :global_stock_threshold, placeholder: "Global threshold (default is zero (0))", class: ["text-sm mt-2 w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400 text-gray-700", {"": inventory.errors[:global_stock_threshold].none?, "border-red-400 focus:outline-red-600": inventory.errors[:global_stock_threshold].any?}] %>
     </div>
 
-    <%= form.submit "Save", class: "w-full cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800" %>
+    <%= form.submit "Save", class: "w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" %>
   <% end %>
 </div>
