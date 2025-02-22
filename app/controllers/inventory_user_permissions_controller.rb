@@ -1,6 +1,7 @@
 class InventoryUserPermissionsController < ApplicationController
   before_action :set_inventory
   before_action :set_inventory_user
+  before_action :authorize_permission
   
   def edit
     @categories = @inventory.categories.ordered
@@ -30,7 +31,7 @@ class InventoryUserPermissionsController < ApplicationController
     end
   rescue ActiveRecord::RecordInvalid
     flash.now[:alert] = "There was an error updating permissions"
-    render :edit
+    render :edit, status: :unprocessable_entity
   end
   
   private
@@ -41,5 +42,11 @@ class InventoryUserPermissionsController < ApplicationController
   
   def set_inventory_user
     @inventory_user = @inventory.inventory_users.find(params[:inventory_user_id])
+  end
+
+  def authorize_permission
+    # Create a dummy CategoryPermission instance for authorization
+    permission = CategoryPermission.new(inventory_user: @inventory_user)
+    authorize permission
   end
 end

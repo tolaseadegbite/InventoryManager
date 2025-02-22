@@ -6,7 +6,12 @@ class CategoriesController < ApplicationController
   before_action -> { authorize Category }, only: [:new, :create]
 
   def index
-    @categories = @inventory.categories.ordered
+    if inventory_user = @inventory.inventory_users.find_by(user: current_user)
+      @categories = inventory_user.permitted_categories.ordered
+    else
+      @categories = @inventory.categories.ordered
+    end
+
     @pagy, @categories = pagy(@categories, limit: 30)
   end
 

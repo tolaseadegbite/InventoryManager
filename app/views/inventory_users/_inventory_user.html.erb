@@ -28,23 +28,19 @@
       </span>
     </td>
     <td class="px-6 py-4 whitespace-nowrap">
-      <% if !inventory_user.manager? %>
-        <% if inventory_user.permitted_categories.present? %>
-          <div class="flex items-center gap-2">
-            <% inventory_user.permitted_categories.first(2).each do |category| %>
-              <%= link_to category.name, inventory_category_path(@inventory, category), class: "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-600" %>
+      <% if inventory_user.permitted_categories.present? %>
+        <div class="flex items-center gap-2">
+          <% inventory_user.permitted_categories.first(2).each do |category| %>
+            <%= link_to category.name, inventory_category_path(@inventory, category), class: "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-600" %>
+          <% end %>
+          <% if inventory_user.permitted_categories.count > 2 %>
+            <%= link_to inventory_inventory_user_path(@inventory, inventory_user, tab: 'categories'), data: { turbo_frame: "_top" }, class: "text-xs" do %>
+              + <%= inventory_user.permitted_categories.count - 2 %>
             <% end %>
-            <% if inventory_user.permitted_categories.count > 2 %>
-              <%= link_to inventory_inventory_user_path(@inventory, inventory_user, tab: 'categories'), data: { turbo_frame: "_top" }, class: "text-xs" do %>
-                + <%= inventory_user.permitted_categories.count - 2 %>
-              <% end %>
-            <% end %>
-          </div>
-        <% else %>
-          <p class="text-sm text-gray-600">No assigned categories</p>
-        <% end %>
+          <% end %>
+        </div>
       <% else %>
-        <%= link_to 'All categories', inventory_categories_path(@inventory), class: "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-600" %>
+        <p class="text-sm text-gray-600">No assigned categories</p>
       <% end %>
     </td>
     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
