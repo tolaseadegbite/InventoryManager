@@ -31,6 +31,10 @@ class InventoryPolicy < ApplicationPolicy
     manager?
   end
 
+  def manage_categories?
+    manager?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       scope.joins(:inventory_users).where(inventory_users: { user_id: user.id })

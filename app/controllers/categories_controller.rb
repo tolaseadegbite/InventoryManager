@@ -2,8 +2,8 @@ class CategoriesController < ApplicationController
   include Pagy::Backend
   before_action :find_inventory
   before_action :find_category, only: %w[show edit update destroy confirm_delete]
-  before_action -> { authorize @category }, only: [:show, :edit, :update, :destroy]
-  before_action -> { authorize Category }, only: [:new, :create]
+  before_action -> { authorize @category }, only: [:show, :edit, :update, :destroy, :confirm_delete]
+  before_action -> { authorize @inventory, :manage_categories? }, only: [:new, :create]
 
   def index
     if inventory_user = @inventory.inventory_users.find_by(user: current_user)
