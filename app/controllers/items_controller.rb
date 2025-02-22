@@ -3,10 +3,11 @@ class ItemsController < ApplicationController
   before_action :set_inventory
   before_action :set_item, only: [:show, :edit, :update, :destroy, :modify_quantity, :quantity_modal, :confirm_delete]
   before_action -> { authorize @item }, only: [:show, :edit, :update, :destroy]
-  before_action -> { authorize @item, :modify_quantity? }, only: [:modify_quantity]
+  before_action -> { authorize @item, :modify_quantity? }, only: [:modify_quantity, :quantity_modal]
 
   def index
-    @q = @inventory.items.ransack(params[:q])
+    base_query = policy_scope(@inventory.items)
+    @q = base_query.ransack(params[:q])
     @pagy, @items = pagy(@q.result.includes(:category).ordered, limit: 30)
   end
 

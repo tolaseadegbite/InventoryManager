@@ -17,7 +17,8 @@ class CategoriesController < ApplicationController
 
   def show
     @total_items = @category.items_count
-    @q = @category.items.ransack(params[:q])
+    base_query = policy_scope(@category.items)
+    @q = base_query.ransack(params[:q])
     @pagy, @items = pagy(@q.result.includes(:category).ordered, limit: 10)
   end
 
