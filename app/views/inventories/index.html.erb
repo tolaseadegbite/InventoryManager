@@ -22,12 +22,14 @@
     <%= render 'inventories/components/inventories_tab' %>
   </div>
 
-  <!-- inventories -->
-  <%= content_tag(:"turbo-frame", id: "inventories", class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5") do %>
-    <% if @inventories.any? %>
-      <%= render @inventories %>
-    <% else %>
-      <p>You are yet to create your first inventory</p>
-    <% end %>
+  <% if @inventories.none? %>
+    <div id="empty_state">
+      <%= render "inventories/components/empty_state" %>
+    </div>
   <% end %>
+
+  <!-- inventories -->
+    <%= content_tag(:"turbo-frame", id: "inventories", class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5") do %>
+      <%= render @inventories %>
+    <% end %>
 </div>

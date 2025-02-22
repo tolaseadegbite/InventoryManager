@@ -2,6 +2,8 @@
     <%= render @inventory %>
 <% end %>
 
+<%= turbo_stream.remove 'empty_state' %>
+
 <%= turbo_stream.update 'header_counter_badge' do %>
     <%= render 'inventories/components/header_counter_badge' %>
 <% end %>

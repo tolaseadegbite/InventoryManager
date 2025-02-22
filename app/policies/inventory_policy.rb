@@ -1,47 +1,39 @@
 class InventoryPolicy < ApplicationPolicy
   def show?
-    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    inventory_user.present?
   end
 
-  def edit?
-    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+  def create?
+    true # Any authenticated user can create an inventory
   end
 
   def update?
-    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    manager?
   end
 
   def destroy?
-    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
-  end
-
-  def dashboard?
-    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    manager?
   end
 
   def confirm_delete?
-    record.members.include?(user) || record.inventory_users.exists?(user_id: user.id)
+    manager?
   end
 
-  def update_member?
-    update?
+  def dashboard?
+    show?
   end
 
-  def add_member?
-    update?
+  def manage_users?
+    manager?
   end
 
-  def remove_member?
-    update?
+  def manage_invitations?
+    manager?
   end
 
-  class Scope < Scope
+  class Scope < ApplicationPolicy::Scope
     def resolve
-      if user.admin?
-        scope.all
-      else
-        scope.joins(:inventory_users).where(inventory_users: { user_id: user.id })
-      end
+      scope.joins(:inventory_users).where(inventory_users: { user_id: user.id })
     end
   end
 end

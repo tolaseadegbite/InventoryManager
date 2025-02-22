@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ApplicationPolicy
   attr_reader :user, :record
 
@@ -9,11 +7,11 @@ class ApplicationPolicy
   end
 
   def index?
-    true
+    false
   end
 
   def show?
-    true
+    false
   end
 
   def create?
@@ -36,6 +34,32 @@ class ApplicationPolicy
     false
   end
 
+  protected
+
+  def manager?
+    inventory_user&.manager?
+  end
+
+  def item_administrator?
+    inventory_user&.item_administrator?
+  end
+
+  def viewer?
+    inventory_user&.viewer?
+  end
+
+  def inventory_user
+    @inventory_user ||= begin
+      inventory = if record.respond_to?(:inventory)
+        record.inventory
+      elsif record.is_a?(Inventory)
+        record
+      end
+      
+      inventory&.inventory_users&.find_by(user: user)
+    end
+  end
+
   class Scope
     def initialize(user, scope)
       @user = user
@@ -43,7 +67,7 @@ class ApplicationPolicy
     end
 
     def resolve
-      raise NoMethodError, "You must define #resolve in #{self.class}"
+      raise NotImplementedError, "You must define #resolve in #{self.class}"
     end
 
     private

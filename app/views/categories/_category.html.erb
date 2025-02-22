@@ -7,7 +7,7 @@
             <% end %>
         </div>
         
-        <% if category.inventory.user == current_user %>
+        <% if inventory_manager?(@inventory) %>
             <div>
                 <button id="dropdownMenuIconButton-<%= category.id %>" data-dropdown-toggle="dropdownDots-<%= category.id %>" class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-700 bg-white rounded-full hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
                     <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
@@ -37,6 +37,10 @@
                     </ul>
                 </div>
             </div>
+        <% elsif permitted_category?(@inventory, category) %>
+            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                Permitted category
+            </span>
         <% end %>
     </div>
 <% end %>

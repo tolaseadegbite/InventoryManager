@@ -1,1 +1,9 @@
 <%= turbo_stream.remove @inventory %>
+
+<%= render_turbo_stream_flash_messages %>
+
+<% if !current_user.inventories.present? %>
+  <%= turbo_stream.update 'empty_state' do %>
+    <%= render "inventories/components/empty_state" %>
+  <% end %>
+<% end %>

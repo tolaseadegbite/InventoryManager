@@ -42,12 +42,10 @@
         <%= item.category.present? ? link_to(item.category.name, inventory_category_path(@inventory, item.category), class: "text-orange-500 hover:underline", data: { turbo_frame: "_top" }) : '<span class="text-gray-400 text-">Not set</span>'.html_safe %>
       </li>
       <li class="w-1/4 flex justify-center gap-2">
-        <% if current_user.admin? %>
-          <%= link_to quantity_modal_inventory_item_path(@inventory, item, action_type: 'add'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-green-100 text-green-600 hover:bg-green-200 px-3 py-2 rounded-lg shadow-sm transition-all" do %>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-          <% end %>
+        <%= link_to quantity_modal_inventory_item_path(@inventory, item, action_type: 'add'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-green-100 text-green-600 hover:bg-green-200 px-3 py-2 rounded-lg shadow-sm transition-all" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
         <% end %>
         <%= link_to quantity_modal_inventory_item_path(@inventory, item, action_type: 'remove'), data: { turbo_frame: :modal }, class: "flex items-center gap-2 bg-red-100 text-red-600 hover:bg-red-200 px-3 py-2 rounded-lg shadow-sm transition-all" do %>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">

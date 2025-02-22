@@ -49,7 +49,6 @@ class InventoriesController < ApplicationController
   end
 
   def confirm_delete
-    
   end
 
   def destroy
@@ -62,7 +61,6 @@ class InventoriesController < ApplicationController
   end
 
   def dashboard
-    
   end
 
   private

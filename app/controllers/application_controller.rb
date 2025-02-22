@@ -18,11 +18,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def user_not_authorized
-    flash[:alert] = "You are not authorized to perform this action."
-    redirect_back(fallback_location: root_path)
-  end
-
   def set_layout
     if inventory_related_view?
       "application"
@@ -51,7 +46,7 @@ class ApplicationController < ActionController::Base
 
   def set_accordion_inventories
     if current_user
-      @accordion_inventories = current_user.inventories.ordered
+      @accordion_inventories = current_user.all_inventories.ordered
     end
   end
 

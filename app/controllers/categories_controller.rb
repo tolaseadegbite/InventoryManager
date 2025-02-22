@@ -1,8 +1,9 @@
 class CategoriesController < ApplicationController
   include Pagy::Backend
-  before_action :set_inventory
+  before_action :find_inventory
   before_action :find_category, only: %w[show edit update destroy confirm_delete]
-  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
+  before_action -> { authorize @category }, only: [:show, :edit, :update, :destroy]
+  before_action -> { authorize Category }, only: [:new, :create]
 
   def index
     @categories = @inventory.categories.ordered
@@ -66,7 +67,7 @@ class CategoriesController < ApplicationController
     params.require(:category).permit(:name, :description)
   end
 
-  def set_inventory
+  def find_inventory
     @inventory = Inventory.find(params[:inventory_id])
   end
 

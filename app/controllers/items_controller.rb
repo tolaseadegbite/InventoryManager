@@ -3,9 +3,8 @@ class ItemsController < ApplicationController
   before_action :set_inventory
   # before_action :set_category, only: [:show]
   before_action :set_item, only: [:show, :edit, :update, :destroy, :modify_quantity, :quantity_modal, :confirm_delete]
-  before_action :require_admin, only: [:new, :create, :edit, :update, :destroy]
-  before_action :authorize_quantity_modification, only: [:modify_quantity]
-  # before_action :check_category_permission, except: [:index, :show]
+  before_action -> { authorize @item }, only: [:show, :edit, :update, :destroy]
+  before_action -> { authorize @item, :modify_quantity? }, only: [:modify_quantity]
 
   def index
     @q = @inventory.items.ransack(params[:q])

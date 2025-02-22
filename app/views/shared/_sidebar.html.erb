@@ -2,11 +2,15 @@
    <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
       <div id="accordion-collapse" data-accordion="collapse" class="mt-2 mb-5">
          <h2 id="accordion-collapse-heading-1">
-            <button type="button" class="flex items-center justify-between w-full py-5 px-3 z-50 relative font-medium rtl:text-right text-gray-500 border border-gray-200 rounded-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 gap-3 collapsed" data-accordion-target="#accordion-collapse-body-1" aria-controls="accordion-collapse-body-1">
-               <span><%= @inventory.name %></span>
-               <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
-               </svg>
+            <button type="button" class="w-full py-5 px-3 z-50 relative font-medium rtl:text-right text-gray-500 border border-gray-200 rounded-xl focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:border-gray-700 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 gap-3 collapsed" data-accordion-target="#accordion-collapse-body-1" aria-controls="accordion-collapse-body-1">
+               <div class="flex items-center justify-between">
+                  <span><%= @inventory.name %></span>
+                  <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                  </svg>
+               </div>
+
+               <div class="mt-2 text-left"><%= inventory_association_badge(@inventory) %></div>
             </button>
          </h2>
          <div id="accordion-collapse-body-1" class="hidden" aria-labelledby="accordion-collapse-heading-1">
@@ -14,7 +18,10 @@
                
                <div class="text-sm font-medium text-gray-900 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                   <% (@accordion_inventories - [@inventory]).each do |inventory| %>
-                     <%= link_to inventory.name, dashboard_inventory_path(inventory), class: "block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:text-gray-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white" %>
+                     <%= link_to dashboard_inventory_path(inventory), class: "block w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:text-gray-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white" do %>
+                        <%= inventory.name %>
+                        <div class="mt-2"><%= inventory_association_badge(inventory) %></div>
+                     <% end %>
                   <% end %>
                   <%= link_to inventories_path, class: "flex gap-3 items-center font-semibold w-full px-4 py-2 border-b border-gray-200 cursor-pointer hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700 focus:text-gray-700 dark:border-gray-600 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-500 dark:focus:text-white" do %>
                      See all
