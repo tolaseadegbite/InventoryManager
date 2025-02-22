@@ -2,7 +2,7 @@
   <div data-action="turbo:submit-end->dialog#submitEnd" class="p-4">
     <div class="space-y-2">
         <h2 class="font-semibold text-xl sm:text-xl md:text-lg">Remove user?</h2>
-        <p>Are you sure you want to remove this user from your inventory?</p>
+        <p>Are you sure you want to remove <%= @inventory_user.user.profile.name %> from the inventory?</p>
     </div>
     <div class="mt-4 flex gap-4 justify-end">
       <%= button_to "#", data: { action: "modal#close" }, type: "button", class: "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-2xl px-6 py-4 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" do %>
