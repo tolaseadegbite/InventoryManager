@@ -3,12 +3,12 @@
         <%= render 'shared/errors', form: form %>
         
         <div class="mb-6">
-            <%#= form.label :name, class: "block text-sm font-semibold" %>
+            <%= form.label :name, class: "block text-sm font-semibold" %>
             <%= form.text_field :name, placeholder: "Name", class: "mt-2 w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400 text-sm", required: true %>
         </div>
 
         <div class="mb-6">
-            <%#= form.label :description, class: "block text-sm font-semibold" %>
+            <%= form.label :description, class: "block text-sm font-semibold" %>
             <%= form.text_area :description, placeholder: "Description", class: "h-24 mt-2 w-full px-3 p-2.5 border rounded-md dark:bg-gray-900 dark:text-gray-100 dark:focus:bg-gray-800 border-gray-300 dark:border-gray-700 dark:focus:border-emerald-400 dark:focus:ring-emerald-400 text-sm" %>
         </div>
 

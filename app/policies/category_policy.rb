@@ -24,8 +24,7 @@ class CategoryPolicy < ApplicationPolicy
       if user.manager?
         scope.all
       else
-        scope.joins(:category_permissions)
-             .where(category_permissions: { inventory_user_id: inventory_user.id })
+        scope.joins(:category_permissions).where(category_permissions: { inventory_user_id: inventory_user.id })
       end
     end
   end
