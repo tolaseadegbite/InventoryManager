@@ -38,12 +38,11 @@ class ItemPolicy < ApplicationPolicy
     def resolve
       inventory = scope.first&.inventory
       inventory_user = user.inventory_users.find_by(inventory: inventory)
-
-      return scope.all if inventory_user&.manager?
-  
+      return scope.none unless inventory_user  # Return nothing if not an inventory user
+      
       scope.joins(:category)
            .joins("INNER JOIN category_permissions ON categories.id = category_permissions.category_id")
-           .where(category_permissions: { inventory_user_id: inventory_user&.id })
+           .where(category_permissions: { inventory_user_id: inventory_user.id })
            .distinct
     end
   end
