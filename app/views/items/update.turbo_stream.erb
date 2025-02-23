@@ -7,7 +7,7 @@
 <% end %>
 
 <%= turbo_stream.update "item_info_#{@item.id}" do %>
-  <%= render "item_info", item: @item %>
+  <%= render "item_info", inventory: @inventory, item: @item %>
 <% end %>
 
 <%= render_turbo_stream_flash_messages %>

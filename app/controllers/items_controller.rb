@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
   end
 
   def new
-    @item = @inventory.items.build
+    @item = @inventory.items.build(category_id: params[:category_id])
   end
 
   def create

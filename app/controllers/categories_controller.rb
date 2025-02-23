@@ -2,6 +2,7 @@ class CategoriesController < ApplicationController
   include Pagy::Backend
   before_action :find_inventory
   before_action :find_category, only: %w[show edit update destroy confirm_delete]
+  before_action :set_inventory_user
   before_action -> { authorize @category }, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action -> { authorize @inventory, :manage_categories? }, only: [:new, :create]
 
@@ -27,15 +28,17 @@ class CategoriesController < ApplicationController
   end
 
   def create
-    @category = @inventory.categories.build(category_params)
-
-    if @category.save
+    @item = @inventory.items.build(item_params)
+    @item.user = current_user
+    @item.category_id = params[:category_id] if params[:category_id].present?
+  
+    if @item.save
       respond_to do |format|
-        format.html { redirect_to inventory_categories_path(@inventory), notice: "Category created successfully" }
-        format.turbo_stream { flash.now[:notice] = "Category created successfully" }
+        format.html { redirect_to inventory_item_path(@inventory, @item), notice: "Item was successfully created" }
+        format.turbo_stream { flash.now[:notice] = "Item was successfully created" }
       end
     else
-      flash.now[:alert] = "Failed to create category. Please check the errors below."
+      flash.now[:alert] = "Failed to create item. Please check the errors below."
       render :new, status: :unprocessable_entity
     end
   end
@@ -79,6 +82,10 @@ class CategoriesController < ApplicationController
 
   def find_category
     @category = @inventory.categories.find(params[:id])
+  end
+
+  def set_inventory_user
+    @inventory_user = @inventory.inventory_users.find_by(user: current_user)
   end
 
   def require_admin

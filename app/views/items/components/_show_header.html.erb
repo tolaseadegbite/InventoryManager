@@ -1,7 +1,7 @@
 <div class="flex gap-2 items-center justify-between mb-3">
   <h1 class="font-bold text-xl"><%= @item.name %></h1>
 
-  <% if @inventory.user == current_user %>
+  <% if can_create_items?(@inventory) %>
     <div class="flex">
       <%= link_to edit_inventory_item_path(@inventory, @item), class: "text-gray-900 bg-white border border-gray-900 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700", data: {action: "click->dialog#open", turbo_frame: :modal} do %>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
