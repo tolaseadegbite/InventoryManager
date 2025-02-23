@@ -2,7 +2,8 @@ class ItemsController < ApplicationController
   include Pagy::Backend
   before_action :set_inventory
   before_action :set_item, only: [:show, :edit, :update, :destroy, :modify_quantity, :quantity_modal, :confirm_delete]
-  before_action -> { authorize @item }, only: [:show, :edit, :update, :destroy]
+  before_action -> { authorize @item }, only: [:show, :edit, :update, :confirm_delete, :destroy]
+  before_action -> { authorize @inventory, :manage_items? }, only: [:new, :create]
   before_action -> { authorize @item, :modify_quantity? }, only: [:modify_quantity, :quantity_modal]
 
   def index

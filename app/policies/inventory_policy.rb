@@ -35,6 +35,15 @@ class InventoryPolicy < ApplicationPolicy
     manager?
   end
 
+  def manage_items?
+    return false unless inventory_user
+    return true if manager?
+    return false if viewer?
+    
+    # Item administrators can only create items if they have permitted categories
+    item_administrator? && inventory_user.permitted_categories.exists?
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       scope.joins(:inventory_users).where(inventory_users: { user_id: user.id })

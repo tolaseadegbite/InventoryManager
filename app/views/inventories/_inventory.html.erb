@@ -49,6 +49,7 @@
     <% if inventory.user != current_user %>
       <div class="mb-5">
         <%= inventory_owner_badge(inventory) %>
+        <%= inventory_index_association_badge(inventory) %>
       </div>
     <% end %>
 

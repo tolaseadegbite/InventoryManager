@@ -1,4 +1,7 @@
 class InventoryUser < ApplicationRecord
+  after_create :check_role_permissions
+  after_create :assign_categories_if_manager
+
   validates :role, presence: true
   validates :user_id, uniqueness: { scope: :inventory_id }
   
@@ -12,8 +15,6 @@ class InventoryUser < ApplicationRecord
     item_administrator: 1,
     viewer: 3
   }
-
-  after_create :check_role_permissions
   
   def can_access_category?(category)
     return true if manager?
@@ -34,6 +35,14 @@ class InventoryUser < ApplicationRecord
     # New inventory users can't do anything until categories are assigned
     # unless they're managers
     update(role: role)
+  end
+
+  def assign_categories_if_manager
+    return unless manager?
+    
+    inventory.categories.find_each do |category|
+      category_permissions.create!(category: category)
+    end
   end
   
 end

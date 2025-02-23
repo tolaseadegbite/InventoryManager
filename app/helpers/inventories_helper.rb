@@ -16,12 +16,41 @@ module InventoriesHelper
     end
   end
 
+  def inventory_index_association_badge(inventory)
+    return unless inventory.user_id != Current.user.id
+    
+    inventory_user = inventory.inventory_users.find_by(user: current_user)
+    content_tag :span, class: "text-xs font-medium bg-gray-100 text-gray-800 px-2.5 py-0.5 rounded-full" do
+      "Role: #{inventory_user&.role.titleize}"
+    end
+  end
+
   def inventory_manager?(inventory)
     return false if current_user.nil?
 
     inventory_user = inventory.inventory_users.find_by(user: current_user)
     inventory_user&.manager?
   end
+
+  def can_create_items?(inventory)
+    return false if current_user.nil?
+
+    inventory_user = inventory.inventory_users.find_by(user: current_user)
+    return false unless inventory_user
+
+    return true if inventory_user.manager?
+    return false if inventory_user.viewer?
+    
+    # For item administrators, check if they have any permitted categories
+    inventory_user.item_administrator? && inventory_user.permitted_categories.exists?
+  end
+
+  # def can_manage_categories?(inventory)
+  #   return false if current_user.nil?
+
+  #   inventory_user = inventory.inventory_users.find_by(user: current_user)
+  #   inventory_user&.manager?
+  # end
 
   def permitted_category?(inventory, category)
     return false if current_user.nil?

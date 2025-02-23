@@ -12,9 +12,13 @@ end
 # Define roles array
 roles = [:regular, :admin]
 
-# Create 10 users
+# Create 10 users plus test user
 users = 10.times.map do |i|
-  email = i.zero? ? "tolase@test.com" : generate_email(Faker::Name.name)
+  email = if i.zero?
+    "tolase@test.com"
+  else
+    generate_email(Faker::Name.name)
+  end
   password = i.zero? ? "foofoofoo" : "password"
 
   user = User.create!(
@@ -24,7 +28,6 @@ users = 10.times.map do |i|
     role: i.zero? ? :admin : roles.sample
   )
 
-  # Create profile
   Profile.create!(
     user: user,
     name: i.zero? ? "Tolase" : Faker::Name.name
@@ -32,6 +35,21 @@ users = 10.times.map do |i|
 
   user
 end
+
+# Add test user
+test_user = User.create!(
+  email_address: "test@user.com",
+  password_digest: BCrypt::Password.create("foofoofoo"),
+  status: :verified,
+  role: :regular
+)
+
+Profile.create!(
+  user: test_user,
+  name: "Test User"
+)
+
+users << test_user
 
 # Create 5 inventories for the first (manager) user
 manager_user = users.first
@@ -69,9 +87,14 @@ inventories.each do |inventory|
   end
 end
 
-# Create eCommerce categories
-categories = ["Electronics", "Clothing", "Home & Kitchen", "Books", "Toys",
-              "Sports", "Beauty", "Health", "Grocery", "Automotive"]
+# Create expanded eCommerce categories
+categories = [
+  "Electronics", "Clothing", "Home & Kitchen", "Books", "Toys",
+  "Sports Equipment", "Beauty Products", "Health Supplies", "Grocery",
+  "Automotive Parts", "Office Supplies", "Garden & Outdoor",
+  "Pet Supplies", "Musical Instruments", "Art Supplies",
+  "Tools & Hardware", "Baby Products", "Stationery"
+]
 
 # Assign categories to the manager's inventories
 manager_inventories = inventories.select { |inv| inv.user == manager_user }
@@ -96,33 +119,37 @@ inventories.reject { |inv| inv.user == manager_user }.each do |inventory|
   end
 end
 
-# Create 100 items for the manager's inventories
+# Create 50-70 items for each category in manager's inventories
 manager_inventories.each do |inventory|
-  20.times do
-    Item.create!(
-      name: Faker::Commerce.product_name,
-      description: Faker::Lorem.sentence,
-      quantity: rand(0..100),
-      stock_threshold: rand(0..20),
-      category: inventory.categories.sample,
-      inventory: inventory,
-      user: manager_user
-    )
+  inventory.categories.each do |category|
+    rand(50..70).times do
+      Item.create!(
+        name: Faker::Commerce.product_name,
+        description: Faker::Lorem.sentence,
+        quantity: rand(0..100),
+        stock_threshold: rand(0..20),
+        category: category,
+        inventory: inventory,
+        user: manager_user
+      )
+    end
   end
 end
 
-# Create items for other inventories
+# Create 50-70 items for each category in other inventories
 inventories.reject { |inv| inv.user == manager_user }.each do |inventory|
-  rand(10..30).times do
-    Item.create!(
-      name: Faker::Commerce.product_name,
-      description: Faker::Lorem.sentence,
-      quantity: rand(0..100),
-      stock_threshold: rand(0..20),
-      category: inventory.categories.sample,
-      inventory: inventory,
-      user: inventory.user
-    )
+  inventory.categories.each do |category|
+    rand(50..70).times do
+      Item.create!(
+        name: Faker::Commerce.product_name,
+        description: Faker::Lorem.sentence,
+        quantity: rand(0..100),
+        stock_threshold: rand(0..20),
+        category: category,
+        inventory: inventory,
+        user: inventory.user
+      )
+    end
   end
 end
 
