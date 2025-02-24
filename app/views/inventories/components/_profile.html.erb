@@ -6,7 +6,7 @@
                     Name
                 </span>
 
-                <span>
+                <span class="text-sm">
                     <%= @inventory.name %>
                 </span>
             </div>
@@ -17,7 +17,7 @@
                     Description
                 </span>
 
-                <span>
+                <span class="text-sm">
                     <% if @inventory.description.present? %>
                     <%= @inventory.description %>
                     <% else %>
@@ -32,7 +32,7 @@
                     Global threshold
                 </span>
 
-                <span>
+                <span class="text-sm">
                     <%= @inventory.global_stock_threshold %>
                 </span>
             </div>
@@ -43,7 +43,7 @@
                     Inventory users
                 </span>
 
-                <span>
+                <span class="text-sm">
                     <%= link_to @inventory.members.count, inventory_inventory_users_path(@inventory), class: "underline" %>
                 </span>
             </div>

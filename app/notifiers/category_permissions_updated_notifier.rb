@@ -6,7 +6,7 @@ class CategoryPermissionsUpdatedNotifier < ApplicationNotifier
     end
 
     def url
-      inventory_path(params[:inventory])
+      inventory_inventory_user_path(params[:inventory], params[:inventory_user], tab: 'categories')
     end
   end
 end
