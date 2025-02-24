@@ -45,6 +45,19 @@ module InventoriesHelper
     inventory_user.item_administrator? && inventory_user.permitted_categories.exists?
   end
 
+  def can_create_inventory_action?(item)
+    return false if current_user.nil?
+
+    inventory_user = item.inventory.inventory_users.find_by(user: current_user)
+    return false unless inventory_user
+
+    return true if inventory_user.manager?
+    return false if inventory_user.viewer?
+    
+    # For item administrators, check if they have permission for the item's category
+    inventory_user.item_administrator? && inventory_user.can_access_category?(item.category)
+  end
+
   # def can_manage_categories?(inventory)
   #   return false if current_user.nil?
 

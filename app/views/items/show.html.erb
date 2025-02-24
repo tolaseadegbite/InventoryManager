@@ -66,11 +66,13 @@
     <%= render "item_info", inventory: @inventory, item: @item %>
   <% end %>
 
-  <div class="mt-6 max-w-screen-md mx-auto">
-    <div id="show_quantity_form" class="flex flex-col md:flex-row gap-4">
-      <%= render 'items/components/show_quantity_form', inventory: @inventory, item: @item %>
+  <% if can_create_inventory_action?(@item) %>
+    <div class="mt-6 max-w-screen-md mx-auto">
+      <div id="show_quantity_form" class="flex flex-col md:flex-row gap-4">
+        <%= render 'items/components/show_quantity_form', inventory: @inventory, item: @item %>
+      </div>
     </div>
-  </div>
+  <% end %>
 
   <div class="mt-10 max-w-screen-lg mx-auto">
     <%= turbo_frame_tag "inventory_history_#{@item.id}" do %>

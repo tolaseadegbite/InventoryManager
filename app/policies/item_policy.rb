@@ -17,6 +17,11 @@ class ItemPolicy < ApplicationPolicy
     item_administrator? && can_access_item?
   end
 
+  def confirm_delete?
+    return true if manager?
+    item_administrator? && can_access_item?
+  end
+
   def destroy?
     return true if manager?
     item_administrator? && can_access_item?
