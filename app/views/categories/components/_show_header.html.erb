@@ -1,6 +1,13 @@
 <div class="flex gap-2 items-center justify-between mb-5">
-    <div class="flex gap-1 items-center">
-        <h1 class="font-bold text-xl"><%= @category.name %> <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'categories/components/header_counter_badge' %></span></h1>
+    <h1 class="font-bold text-xl"><%= @category.name %> <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'categories/components/header_counter_badge' %></span></h1>
+
+    <div class="flex gap-2 items-center">
+
+        <!-- search form -->
+
+        <div class="hidden md:block items-search">
+            <%= render 'items/components/items_search_form', url: inventory_category_path(@inventory, @category) %>
+        </div>
 
         <% if can_create_items?(@inventory) && @inventory_user&.can_access_category?(@category) %>
             <%= link_to new_inventory_item_path(@inventory, category_id: @category), class: "inline-flex whitespace-nowrap items-center gap-1 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded cursor-pointer", 
@@ -11,15 +18,6 @@
                 Add item
             <% end %>
         <% end %>
-    </div>
-
-    <div class="flex gap-2 items-center">
-
-        <!-- search form -->
-
-        <div class="hidden md:block items-search">
-            <%= render 'items/components/items_search_form', url: inventory_category_path(@inventory, @category) %>
-        </div>
 
         <% if inventory_manager?(@inventory) %>
             <div class="flex">
