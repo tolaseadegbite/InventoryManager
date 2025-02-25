@@ -37,22 +37,43 @@
         <div class="flex gap-2 items-center justify-between mb-5 md:mb-2">
             <h1 class="font-bold text-xl">Categories <span id="header_counter_badge" class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-700 dark:text-blue-300"><%= render 'categories/components/header_counter_badge' %></span></h1>
 
-            <% if can_create_items?(@inventory) %>
-                <%= link_to new_inventory_category_path(@inventory), class: "inline-flex whitespace-nowrap items-center gap-1 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded cursor-pointer", data: { turbo_frame: :modal } do %>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    Add category
+            <div class="flex gap-2 items-center">
+
+                <!-- search form -->
+                <div class="hidden md:block categories-search">
+                    <%= render 'categories/components/categories_search_form', url: inventory_categories_path(@inventory) %>
+                </div>
+
+                <% if can_create_items?(@inventory) %>
+                    <%= link_to new_inventory_category_path(@inventory), class: "inline-flex whitespace-nowrap items-center gap-1 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded cursor-pointer", data: { turbo_frame: :modal } do %>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Add category
+                    <% end %>
                 <% end %>
-            <% end %>
+            </div>
         </div>
     </div>
 
-    <% if @categories.present? %>
-        <%= content_tag(:"turbo-frame", id: "categories", class: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5") do %>
-            <%= render @categories %>
+    <% if params[:page] %>
+        <h2 class="font-bold text-l mb-5">Page: <%= params[:page] %></h2>
+    <% end %>
+
+    <!-- mobile search form -->
+    <div class="block md:hidden mb-5">
+        <%#= render 'categories/components/mobile_categories_search_form', url: inventory_categories_path(@inventory) %>
+        <%= render 'categories/components/categories_search_form', url: inventory_categories_path(@inventory) %>
+    </div>
+
+    <%= turbo_frame_tag :results, data: { turbo_action: 'advance' } do %>
+
+        <% if @categories.present? %>
+            <%= content_tag(:"turbo-frame", id: "categories", class: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5") do %>
+                <%= render @categories %>
+            <% end %>
+        <% else %>
+            <p class="text-sm italic text-gray-600 mt-4">No categories!</p>
         <% end %>
-    <% else %>
-        <p class="text-sm italic text-gray-600 mt-4">No categories!</p>
     <% end %>
 </div>

@@ -7,13 +7,14 @@ class CategoriesController < ApplicationController
   before_action -> { authorize @inventory, :manage_categories? }, only: [:new, :create]
 
   def index
-    if inventory_user = @inventory.inventory_users.find_by(user: current_user)
-      @categories = inventory_user.permitted_categories.ordered
+    base_query = if inventory_user = @inventory.inventory_users.find_by(user: current_user)
+      inventory_user.permitted_categories.ordered
     else
-      @categories = @inventory.categories.ordered
+      @inventory.categories.ordered
     end
-
-    @pagy, @categories = pagy(@categories, limit: 30)
+    
+    @q = base_query.ransack(params[:q])
+    @pagy, @categories = pagy(@q.result, limit: 30)
   end
 
   def show
