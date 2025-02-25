@@ -6,6 +6,10 @@ class Profile < ApplicationRecord
     ["name"]
   end
 
+  def self.ransackable_associations(auth_object = nil)
+    ["user"]
+  end
+
   has_one_attached :avatar do |attachable|
     attachable.variant :display, resize_to_limit: [200, 200]
   end

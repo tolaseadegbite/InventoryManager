@@ -1,4 +1,5 @@
 class InventoryUsersController < ApplicationController
+  include Pagy::Backend
   before_action :set_inventory
   before_action :set_inventory_user, only: [:show, :edit, :update, :destroy, :confirm_delete]
   before_action :authorize_inventory_user, except: [:index]
@@ -6,7 +7,15 @@ class InventoryUsersController < ApplicationController
   def index
     authorize @inventory, policy_class: InventoryUserPolicy
     @current_tab = params[:tab] || 'users'
-    @users = @inventory.inventory_users.includes(:user, user: :profile).order(id: :asc)
+    
+    base_query = @inventory.inventory_users.with_user_and_profile
+    @q = base_query.ransack(params[:q])
+    
+    # Add proper sorting for profile name
+    @q.sorts = ['user_profile_name asc'] if @q.sorts.empty?
+    
+    @pagy, @users = pagy(@q.result, items: 30)
+    
     @pending_invitations = @inventory.inventory_invitations.includes(:recipient, recipient: :profile).pending.order(created_at: :desc)
   end
 

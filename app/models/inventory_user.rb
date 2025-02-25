@@ -15,6 +15,17 @@ class InventoryUser < ApplicationRecord
     item_administrator: 1,
     viewer: 3
   }
+
+  def self.ransackable_attributes(auth_object = nil)
+    ["role", "user_id", "inventory_id", "created_at"]
+  end
+  
+  def self.ransackable_associations(auth_object = nil)
+    ["inventory", "user", "category_permissions", "permitted_categories", "user_profile"]
+  end
+
+  # Add this scope for better profile searching
+  scope :with_user_and_profile, -> { includes(user: :profile) }
   
   def can_access_category?(category)
     return true if manager?

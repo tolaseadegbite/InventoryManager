@@ -22,12 +22,12 @@ class User < ApplicationRecord
     email_address
   end
 
-  def self.ransackable_attributes(auth_object = nil) 
-    ["email_address", "role", "created_at"] 
+  def self.ransackable_attributes(auth_object = nil)
+    ["email_address", "role", "created_at"]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    ["profile"]
+    ["profile", "inventory_users"]
   end
   
   enum :status, { unverified: 0, verified: 1, closed: 2 }
