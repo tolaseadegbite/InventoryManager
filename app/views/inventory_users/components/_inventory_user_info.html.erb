@@ -3,5 +3,5 @@
   <span>•</span>
   <div><span class="font-semibold">Role:</span> <%= inventory_user.role.titleize %></div>
   <span>•</span>
-  <div><span class="font-semibold">Created on:</span> <span><%= inventory_user.user.created_at.strftime("%Y-%m-%d %H:%M") %></span></div>
+  <div><span class="font-semibold">Joined:</span> <span><%= inventory_user.created_at.strftime("%b %d, %Y") %></span></div>
 </div>

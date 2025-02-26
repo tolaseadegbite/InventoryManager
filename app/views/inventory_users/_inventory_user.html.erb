@@ -2,7 +2,7 @@
   <!-- Desktop View -->
   <tr>
     <td class="px-6 py-4 whitespace-nowrap">
-      <%= link_to inventory_inventory_user_path(@inventory, inventory_user) do %>
+      <%= link_to inventory_inventory_user_path(@inventory, inventory_user), data: { turbo_frame: "_top" } do %>
         <div class="flex items-center">
           <div class="h-10 w-10 flex-shrink-0">
             <% if inventory_user.user.profile.avatar.attached? %>
