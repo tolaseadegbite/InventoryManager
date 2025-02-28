@@ -1,5 +1,12 @@
 <div class="flex gap-2 items-center justify-between mb-3">
-  <h1 class="font-bold text-xl"><%= @inventory_user.user.profile.name %></h1>
+  <div class="flex items-center gap-2">
+    <% if @inventory_user.user.profile.avatar.attached? %>
+      <%= image_tag(@inventory_user.user.profile.avatar, class: "w-12 h-12 border-2 border-white rounded-full dark:border-gray-800", alt: "inventory user avatar") %>
+    <% else %>
+      <%= image_tag('others/default avatar.png', class: "w-12 h-12 object-cover rounded-full border-gray-800", alt: "inventory user avatar") %>
+    <% end %>
+    <h1 class="font-bold text-xl"><%= @inventory_user.user.profile.name %></h1>
+  </div>
 
   <div class="flex">
     <% if inventory_manager?(@inventory) %>
