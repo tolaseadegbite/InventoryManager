@@ -22,6 +22,15 @@ class InventoryUsersController < ApplicationController
   def show
     @current_tab = params[:tab] || 'activities'
     @permitted_categories = @inventory_user.permitted_categories.ordered
+    
+    if @current_tab == 'activities'
+      @pagy, @user_activities = pagy(
+        ActivityLog.where(inventory: @inventory, user_id: @inventory_user.user_id)
+                  .includes(:user, { user: :profile }, :trackable)
+                  .order(created_at: :desc),
+        items: 10
+      )
+    end
   end
 
   def edit

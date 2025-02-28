@@ -11,6 +11,12 @@
       
       <%= turbo_frame_tag "activity_logs" do %>
         <%= render "list", activity_logs: @activity_logs %>
+        
+        <% if @pagy && @pagy.pages > 1 %>
+          <div class="mt-4">
+            <%== pagy_nav(@pagy) %>
+          </div>
+        <% end %>
       <% end %>
     </div>
   </div>
