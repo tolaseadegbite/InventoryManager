@@ -22,12 +22,15 @@
     <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <%= yield :head %>
   </head>
 
   <body>
     <%= render "shared/navbar" %>
     <%= render "shared/sidebar" %>
-    <div class="p-4 sm:ml-64">
+    <div class="p-4 sm:ml-64 bg-gray-50 dark:border-black dark:bg-black">
       <div class="py-4 mt-14">
         <%= yield %>
         <%= render partial: "shared/flash" %>

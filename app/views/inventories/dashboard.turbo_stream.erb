@@ -1,0 +1,41 @@
+<%= turbo_stream.replace "activity_logs" do %>
+  <%= render partial: "activity_logs/list", locals: { activity_logs: @activity_logs } %>
+<% end %>
+
+<%= turbo_stream.replace "low_stock_items" do %>
+  <% @low_stock_items.each do |item| %>
+    <li class="py-3 sm:py-4">
+      <div class="flex items-center">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+            <%= link_to item.name, inventory_item_path(@inventory, item), class: "hover:underline" %>
+          </p>
+          <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+            <%= item.category.name %>
+          </p>
+        </div>
+        <div class="inline-flex items-center text-sm font-semibold text-red-600 dark:text-red-400">
+          <%= item.quantity %> units left
+        </div>
+      </div>
+    </li>
+  <% end %>
+<% end %>
+
+<%= turbo_stream.update "stats_total_items" do %>
+  <%= @stats[:total_items] %>
+<% end %>
+
+<%= turbo_stream.update "stats_low_stock" do %>
+  <%= @stats[:low_stock_items] %>
+<% end %>
+
+<%= turbo_stream.update "stats_categories" do %>
+  <%= @stats[:categories_count] %>
+<% end %>
+
+<% if @inventory_user.manager? %>
+  <%= turbo_stream.update "stats_users" do %>
+    <%= @stats[:users_count] %>
+  <% end %>
+<% end %>

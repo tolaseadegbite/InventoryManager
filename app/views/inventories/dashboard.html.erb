@@ -1,21 +1,333 @@
-<div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
-  <div class="px-4 py-5 sm:p-6">
-    <div class="sm:flex sm:items-center">
-      <div class="sm:flex-auto">
-        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-          Recent Activity
-        </h3>
+<% provide(:title, "Dashboard") %>
+
+<div class="grid grid-cols-1 gap-6" data-controller="dashboard">
+  <!-- Page Header -->
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors">Dashboard</h1>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 transition-colors">
+        Overview of <%= @inventory.name %> inventory
+      </p>
+    </div>
+    <div class="flex items-center space-x-3">
+      <div class="relative">
+        <button id="dateRangeDropdown" data-dropdown-toggle="dateRangeMenu" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white transition-colors inline-flex items-center">
+          <span>Last 30 days</span>
+          <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+          </svg>
+        </button>
+        <div id="dateRangeMenu" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dateRangeDropdown">
+            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white transition-colors">Today</a></li>
+            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white transition-colors">Last 7 days</a></li>
+            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white transition-colors">Last 30 days</a></li>
+            <li><a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white transition-colors">Last 90 days</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-        <%= link_to inventory_activity_logs_path(@inventory), 
-            class: "text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300" do %>
-          View All Activity
+      
+      <% if @inventory_user.manager? || @inventory_user.item_administrator? %>
+        <%= link_to "#", class: "text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-white-600 dark:hover:bg-white/70 focus:outline-none dark:focus:ring-blue-800 transition-colors" do %>
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            Export Report
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- Total Items Card -->
+    <div class="p-5 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Total Items</h5>
+          <p class="text-sm text-gray-500 dark:text-gray-400 transition-colors">All inventory items</p>
+        </div>
+        <div class="p-2 bg-blue-100 rounded-full dark:bg-blue-900 transition-colors">
+          <svg class="w-6 h-6 text-blue-600 dark:text-blue-300 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+          </svg>
+        </div>
+      </div>
+      <div class="flex items-baseline">
+        <span id="stats_total_items" class="text-3xl text-gray-900 dark:text-white transition-colors"><%= @stats[:total_items] %></span>
+      </div>
+    </div>
+
+    <!-- Low Stock Card -->
+    <div class="p-5 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Low Stock</h5>
+          <p class="text-sm text-gray-500 dark:text-gray-400 transition-colors">Items below threshold</p>
+        </div>
+        <div class="p-2 bg-red-100 rounded-full dark:bg-red-900 transition-colors">
+          <svg class="w-6 h-6 text-red-600 dark:text-red-300 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+        </div>
+      </div>
+      <div class="flex items-baseline">
+        <span id="stats_low_stock" class="text-3xl text-gray-900 dark:text-white transition-colors"><%= @stats[:low_stock_items] %></span>
+      </div>
+    </div>
+
+    <!-- Categories Card -->
+    <div class="p-5 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Categories</h5>
+          <p class="text-sm text-gray-500 dark:text-gray-400 transition-colors">Total categories</p>
+        </div>
+        <div class="p-2 bg-purple-100 rounded-full dark:bg-purple-900 transition-colors">
+          <svg class="w-6 h-6 text-purple-600 dark:text-purple-300 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+          </svg>
+        </div>
+      </div>
+      <div class="flex items-baseline">
+        <span id="stats_categories" class="text-3xl text-gray-900 dark:text-white transition-colors"><%= @stats[:categories_count] %></span>
+      </div>
+    </div>
+
+    <!-- Users Card (Only visible to managers) -->
+    <% if @inventory_user.manager? %>
+      <div class="p-5 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Users</h5>
+            <p class="text-sm text-gray-500 dark:text-gray-400 transition-colors">Active inventory users</p>
+          </div>
+          <div class="p-2 bg-green-100 rounded-full dark:bg-green-900 transition-colors">
+            <svg class="w-6 h-6 text-green-600 dark:text-green-300 transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+            </svg>
+          </div>
+        </div>
+        <div class="flex items-baseline">
+          <span id="stats_users" class="text-3xl text-gray-900 dark:text-white transition-colors"><%= @stats[:users_count] %></span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Inventory Trends Chart -->
+    <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+      <div class="flex justify-between items-center mb-4">
+        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Inventory Trends</h5>
+      </div>
+      <div id="inventory-chart" class="h-80" data-dashboard-target="inventoryChart" data-trends="<%= @inventory_trends.to_json %>"></div>
+    </div>
+
+    <!-- Category Distribution Chart -->
+    <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+      <div class="flex justify-between items-center mb-4">
+        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Category Distribution</h5>
+      </div>
+      <div id="category-chart" class="h-80" data-dashboard-target="categoryChart" data-categories="<%= @category_data.to_json %>"></div>
+    </div>
+  </div>
+
+  <!-- Recent Activities and Low Stock Items -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+    <!-- Recent Activities -->
+    <div class="" data-controller="activity-log">
+      <div class="flex justify-between items-center mb-4">
+        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Recent Activities</h5>
+        <%= link_to inventory_activity_logs_path(@inventory), class: "text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 transition-colors" do %>
+          View all
+        <% end %>
+      </div>
+      <div id="activity_logs" class="flow-root">
+        <ul role="list">
+          <% @activity_logs.each do |log| %>
+            <li class="p-4 bg-white rounded-3xl shadow-sm mt-2 border border-gray-200 dark:bg-black dark:border-gray-700 transition-colors">
+              <div class="flex justify-between items-center">
+                <div class="flex gap-1 items-center bg-orange-200 dark:bg-orange-900 py-1 px-2 rounded-xl transition-colors">
+                  <div class="flex-shrink-0">
+                    <% if log.user.profile.avatar.attached? %>
+                      <%= image_tag(log.user.profile.avatar.variant(resize_to_fill: [32, 32]), class: "w-6 h-6 border-2 border-white rounded-full dark:border-gray-800 transition-colors", alt: "#{log.user.profile.name}'s avatar") %>
+                    <% else %>
+                      <%= image_tag('others/default avatar.png', class: "w-5 h-5 object-cover rounded-full border border-white dark:border-gray-700 transition-colors", alt: "#{log.user.profile.name}'s avatar") %>
+                    <% end %>
+                  </div>
+                  
+                  <div class="text-xs font-medium text-gray-900 dark:text-gray-100 transition-colors">
+                    <%= log.user.profile.name %>
+                  </div>
+                </div>
+
+                <div class="text-gray-500 dark:text-gray-400 text-xs transition-colors">
+                  <%= time_ago_in_words(log.created_at) %> ago
+                </div>
+              </div>
+
+              <div class="mt-2">
+                <p class="text-sm text-gray-500 truncate dark:text-gray-400 transition-colors">
+                  <%= render "activity_logs/details", log: log %>
+                </p>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Low Stock Items -->
+    <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+      <div class="flex justify-between items-center mb-4">
+        <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Low Stock Items</h5>
+        <%= link_to inventory_items_path(@inventory, q: { low_stock_eq: true }), class: "text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 transition-colors" do %>
+          View all
+        <% end %>
+      </div>
+      <div class="flow-root">
+        <ul id="low_stock_items" role="list" class="divide-y divide-gray-200 dark:divide-gray-700 transition-colors">
+          <% @low_stock_items.each do |item| %>
+            <li class="py-3 sm:py-4">
+              <div class="flex items-center">
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-gray-900 truncate dark:text-white transition-colors">
+                    <%= link_to item.name, inventory_item_path(@inventory, item), class: "hover:underline" %>
+                  </p>
+                  <p class="text-sm text-gray-500 truncate dark:text-gray-400 transition-colors">
+                    <%= item.category.name %>
+                  </p>
+                </div>
+                <div class="inline-flex items-center text-sm font-semibold text-red-600 dark:text-red-400 transition-colors">
+                  <%= item.quantity %> units left
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category Overview Table -->
+  <% if @category_overview.present? %>
+    <div class="mt-6">
+      <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+        <div class="flex justify-between items-center mb-4">
+          <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Category Overview</h5>
+          <div class="flex items-center space-x-3">
+            <div class="relative">
+              <input type="text" id="categorySearch" data-action="input->dashboard#searchCategories" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 transition-colors" placeholder="Search categories...">
+            </div>
+          </div>
+        </div>
+        <div class="relative overflow-x-auto">
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 transition-colors">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-black dark:text-gray-300 transition-colors">
+              <tr>
+                <th scope="col" class="px-6 py-3">Category Name</th>
+                <th scope="col" class="px-6 py-3">Total Items</th>
+                <th scope="col" class="px-6 py-3">Low Stock</th>
+                <th scope="col" class="px-6 py-3">Permitted Users</th>
+                <th scope="col" class="px-6 py-3">Last Activity</th>
+              </tr>
+            </thead>
+            <tbody data-dashboard-target="categoryTable">
+              <% @category_overview.each do |category| %>
+                <tr class="bg-white border-b dark:bg-black dark:border-gray-700 transition-colors" data-category-name="<%= category[:name].downcase %>">
+                  <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white transition-colors">
+                    <%= link_to category[:name], inventory_category_path(@inventory, category[:id]), class: "hover:underline" %>
+                  </th>
+                  <td class="px-6 py-4"><%= category[:total_items] %></td>
+                  <td class="px-6 py-4">
+                    <% if category[:low_stock] > 0 %>
+                      <span class="text-red-600 dark:text-red-400 transition-colors"><%= category[:low_stock] %></span>
+                    <% else %>
+                      <%= category[:low_stock] %>
+                    <% end %>
+                  </td>
+                  <td class="px-6 py-4">
+                    <div class="flex -space-x-4 rtl:space-x-reverse">
+                      <% category[:permitted_users].take(3).each do |user| %>
+                        <%= link_to inventory_inventory_user_path(@inventory, user[:inventory_user_id]) do %>
+                          <% if user[:has_avatar] %>
+                            <%= image_tag(user[:avatar_url], class: "w-8 h-8 border-2 border-white rounded-full dark:border-gray-800 transition-colors", title: user[:name]) %>
+                          <% else %>
+                            <%= image_tag('others/default avatar.png', class: "w-8 h-8 border-2 border-white rounded-full dark:border-gray-800 transition-colors", title: user[:name]) %>
+                          <% end %>
+                        <% end %>
+                      <% end %>
+                      <% if category[:permitted_users].size > 3 %>
+                        <%= link_to inventory_inventory_users_path(@inventory), class: "flex items-center justify-center w-8 h-8 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800 dark:hover:bg-gray-500 transition-colors" do %>
+                          +<%= category[:permitted_users].size - 3 %>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </td>
+                  <td class="px-6 py-4 text-gray-500 dark:text-gray-400 transition-colors">
+                    <% if category[:last_activity_at].present? %>
+                      <%= time_ago_in_words(category[:last_activity_at]) %> ago
+                    <% else %>
+                      No activity
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  
+  <!-- Quick Access Shortcuts -->
+  <div class="mt-6">
+    <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+      <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors mb-4">Quick Actions</h5>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <% if @inventory_user.manager? %>
+          <%= link_to inventory_inventory_users_path(@inventory), class: "flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-white dark:hover:bg-gray-600 transition-colors" do %>
+            <svg class="w-8 h-8 mb-2 text-gray-500 dark:text-black transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+            </svg>
+            <span class="text-sm font-medium text-gray-900 dark:text-black transition-colors">Manage Users</span>
+          <% end %>
+          
+          <%= link_to inventory_categories_path(@inventory), class: "flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-white dark:hover:bg-gray-600 transition-colors" do %>
+            <svg class="w-8 h-8 mb-2 text-gray-500 dark:text-black transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
+            </svg>
+            <span class="text-sm font-medium text-gray-900 dark:text-black dark:hover-text-white transition-colors">Manage Categories</span>
+          <% end %>
+        <% end %>
+        
+        <% if @inventory_user.manager? || @inventory_user.item_administrator? %>
+          <%= link_to new_inventory_item_path(@inventory), class: "flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-white dark:hover:bg-gray-600 transition-colors", data: { turbo_frame: :modal } do %>
+            <svg class="w-8 h-8 mb-2 text-gray-500 dark:text-black transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <span class="text-sm font-medium text-gray-900 dark:text-black transition-colors">Add New Item</span>
+          <% end %>
+        <% end %>
+        
+        <%= link_to inventory_items_path(@inventory), class: "flex flex-col items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-white dark:hover:bg-gray-600 transition-colors" do %>
+          <svg class="w-8 h-8 mb-2 text-gray-500 dark:text-black transition-colors" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <span class="text-sm font-medium text-gray-900 dark:text-black transition-colors">Search Items</span>
         <% end %>
       </div>
     </div>
-    
-    <%= turbo_frame_tag "dashboard_activity" do %>
-      <%= render "activity_logs/list", activity_logs: @activity_logs %>
-    <% end %>
   </div>
 </div>
+
+<!-- At the bottom of your dashboard.html.erb file -->
+<%= content_for :head do %>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<% end %>

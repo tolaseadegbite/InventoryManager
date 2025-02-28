@@ -3,3 +3,4 @@ import "@hotwired/turbo-rails"
 import "controllers"
 import 'flowbite';
 import "tom-select"
+// import "apexcharts"
