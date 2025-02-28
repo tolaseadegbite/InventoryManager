@@ -1,6 +1,9 @@
 class InventoryUser < ApplicationRecord
   after_create :check_role_permissions
   after_create :assign_categories_if_manager
+  after_create :log_user_added
+  after_update :log_role_change, if: :saved_change_to_role?
+  after_destroy :log_user_removed
 
   validates :role, presence: true
   validates :user_id, uniqueness: { scope: :inventory_id }
@@ -24,7 +27,6 @@ class InventoryUser < ApplicationRecord
     ["inventory", "user", "category_permissions", "permitted_categories", "user_profile"]
   end
 
-  # Add this scope for better profile searching
   scope :with_user_and_profile, -> { includes(user: :profile) }
   
   def can_access_category?(category)
@@ -42,9 +44,6 @@ class InventoryUser < ApplicationRecord
   
   def check_role_permissions
     return if manager?
-    
-    # New inventory users can't do anything until categories are assigned
-    # unless they're managers
     update(role: role)
   end
 
@@ -55,5 +54,50 @@ class InventoryUser < ApplicationRecord
       category_permissions.create!(category: category)
     end
   end
-  
+
+  def log_user_added
+    ActivityLog.create!(
+      user: Current.user || user,
+      inventory: inventory,
+      action_type: :user_added,
+      trackable: self,
+      details: {
+        user_name: user.profile.name,
+        role: role.titleize,
+        added_by: Current.user&.profile&.name || 'System',
+        email: user.email_address
+      }
+    )
+  end
+
+  def log_role_change
+    ActivityLog.create!(
+      user: Current.user,
+      inventory: inventory,
+      action_type: :role_changed,
+      trackable: self,
+      details: {
+        user_name: user.profile.name,
+        email: user.email_address,
+        old_role: role_previously_was.titleize,
+        new_role: role.titleize,
+        changed_by: Current.user.profile.name
+      }
+    )
+  end
+
+  def log_user_removed
+    ActivityLog.create!(
+      user: Current.user,
+      inventory: inventory,
+      action_type: :user_removed,
+      trackable: self,
+      details: {
+        user_name: user.profile.name,
+        email: user.email_address,
+        role: role.titleize,
+        removed_by: Current.user.profile.name
+      }
+    )
+  end
 end

@@ -30,9 +30,27 @@
 
 <%# Activities Tab Content %>
 <% if @current_tab == 'activities' %>
-    <div class="bg-white rounded-lg shadow">
-        <div class="p-4 text-sm">
-            <p class="text-sm italic text-gray-600">No activity</p>
+    <div class="mt-8">
+        <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="sm:flex sm:items-center">
+                    <div class="sm:flex-auto">
+                        <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                            User Activity
+                        </h3>
+                    </div>
+                    <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                        <%= link_to inventory_inventory_user_activity_logs_path(@inventory, @inventory_user), 
+                            class: "text-sm font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300" do %>
+                            View All Activity
+                        <% end %>
+                    </div>
+                </div>
+                
+                <%= turbo_frame_tag "user_activity" do %>
+                    <%= render "activity_logs/list", activity_logs: @activity_logs %>
+                <% end %>
+            </div>
         </div>
     </div>
 <% end %>

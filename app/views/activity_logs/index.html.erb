@@ -1,0 +1,17 @@
+<div class="">
+  <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg" data-controller="activity-log">
+    <div class="px-4 py-5 sm:p-6">
+      <div class="sm:flex sm:items-center">
+        <div class="sm:flex-auto">
+          <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">
+            Activity Log
+          </h3>
+        </div>
+      </div>
+      
+      <%= turbo_frame_tag "activity_logs" do %>
+        <%= render "list", activity_logs: @activity_logs %>
+      <% end %>
+    </div>
+  </div>
+</div>

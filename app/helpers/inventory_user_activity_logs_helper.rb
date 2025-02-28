@@ -1,0 +1,2 @@
+module InventoryUserActivityLogsHelper
+end

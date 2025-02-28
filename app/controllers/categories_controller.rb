@@ -29,17 +29,15 @@ class CategoriesController < ApplicationController
   end
 
   def create
-    @item = @inventory.items.build(item_params)
-    @item.user = current_user
-    @item.category_id = params[:category_id] if params[:category_id].present?
+    @category = @inventory.categories.build(category_params)
   
-    if @item.save
+    if @category.save
       respond_to do |format|
-        format.html { redirect_to inventory_item_path(@inventory, @item), notice: "Item was successfully created" }
-        format.turbo_stream { flash.now[:notice] = "Item was successfully created" }
+        format.html { redirect_to inventory_category_path(@inventory, @category), notice: "Category was successfully created" }
+        format.turbo_stream { flash.now[:notice] = "Category was successfully created" }
       end
     else
-      flash.now[:alert] = "Failed to create item. Please check the errors below."
+      flash.now[:alert] = "Failed to create category. Please check the errors below."
       render :new, status: :unprocessable_entity
     end
   end

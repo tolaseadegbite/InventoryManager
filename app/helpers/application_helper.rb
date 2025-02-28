@@ -1,5 +1,7 @@
 module ApplicationHelper
-    # returns full title if present, else returns base title
+  include InventoriesHelper
+
+  # returns full title if present, else returns base title
   def full_title(page_title="")
     base_title = "Inventorify"
     if page_title.blank?

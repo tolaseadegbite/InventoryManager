@@ -1,0 +1,49 @@
+<div class="mt-4 flow-root">
+  <% if activity_logs.present? %>
+    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-600">
+          <thead>
+            <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-white sm:pl-0">Time</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">User</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Action</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-white">Details</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            <% activity_logs.each do |log| %>
+              <tr>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 dark:text-gray-400 sm:pl-0">
+                  <%= time_ago_in_words(log.created_at) %> ago
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                  <%= log.user.profile.name %>
+                  <span class="text-xs text-gray-400">
+                    (<%= log.user.inventory_users.find_by(inventory: log.inventory)&.role.titleize %>)
+                  </span>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                  <%= log.action_type.humanize %>
+                </td>
+                <td class="px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                  <%= render "activity_logs/details", log: log %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        
+        <% if @pagy %>
+          <div class="mt-4 flex justify-center">
+            <%== pagy_nav(@pagy) %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="text-center py-4 text-sm text-gray-500 dark:text-gray-400">
+      No activities recorded yet.
+    </div>
+  <% end %>
+</div>

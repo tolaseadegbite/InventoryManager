@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       get 'dashboard'
       get :confirm_delete
     end
+    resources :activity_logs, only: [:index]
     
     resources :categories do
       member do
@@ -44,6 +45,7 @@ Rails.application.routes.draw do
         get :confirm_delete
       end
       resource :permission, controller: 'inventory_user_permissions'
+      resources :activity_logs, only: [:index], controller: 'inventory_user_activity_logs'
     end
   end
 

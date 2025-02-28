@@ -16,7 +16,7 @@ class InventoryUserPolicy < ApplicationPolicy
   end
 
   def destroy?
-    manager? && record.user_id != user.id # Cannot remove themselves
+    manager? || record.user_id == user.id # Cannot remove themselves (&&,!=)
   end
 
   def confirm_delete?
