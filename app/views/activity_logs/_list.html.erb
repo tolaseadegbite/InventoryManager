@@ -28,7 +28,7 @@
                     </div>
                     <%= log.user.profile.name %>
                     <span class="text-xs text-gray-400">
-                      (<%= log.user.inventory_users.find_by(inventory: log.inventory)&.role.titleize %>)
+                      (<%= log.user.inventory_users.find_by(inventory: log.inventory)&.role&.titleize || 'N/A' %>)
                     </span>
                   </div>
                 </td>

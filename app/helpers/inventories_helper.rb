@@ -11,8 +11,10 @@ module InventoriesHelper
     return unless inventory.user_id != Current.user.id
     
     inventory_user = inventory.inventory_users.find_by(user: current_user)
+    return unless inventory_user # Add this line to prevent nil errors
+    
     content_tag :span, class: "text-xs font-medium bg-gray-100 text-gray-800 px-2.5 py-0.5 rounded-full" do
-      "Shared: #{inventory_user&.role.titleize}"
+      "Shared: #{inventory_user.role&.titleize || 'Unknown'}"
     end
   end
 
@@ -20,8 +22,10 @@ module InventoriesHelper
     return unless inventory.user_id != Current.user.id
     
     inventory_user = inventory.inventory_users.find_by(user: current_user)
+    return unless inventory_user # Add this line to prevent nil errors
+    
     content_tag :span, class: "text-xs font-medium bg-gray-100 text-gray-800 px-2.5 py-0.5 rounded-full" do
-      "Role: #{inventory_user&.role.titleize}"
+      "Role: #{inventory_user.role&.titleize || 'Unknown'}"
     end
   end
 
