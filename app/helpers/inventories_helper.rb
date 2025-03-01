@@ -58,13 +58,6 @@ module InventoriesHelper
     inventory_user.item_administrator? && inventory_user.can_access_category?(item.category)
   end
 
-  # def can_manage_categories?(inventory)
-  #   return false if current_user.nil?
-
-  #   inventory_user = inventory.inventory_users.find_by(user: current_user)
-  #   inventory_user&.manager?
-  # end
-
   def permitted_category?(inventory, category)
     return false if current_user.nil?
 

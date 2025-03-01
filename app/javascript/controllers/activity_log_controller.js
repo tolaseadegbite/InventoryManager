@@ -4,9 +4,12 @@ export default class extends Controller {
   static targets = ["list"]
   
   connect() {
-    this.refreshInterval = setInterval(() => {
-      this.refresh()
-    }, 30000) // Refresh every 30 seconds
+    // Only set up auto-refresh on the dashboard
+    if (window.location.pathname.includes('/dashboard')) {
+      this.refreshInterval = setInterval(() => {
+        this.refresh()
+      }, 30000) // Refresh every 30 seconds
+    }
   }
   
   disconnect() {
@@ -16,6 +19,13 @@ export default class extends Controller {
   }
   
   refresh() {
-    this.element.requestSubmit()
+    const url = new URL(window.location.href)
+    url.searchParams.set('_', new Date().getTime())
+    
+    fetch(url, {
+      headers: {
+        Accept: "text/vnd.turbo-stream.html"
+      }
+    })
   }
 }

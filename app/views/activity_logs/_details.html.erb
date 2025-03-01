@@ -1,7 +1,7 @@
-<div class="space-y-1">
+<div class="space-y-1 text-sm dark:text-white">
   <% case log.action_type %>
   <% when 'inventory_created' %>
-    Created new inventory <strong><%= log.details['name'] %></strong>
+    <strong>Created new inventory</strong> <span class="text-blue-700 underline"><%= log.details['name'] %></span>
   <% when 'inventory_updated' %>
     Updated inventory <strong><%= log.trackable.name %></strong>
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
@@ -11,13 +11,24 @@
     Created new item <strong><%= log.trackable.name %></strong>
     in category <%= log.trackable.category.name %>
   <% when 'item_updated' %>
-    Updated item <strong><%= log.trackable.name %></strong>
+    <strong>Updated item</strong>  <span class="text-blue-700 underline"><%= log.trackable.name %></span>
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
   <% when 'item_deleted' %>
     Deleted item <strong><%= log.details['name'] %></strong>
+  <% when 'quantity_added' %>
+    <strong>Added <%= log.details['amount'] %> units</strong> to 
+    <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <strong>(Total: <%= log.details['to'] %>)</strong>
+    <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
+    
+  <% when 'quantity_removed' %>
+    <strong>Removed <%= log.details['amount'] %> units</strong> from 
+    <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <strong>(Total: <%= log.details['to'] %>)</strong>
+    <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
   <% when 'quantity_changed' %>
-    Changed quantity of <strong><%= log.trackable.name %></strong>
-    from <%= log.details['from'] %> to <%= log.details['to'] %>
+    <strong>Changed quantity of</strong> <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <strong>from <%= log.details['from'] %> to <%= log.details['to'] %></strong>
     <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
   <% when 'category_created' %>
     Created new category <strong><%= log.trackable.name %></strong>

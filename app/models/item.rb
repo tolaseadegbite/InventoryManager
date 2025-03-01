@@ -2,7 +2,7 @@ class Item < ApplicationRecord
   # Callbacks
   after_commit :update_stock_status, if: :should_check_stock?
   after_create :log_creation
-  after_update :log_update
+  after_update :log_update, unless: -> { saved_changes.keys == ['quantity'] || saved_changes.keys == ['quantity', 'updated_at'] }
   after_destroy :log_deletion
 
   # Validations
@@ -36,7 +36,6 @@ class Item < ApplicationRecord
     ["category", "inventory"]
   end
 
-  # Instance methods
   def modify_quantity(action, amount, current_user, notes = nil)
     return false if amount.nil? || amount <= 0
     return false if action == "remove" && amount > quantity
@@ -44,10 +43,11 @@ class Item < ApplicationRecord
     transaction do
       original_quantity = quantity
       new_quantity = action == "add" ? quantity + amount : quantity - amount
-      self.quantity = new_quantity
-      send(:attribute_will_change!, 'quantity') if quantity != original_quantity
-      save!
+      
+      # Update the quantity without triggering callbacks
+      update_column(:quantity, new_quantity)
   
+      # Create the inventory action record
       inventory_actions.create!(
         inventory: inventory,
         user: current_user,
@@ -55,17 +55,18 @@ class Item < ApplicationRecord
         quantity: amount,
         notes: notes
       )
-
-      # Log the quantity change
+  
+      # Create a specialized activity log for quantity changes
       ActivityLog.create!(
         user: current_user,
         inventory: inventory,
         action_type: :quantity_changed,
         trackable: self,
         details: {
+          action: action,
+          amount: amount,
           from: original_quantity,
           to: new_quantity,
-          action: action,
           notes: notes
         }
       )
@@ -75,6 +76,24 @@ class Item < ApplicationRecord
     Rails.logger.error "Failed to #{action} quantity: #{e.message}"
     errors.add(:base, e.message)
     false
+  end
+  
+  private
+  
+  def check_and_update_stock_status
+    return unless quantity.present?
+  
+    current_low_stock = quantity <= effective_threshold
+    
+    if current_low_stock != low_stock
+      update_column(:low_stock, current_low_stock)
+      
+      if current_low_stock
+        notify_admins_of_stock_change
+      else
+        notify_admins_of_stock_replenishment
+      end
+    end
   end    
 
   def effective_threshold

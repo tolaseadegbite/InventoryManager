@@ -18,10 +18,19 @@
                   <%= time_ago_in_words(log.created_at) %> ago
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-gray-400">
-                  <%= log.user.profile.name %>
-                  <span class="text-xs text-gray-400">
-                    (<%= log.user.inventory_users.find_by(inventory: log.inventory)&.role.titleize %>)
-                  </span>
+                  <div class="flex gap-1 items-center">
+                    <div class="flex-shrink-0">
+                      <% if log.user.profile.avatar.attached? %>
+                        <%= image_tag(log.user.profile.avatar.variant(resize_to_fill: [32, 32]), class: "w-6 h-6 border-2 border-white rounded-full dark:border-gray-800", alt: "#{log.user.profile.name}'s avatar") %>
+                      <% else %>
+                        <%= image_tag('others/default avatar.png', class: "w-5 h-5 object-cover rounded-full border-gray-800", alt: "#{log.user.profile.name}'s avatar") %>
+                      <% end %>
+                    </div>
+                    <%= log.user.profile.name %>
+                    <span class="text-xs text-gray-400">
+                      (<%= log.user.inventory_users.find_by(inventory: log.inventory)&.role.titleize %>)
+                    </span>
+                  </div>
                 </td>
                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-gray-400">
                   <%= log.action_type.humanize %>
