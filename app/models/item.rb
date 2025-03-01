@@ -36,7 +36,6 @@ class Item < ApplicationRecord
     ["category", "inventory"]
   end
 
-  # Instance methods
   def modify_quantity(action, amount, current_user, notes = nil)
     return false if amount.nil? || amount <= 0
     return false if action == "remove" && amount > quantity
@@ -58,7 +57,6 @@ class Item < ApplicationRecord
       )
   
       # Create a specialized activity log for quantity changes
-      # This replaces the generic item_updated log
       ActivityLog.create!(
         user: current_user,
         inventory: inventory,
@@ -78,6 +76,24 @@ class Item < ApplicationRecord
     Rails.logger.error "Failed to #{action} quantity: #{e.message}"
     errors.add(:base, e.message)
     false
+  end
+  
+  private
+  
+  def check_and_update_stock_status
+    return unless quantity.present?
+  
+    current_low_stock = quantity <= effective_threshold
+    
+    if current_low_stock != low_stock
+      update_column(:low_stock, current_low_stock)
+      
+      if current_low_stock
+        notify_admins_of_stock_change
+      else
+        notify_admins_of_stock_replenishment
+      end
+    end
   end    
 
   def effective_threshold

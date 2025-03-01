@@ -172,8 +172,22 @@
               </div>
 
               <div class="mt-2">
-                <p class="text-sm text-gray-500 truncate dark:text-gray-400 transition-colors">
-                  <%= render "activity_logs/details", log: log %>
+                <p class="text-sm text-gray-500 dark:text-gray-400 transition-colors">
+                  <% if log.action_type == 'quantity_changed' && log.details['action'].present? %>
+                    <% if log.details['action'] == 'add' %>
+                      <strong>Added <%= log.details['amount'] %> units</strong> to 
+                      <span class="text-blue-700 dark:text-blue-400"><%= log.trackable.name %></span>
+                      <strong>(Total: <%= log.details['to'] %>)</strong>
+                      <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
+                    <% else %>
+                      <strong>Removed <%= log.details['amount'] %> units</strong> from 
+                      <span class="text-blue-700 dark:text-blue-400"><%= log.trackable.name %></span>
+                      <strong>(Total: <%= log.details['to'] %>)</strong>
+                      <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
+                    <% end %>
+                  <% else %>
+                    <%= render "activity_logs/details", log: log %>
+                  <% end %>
                 </p>
               </div>
             </li>

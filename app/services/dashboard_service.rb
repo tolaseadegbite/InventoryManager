@@ -12,6 +12,7 @@ class DashboardService
       activity_logs: cached_activity_logs,
       stats: cached_stats,
       low_stock_items: cached_low_stock_items,
+      # low_stock_items: low_stock_items_query.fetch,
       category_data: cached_category_data,
       inventory_trends: cached_inventory_trends,
       category_overview: cached_category_overview

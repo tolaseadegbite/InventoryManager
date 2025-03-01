@@ -16,6 +16,8 @@ class ActivityLog < ApplicationRecord
     item_updated: 'item_updated',
     item_deleted: 'item_deleted',
     quantity_changed: 'quantity_changed',
+    quantity_added: 'quantity_added',
+    quantity_removed: 'quantity_removed',
     
     # Category related
     category_created: 'category_created',

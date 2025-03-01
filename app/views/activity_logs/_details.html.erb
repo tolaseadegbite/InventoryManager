@@ -15,6 +15,17 @@
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
   <% when 'item_deleted' %>
     Deleted item <strong><%= log.details['name'] %></strong>
+  <% when 'quantity_added' %>
+    <strong>Added <%= log.details['amount'] %> units</strong> to 
+    <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <strong>(Total: <%= log.details['to'] %>)</strong>
+    <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
+    
+  <% when 'quantity_removed' %>
+    <strong>Removed <%= log.details['amount'] %> units</strong> from 
+    <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <strong>(Total: <%= log.details['to'] %>)</strong>
+    <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
   <% when 'quantity_changed' %>
     <strong>Changed quantity of</strong> <span class="text-blue-700 underline"><%= log.trackable.name %></span>
     <strong>from <%= log.details['from'] %> to <%= log.details['to'] %></strong>
