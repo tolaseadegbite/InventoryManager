@@ -21,7 +21,9 @@ class ApplicationController < ActionController::Base
   private
 
   def set_layout
-    if inventory_related_view?
+    if inventory_dashboard_page?
+      "dashboard"
+    elsif inventory_related_view?
       "application"
     elsif current_user
       "inventory_base"
