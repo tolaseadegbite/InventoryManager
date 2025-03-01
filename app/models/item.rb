@@ -2,7 +2,7 @@ class Item < ApplicationRecord
   # Callbacks
   after_commit :update_stock_status, if: :should_check_stock?
   after_create :log_creation
-  after_update :log_update
+  after_update :log_update, unless: -> { saved_changes.keys == ['quantity'] || saved_changes.keys == ['quantity', 'updated_at'] }
   after_destroy :log_deletion
 
   # Validations
@@ -44,10 +44,11 @@ class Item < ApplicationRecord
     transaction do
       original_quantity = quantity
       new_quantity = action == "add" ? quantity + amount : quantity - amount
-      self.quantity = new_quantity
-      send(:attribute_will_change!, 'quantity') if quantity != original_quantity
-      save!
+      
+      # Update the quantity without triggering callbacks
+      update_column(:quantity, new_quantity)
   
+      # Create the inventory action record
       inventory_actions.create!(
         inventory: inventory,
         user: current_user,
@@ -55,17 +56,19 @@ class Item < ApplicationRecord
         quantity: amount,
         notes: notes
       )
-
-      # Log the quantity change
+  
+      # Create a specialized activity log for quantity changes
+      # This replaces the generic item_updated log
       ActivityLog.create!(
         user: current_user,
         inventory: inventory,
         action_type: :quantity_changed,
         trackable: self,
         details: {
+          action: action,
+          amount: amount,
           from: original_quantity,
           to: new_quantity,
-          action: action,
           notes: notes
         }
       )

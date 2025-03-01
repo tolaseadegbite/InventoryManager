@@ -18,17 +18,15 @@
             class: "mt-2 block w-full text-gray-700 text-sm rounded-md border-gray-300 shadow-sm focus:border-#{@action == 'add' ? 'green' : 'red'}-500 focus:ring-#{@action == 'add' ? 'green' : 'red'}-500" %>
       </div>
 
-      <div class="mb-4 text-sm">
+      <!--<div class="mb-4 text-sm">
         <a href="#" data-action="click->description#toggle" data-description-target="toggleLink" class="text-blue-500 hover:underline">
           Click to add description
         </a>
-      </div>
+      </div>-->
 
-      <div class="mb-4 hidden" data-description-target="notesField">
+      <div class="mb-4" data-description-target="notesField">
         <%= f.label :notes, class: "block text-sm font-semibold" %>
-        <%= f.text_area :notes,
-          placeholder: 'Add optional notes',
-          class: "mt-2 block w-full rounded-md border-gray-300 text-sm text-gray-700 shadow-sm focus:border-#{@action == 'add' ? 'green' : 'red'}-500 focus:ring-#{@action == 'add' ? 'green' : 'red'}-500" %>
+        <%= f.text_area :notes, placeholder: 'Add optional notes', class: "mt-2 block w-full rounded-md border-gray-300 text-sm text-gray-700 shadow-sm focus:border-#{@action == 'add' ? 'green' : 'red'}-500 focus:ring-#{@action == 'add' ? 'green' : 'red'}-500" %>
       </div>
 
       <div class="flex justify-end gap-3">
