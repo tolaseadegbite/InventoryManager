@@ -29,3 +29,31 @@
 //     })
 //   }
 // }
+
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = ["filters"]
+  
+  toggleFilters() {
+    this.filtersTarget.classList.toggle("hidden")
+  }
+  
+  resetForm(event) {
+    event.preventDefault()
+    const form = event.target.closest('form')
+    
+    // Reset all tom-select instances in the form
+    document.querySelectorAll('[data-controller="tom-select"]').forEach(select => {
+      if (select.tomSelect) {
+        select.tomSelect.clear()
+      }
+    })
+    
+    // Reset the standard form fields
+    form.reset()
+    
+    // Submit the form
+    form.requestSubmit()
+  }
+}

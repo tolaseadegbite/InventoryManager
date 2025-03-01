@@ -41,4 +41,13 @@ class ActivityLog < ApplicationRecord
   }
 
   scope :recent, -> { order(created_at: :desc) }
+  
+  # Define ransackable attributes and associations
+  def self.ransackable_attributes(auth_object = nil)
+    ["action_type", "created_at", "user_id", "trackable_type"]
+  end
+  
+  def self.ransackable_associations(auth_object = nil)
+    ["user", "trackable", "inventory"]
+  end
 end

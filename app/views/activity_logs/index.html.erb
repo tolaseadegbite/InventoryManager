@@ -1,12 +1,68 @@
 <div class="">
   <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg" data-controller="activity-log">
     <div class="px-4 py-5 sm:p-6">
-      <div class="sm:flex sm:items-center">
+      <div class="sm:flex sm:items-center mb-4">
         <div class="sm:flex-auto">
           <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">
             Activity Log
           </h3>
         </div>
+        <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+          <button type="button" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600" data-action="click->activity-log#toggleFilters">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            Filters
+          </button>
+        </div>
+      </div>
+      
+      <div class="hidden mb-6 p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg" data-activity-log-target="filters">
+        <%= search_form_for @q, url: inventory_activity_logs_path(@inventory), html: { data: { turbo_frame: "activity_logs" } } do |f| %>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <div>
+              <%= f.label :action_type_eq, "Action Type", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= f.select :action_type_eq, ActivityLog.action_types.map { |k, v| [k.humanize, v] }, 
+                          { include_blank: "All Actions" }, 
+                          { class: "mt-1 block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white",
+                            data: { controller: 'tom-select' } } %>
+            </div>
+            
+            <div>
+              <%= f.label :user_id_eq, "User", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= f.collection_select :user_id_eq, @inventory.inventory_users.includes(user: :profile).map(&:user).uniq, :id, ->(user) { user.profile.name }, 
+                                    { include_blank: "All Users" }, 
+                                    { class: "mt-1 block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white",
+                                      data: { controller: 'tom-select' } } %>
+            </div>
+            
+            <div>
+              <%= f.label :trackable_type_eq, "Record Type", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= f.select :trackable_type_eq, 
+                          [["Item", "Item"], ["Category", "Category"], ["Inventory", "Inventory"]], 
+                          { include_blank: "All Types" }, 
+                          { class: "mt-1 block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white",
+                            data: { controller: 'tom-select' } } %>
+            </div>
+            
+            <div class="sm:col-span-1">
+              <%= f.label :created_at_gteq, "Date From", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= f.date_field :created_at_gteq, class: "mt-1 block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white cursor-pointer" %>
+            </div>
+            
+            <div class="sm:col-span-1">
+              <%= f.label :created_at_lteq, "Date To", class: "block text-sm font-medium text-gray-700 dark:text-gray-300" %>
+              <%= f.date_field :created_at_lteq, class: "mt-1 block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md dark:bg-gray-800 dark:border-gray-600 dark:text-white cursor-pointer" %>
+            </div>
+          </div>
+          
+          <div class="mt-4 flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2">
+            <button type="reset" class="w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600" data-action="click->activity-log#resetForm">
+              Clear
+            </button>
+            <%= f.submit "Apply Filters", class: "w-full sm:w-auto inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-800 cursor-pointer" %>
+          </div>
+        <% end %>
       </div>
       
       <%= turbo_frame_tag "activity_logs" do %>

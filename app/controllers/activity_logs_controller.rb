@@ -7,11 +7,26 @@ class ActivityLogsController < ApplicationController
     
     begin
       # Use the service to get logs based on user's role
-      activity_logs = ActivityLogs::ActivityLogService.logs_for_user(@inventory, current_user)
+      base_logs = ActivityLogs::ActivityLogService.logs_for_user(@inventory, current_user)
+      
+      # Process search parameters
+      search_params = params[:q]&.dup || {}
+      
+      # Adjust the end date to include the entire day
+      if search_params[:created_at_lteq].present?
+        date = Date.parse(search_params[:created_at_lteq])
+        search_params[:created_at_lteq] = date.end_of_day
+      end
+      
+      # Initialize Ransack search
+      @q = base_logs.ransack(search_params)
+      
+      # Set default sort to created_at desc if not specified
+      @q.sorts = 'created_at desc' if @q.sorts.empty?
       
       # Paginate the results
       @pagy, @activity_logs = pagy(
-        activity_logs.includes(:user, :trackable).recent,
+        @q.result.includes(:user, :trackable),
         items: 25
       )
     rescue => e
