@@ -20,7 +20,11 @@ module InventoryUsers
       
       return false unless inventory_user.update(attributes)
       
-      log_role_change(old_role) if inventory_user.role != old_role
+      if inventory_user.role != old_role
+        log_role_change(old_role)
+        notify_role_change(old_role)
+      end
+      
       true
     end
 
@@ -79,6 +83,15 @@ module InventoryUsers
           changed_by: current_user.profile.name
         }
       )
+    end
+
+    def notify_role_change(old_role)
+      RoleChangedNotifier.with(
+        inventory: inventory,
+        old_role: old_role.titleize,
+        new_role: inventory_user.role.titleize,
+        changed_by: current_user.profile.name
+      ).deliver_later(inventory_user.user)
     end
 
     def log_user_removed
