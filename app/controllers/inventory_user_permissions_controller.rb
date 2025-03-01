@@ -8,48 +8,27 @@ class InventoryUserPermissionsController < ApplicationController
   end
   
   def update
-    ActiveRecord::Base.transaction do
-      # Get current category permissions
-      current_category_ids = @inventory_user.category_permissions.pluck(:category_id)
-      
-      # Determine new category IDs based on params
-      new_category_ids = if params[:all_categories] == "1"
-        @inventory.categories.pluck(:id)
-      elsif params[:category_ids].present?
-        params[:category_ids].reject(&:blank?).map(&:to_i)
-      else
-        []
-      end
-      
-      # Find categories to remove and add
-      categories_to_remove = current_category_ids - new_category_ids
-      categories_to_add = new_category_ids - current_category_ids
-      
-      # Remove permissions no longer needed
-      if categories_to_remove.any?
-        @inventory_user.category_permissions.where(category_id: categories_to_remove).destroy_all
-      end
-      
-      # Add new permissions
-      categories_to_add.each do |category_id|
-        @inventory_user.category_permissions.create!(category_id: category_id)
-      end
-  
-      # Send notification if changes were made
-      if categories_to_remove.any? || categories_to_add.any?
-        CategoryPermissionsUpdatedNotifier.with(
-          inventory_user: @inventory_user,
-          inventory: @inventory
-        ).deliver_later(@inventory_user.user)
-      end
-  
+    # Determine new category IDs based on params
+    new_category_ids = if params[:all_categories] == "1"
+      @inventory.categories.pluck(:id)
+    elsif params[:category_ids].present?
+      params[:category_ids].reject(&:blank?).map(&:to_i)
+    else
+      []
+    end
+    
+    # Create a dummy permission for the manager
+    dummy_permission = CategoryPermission.new(inventory_user: @inventory_user)
+    manager = CategoryPermissions::CategoryPermissionManager.new(dummy_permission, current_user)
+    
+    if manager.update_permissions(@inventory_user, new_category_ids)
       redirect_to inventory_inventory_users_path(@inventory),
                   notice: "Permissions updated successfully"
+    else
+      flash.now[:alert] = "There was an error updating permissions"
+      @categories = @inventory.categories.ordered
+      render :edit, status: :unprocessable_entity
     end
-  rescue ActiveRecord::RecordInvalid => e
-    Rails.logger.error("Permission update failed: #{e.message}")
-    flash.now[:alert] = "There was an error updating permissions"
-    render :edit, status: :unprocessable_entity
   end
   
   private

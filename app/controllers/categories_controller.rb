@@ -30,8 +30,9 @@ class CategoriesController < ApplicationController
 
   def create
     @category = @inventory.categories.build(category_params)
+    manager = Categories::CategoryManager.new(@category, current_user)
   
-    if @category.save
+    if manager.create
       respond_to do |format|
         format.html { redirect_to inventory_category_path(@inventory, @category), notice: "Category was successfully created" }
         format.turbo_stream { flash.now[:notice] = "Category was successfully created" }
@@ -47,7 +48,9 @@ class CategoriesController < ApplicationController
 
   def update
     @q = @category.items.ransack(params[:q])
-    if @category.update(category_params)
+    manager = Categories::CategoryManager.new(@category, current_user)
+    
+    if manager.update(category_params)
       respond_to do |format|
         format.html { redirect_to inventory_category_path(@inventory, @category), notice: "Category updated successfully" }
         format.turbo_stream { flash.now[:notice] = "Category updated successfully" }
@@ -62,10 +65,16 @@ class CategoriesController < ApplicationController
   end
 
   def destroy
-    @category.destroy
-    respond_to do |format|
-      format.html { redirect_to inventory_categories_path(@inventory), notice: "Category deleted successfully" }
-      format.turbo_stream { flash.now[:notice] = 'Category deleted successfully' }
+    manager = Categories::CategoryManager.new(@category, current_user)
+    
+    if manager.destroy
+      respond_to do |format|
+        format.html { redirect_to inventory_categories_path(@inventory), notice: "Category deleted successfully" }
+        format.turbo_stream { flash.now[:notice] = 'Category deleted successfully' }
+      end
+    else
+      flash.now[:alert] = "Failed to delete category."
+      redirect_to inventory_category_path(@inventory, @category)
     end
   end
 

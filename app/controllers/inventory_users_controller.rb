@@ -37,7 +37,9 @@ class InventoryUsersController < ApplicationController
   end
 
   def update
-    if @inventory_user.update(inventory_user_params)
+    manager = InventoryUsers::InventoryUserManager.new(@inventory_user, current_user)
+    
+    if manager.update(inventory_user_params)
       redirect_to inventory_inventory_users_path(@inventory), 
                   notice: "User role updated successfully"
     else
@@ -49,9 +51,15 @@ class InventoryUsersController < ApplicationController
   end
 
   def destroy
-    @inventory_user.destroy
-    redirect_to inventory_inventory_users_path(@inventory), 
-                notice: "User removed from inventory"
+    manager = InventoryUsers::InventoryUserManager.new(@inventory_user, current_user)
+    
+    if manager.destroy
+      redirect_to inventory_inventory_users_path(@inventory), 
+                  notice: "User removed from inventory"
+    else
+      redirect_to inventory_inventory_user_path(@inventory, @inventory_user),
+                  alert: "Failed to remove user from inventory"
+    end
   end
 
   private

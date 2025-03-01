@@ -25,7 +25,8 @@ class ItemsController < ApplicationController
     @item = @inventory.items.build(item_params)
     @item.user = current_user
 
-    if @item.save
+    manager = Items::ItemManager.new(@item, current_user)
+    if manager.create
       respond_to do |format|
         format.html { redirect_to inventory_item_path(@inventory, @item), notice: "Item was successfully created" }
         format.turbo_stream { flash.now[:notice] = "Item was successfully created" }
@@ -40,7 +41,8 @@ class ItemsController < ApplicationController
   end
 
   def update
-    if @item.update(item_params)
+    manager = Items::ItemManager.new(@item, current_user)
+    if manager.update(item_params)
       respond_to do |format|
         format.html { redirect_to inventory_item_path(@inventory, @item), notice: "Item was successfully updated" }
         format.turbo_stream { flash.now[:notice] = "Item was successfully updated" }
@@ -55,7 +57,8 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    @item.destroy
+    manager = Items::ItemManager.new(@item, current_user)
+    manager.destroy
     redirect_to inventory_items_path(@inventory), notice: "Item deleted successfully", status: :see_other
   end
 
@@ -69,7 +72,8 @@ class ItemsController < ApplicationController
     quantity = params[:quantity].to_i
     notes = params[:notes]
   
-    success = @item.modify_quantity(action, quantity, current_user, notes)
+    manager = Items::ItemManager.new(@item, current_user)
+    success = manager.modify_quantity(action, quantity, notes)
     @inventory_actions = @item.inventory_actions.includes(:user).ordered if success
     @q = @item.inventory_actions.ransack(params[:q])
   

@@ -1,10 +1,4 @@
-# app/models/inventory.rb
 class Inventory < ApplicationRecord
-  after_create :add_creator_as_manager
-  after_commit :log_creation, on: :create
-  after_commit :log_update, on: :update
-  before_destroy :log_deletion
-  
   validates :name, presence: true
 
   belongs_to :user, counter_cache: :inventories_count
@@ -18,14 +12,6 @@ class Inventory < ApplicationRecord
 
   has_many :inventory_invitations, dependent: :destroy
   has_many :pending_invitations, -> { where(status: :pending) }, class_name: 'InventoryInvitation'
-
-  def add_member(user, role = :viewer)
-    inventory_users.create(user: user, role: role)
-  end
-  
-  def remove_member(user)
-    inventory_users.find_by(user: user)&.destroy
-  end
 
   scope :ordered, -> { order(id: :asc) }
 
@@ -48,60 +34,5 @@ class Inventory < ApplicationRecord
 
   def latest_invitation_for(user)
     inventory_invitations.for_recipient(user).order(created_at: :desc).first
-  end
-
-  private
-
-  def add_creator_as_manager
-    inventory_users.create!(
-      user: user,
-      role: :manager
-    )
-  end
-
-  def log_creation
-    ActivityLog.create!(
-      user: user,
-      inventory: self,
-      action_type: :inventory_created,
-      trackable: self,
-      details: {
-        name: name,
-        created_by: user.profile.name,
-        email: user.email_address,
-        global_stock_threshold: global_stock_threshold
-      }
-    )
-  end
-
-  def log_update
-    return unless saved_changes.present?
-    
-    ActivityLog.create!(
-      user: Current.user,
-      inventory: self,
-      action_type: :inventory_updated,
-      trackable: self,
-      details: {
-        name: name,
-        updated_by: Current.user.profile.name,
-        email: Current.user.email_address,
-        changes: saved_changes.except('updated_at').transform_values { |v| [v[0].to_s, v[1].to_s] }
-      }
-    )
-  end
-
-  def log_deletion
-    ActivityLog.create!(
-      user: Current.user,
-      inventory: self,
-      action_type: :inventory_deleted,
-      trackable: self,
-      details: {
-        name: name,
-        deleted_by: Current.user.profile.name,
-        email: Current.user.email_address
-      }
-    )
   end
 end

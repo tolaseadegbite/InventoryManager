@@ -41,14 +41,4 @@ class ActivityLog < ApplicationRecord
   }
 
   scope :recent, -> { order(created_at: :desc) }
-  
-  def self.log(user:, inventory:, action_type:, trackable:, details:)
-    create!(
-      user: user,
-      inventory: inventory,
-      action_type: action_type,
-      trackable: trackable,
-      details: details
-    )
-  end
 end

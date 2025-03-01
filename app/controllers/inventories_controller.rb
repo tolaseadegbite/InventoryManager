@@ -24,8 +24,9 @@ class InventoriesController < ApplicationController
 
   def create
     @inventory = current_user.inventories.new(inventory_params)
+    manager = Inventories::InventoryManager.new(@inventory, current_user)
 
-    if @inventory.save
+    if manager.create
       respond_to do |format|
         format.html { redirect_to @inventory, notice: "Inventory was successfully created" }
         format.turbo_stream { flash.now[:notice] = "Inventory was successfully created" }
@@ -37,8 +38,10 @@ class InventoriesController < ApplicationController
   end
 
   def update
+    manager = Inventories::InventoryManager.new(@inventory, current_user)
+    
     respond_to do |format|
-      if @inventory.update(inventory_params)
+      if manager.update(inventory_params)
         format.html { redirect_to @inventory, notice: "Inventory was successfully updated." }
         format.turbo_stream { flash.now[:notice] = "Inventory was successfully updated" }
       else
@@ -52,7 +55,8 @@ class InventoriesController < ApplicationController
   end
 
   def destroy
-    @inventory.destroy!
+    manager = Inventories::InventoryManager.new(@inventory, current_user)
+    manager.destroy
 
     respond_to do |format|
       format.html { redirect_to inventories_path, status: :see_other, notice: "Inventory was successfully destroyed." }

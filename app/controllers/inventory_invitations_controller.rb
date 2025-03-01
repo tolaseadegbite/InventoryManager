@@ -10,11 +10,18 @@ class InventoryInvitationsController < ApplicationController
     @invitation = @inventory.inventory_invitations.new(invitation_params)
     @invitation.sender = Current.user
     
-    if @inventory.can_invite?(@invitation.recipient) && @invitation.save
-      redirect_to inventory_inventory_users_path(@inventory, tab: 'invitations'), 
-                  notice: "Invitation sent successfully"
+    if @inventory.can_invite?(@invitation.recipient)
+      manager = Invitations::InvitationManager.new(@invitation, Current.user)
+      
+      if manager.create
+        redirect_to inventory_inventory_users_path(@inventory, tab: 'invitations'), 
+                    notice: "Invitation sent successfully"
+      else
+        flash.now[:alert] = "Failed to create invitation. Please check the errors below."
+        render :new, status: :unprocessable_entity
+      end
     else
-      flash.now[:alert] = "Failed to create invitation. Please check the errors below."
+      flash.now[:alert] = "Failed to create invitation. User cannot be invited."
       render :new, status: :unprocessable_entity
     end
   end
@@ -22,8 +29,9 @@ class InventoryInvitationsController < ApplicationController
   def accept
     authorize @invitation, :respond?
     
-    if @invitation.pending?
-      @invitation.accepted!
+    manager = Invitations::InvitationManager.new(@invitation, Current.user)
+    
+    if manager.accept
       redirect_to inventory_path(@invitation.inventory), 
                   notice: "You have joined the inventory"
     else
@@ -35,8 +43,9 @@ class InventoryInvitationsController < ApplicationController
   def decline
     authorize @invitation, :respond?
     
-    if @invitation.pending?
-      @invitation.declined!
+    manager = Invitations::InvitationManager.new(@invitation, Current.user)
+    
+    if manager.decline
       redirect_to root_path, 
                   notice: "You have declined the invitation"
     else
@@ -46,8 +55,15 @@ class InventoryInvitationsController < ApplicationController
   end
 
   def destroy
-    @invitation.destroy
-    redirect_to inventory_inventory_users_path(@inventory, tab: 'invitations'), notice: "You have canceled the invitation"
+    manager = Invitations::InvitationManager.new(@invitation, Current.user)
+    
+    if manager.cancel
+      redirect_to inventory_inventory_users_path(@inventory, tab: 'invitations'), 
+                  notice: "You have canceled the invitation"
+    else
+      redirect_to inventory_inventory_users_path(@inventory, tab: 'invitations'), 
+                  alert: "Failed to cancel the invitation"
+    end
   end
 
   def confirm_delete
