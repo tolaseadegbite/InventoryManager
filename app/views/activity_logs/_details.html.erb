@@ -3,37 +3,59 @@
   <% when 'inventory_created' %>
     <strong>Created new inventory</strong> <span class="text-blue-700 underline"><%= log.details['name'] %></span>
   <% when 'inventory_updated' %>
-    Updated inventory <strong><%= log.trackable.name %></strong>
+    Updated inventory <strong><%= log.trackable&.name || log.details['name'] || '(deleted inventory)' %></strong>
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
   <% when 'inventory_deleted' %>
     Deleted inventory <strong><%= log.details['name'] %></strong>
   <% when 'item_created' %>
-    Created new item <strong><%= log.trackable.name %></strong>
-    in category <%= log.trackable.category.name %>
+    Created new item 
+    <strong>
+      <% if log.trackable %>
+        <%= log.trackable.name %>
+      <% else %>
+        <%= log.details['name'] || '(deleted item)' %>
+      <% end %>
+    </strong>
+    in category 
+    <% if log.trackable&.category %>
+      <%= log.trackable.category.name %>
+    <% else %>
+      <%= log.details['category_name'] || '(unknown category)' %>
+    <% end %>
   <% when 'item_updated' %>
-    <strong>Updated item</strong>  <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <strong>Updated item</strong> 
+    <span class="text-blue-700 underline">
+      <%= log.trackable&.name || log.details['name'] || '(deleted item)' %>
+    </span>
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
   <% when 'item_deleted' %>
     Deleted item <strong><%= log.details['name'] %></strong>
   <% when 'quantity_added' %>
     <strong>Added <%= log.details['amount'] %> units</strong> to 
-    <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <span class="text-blue-700 underline">
+      <%= log.trackable&.name || log.details['item_name'] || '(deleted item)' %>
+    </span>
     <strong>(Total: <%= log.details['to'] %>)</strong>
     <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
     
   <% when 'quantity_removed' %>
     <strong>Removed <%= log.details['amount'] %> units</strong> from 
-    <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <span class="text-blue-700 underline">
+      <%= log.trackable&.name || log.details['item_name'] || '(deleted item)' %>
+    </span>
     <strong>(Total: <%= log.details['to'] %>)</strong>
     <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
   <% when 'quantity_changed' %>
-    <strong>Changed quantity of</strong> <span class="text-blue-700 underline"><%= log.trackable.name %></span>
+    <strong>Changed quantity of</strong> 
+    <span class="text-blue-700 underline">
+      <%= log.trackable&.name || log.details['item_name'] || '(deleted item)' %>
+    </span>
     <strong>from <%= log.details['from'] %> to <%= log.details['to'] %></strong>
     <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
   <% when 'category_created' %>
-    Created new category <strong><%= log.trackable.name %></strong>
+    Created new category <strong><%= log.trackable&.name || log.details['name'] || '(deleted category)' %></strong>
   <% when 'category_updated' %>
-    Updated category <strong><%= log.trackable.name %></strong>
+    Updated category <strong><%= log.trackable&.name || log.details['name'] || '(deleted category)' %></strong>
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
   <% when 'category_deleted' %>
     Deleted category <strong><%= log.details['name'] %></strong>

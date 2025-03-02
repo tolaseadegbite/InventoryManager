@@ -33,8 +33,10 @@
                     </span>
                   </div>
                 </td>
-                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-700 dark:text-gray-400">
-                  <%= log.action_type.humanize %>
+                <td class="whitespace-nowrap px-3 py-4 text-sm">
+                  <span class="<%= action_type_badge_class(log.action_type) %> px-2 py-1 rounded-full text-xs font-medium">
+                    <%= log.action_type.humanize %>
+                  </span>
                 </td>
                 <td class="px-3 py-4 text-sm text-gray-700 dark:text-gray-400">
                   <%= render "activity_logs/details", log: log %>
@@ -54,7 +56,9 @@
             <div class="flex flex-col space-y-3">
               <!-- Header: Action and Time -->
               <div class="flex justify-between items-start">
-                <span class="text-sm font-medium text-gray-900 dark:text-white"><%= log.action_type.humanize %></span>
+                <span class="<%= action_type_badge_class(log.action_type) %> px-2 py-1 rounded-full text-xs font-medium">
+                  <%= log.action_type.humanize %>
+                </span>
                 <span class="text-xs text-gray-500 dark:text-gray-400"><%= time_ago_in_words(log.created_at) %> ago</span>
               </div>
               

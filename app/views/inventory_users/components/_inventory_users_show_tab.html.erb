@@ -1,5 +1,5 @@
-<div class="border-b border-gray-200 my-5">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
+<div class="border-b border-gray-200 my-5 overflow-x-auto hide-scrollbar">
+    <ul class="flex flex-nowrap -mb-px text-sm font-medium text-center text-gray-500 whitespace-nowrap">
         <li class="mr-2">
             <%= link_to inventory_inventory_user_path(@inventory, @inventory_user, tab: 'activities'), 
             class: "inline-flex items-center justify-center p-4 border-b-2 rounded-t-lg #{@current_tab == 'activities' ? 'text-blue-600 border-blue-600 active' : 'border-transparent hover:text-gray-600 hover:border-gray-300'}" do %>
@@ -29,7 +29,7 @@
 <% if @current_tab == 'activities' %>
     <div>
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden" data-controller="activity-log">
-            <div class="px-4">
+            <div class="">
                 <div class="sm:flex sm:items-center justify-between mb-1">
                     <div class="sm:flex-auto">
                         <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
@@ -40,7 +40,7 @@
                         </p>
                     </div>
                     
-                    <div class="mt-4 sm:mt-0">
+                    <div class="mt-4 mx-1 sm:mt-0">
                         <button type="button" class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:hover:bg-gray-600" data-action="click->activity-log#toggleFilters">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />

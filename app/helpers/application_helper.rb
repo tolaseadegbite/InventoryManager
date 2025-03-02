@@ -1,5 +1,6 @@
 module ApplicationHelper
   include InventoriesHelper
+  # include ActivityLogsHelper
 
   # returns full title if present, else returns base title
   def full_title(page_title="")

@@ -2,7 +2,7 @@ class InventoryInvitationNotifier < ApplicationNotifier
   notification_methods do
     def message
       "#{params[:invitation].sender.profile&.name || params[:invitation].sender.email} " \
-      "has invited you to join #{params[:inventory].name} as #{params[:role]}"
+      "has invited you to join #{params[:inventory].name} as #{params[:role].titleize}"
     end
 
     def url
