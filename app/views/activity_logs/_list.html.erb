@@ -1,6 +1,7 @@
 <div class="mt-4 flow-root">
   <% if activity_logs.present? %>
-    <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <!-- Desktop view (visible on md screens and up) -->
+    <div class="hidden md:block -mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
         <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-600">
           <thead>
@@ -43,6 +44,45 @@
           </tbody>
         </table>
       </div>
+    </div>
+    
+    <!-- Mobile view (visible on small screens only) -->
+    <div class="md:hidden">
+      <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+        <% activity_logs.each do |log| %>
+          <li class="py-4 px-1">
+            <div class="flex flex-col space-y-3">
+              <!-- Header: Action and Time -->
+              <div class="flex justify-between items-start">
+                <span class="text-sm font-medium text-gray-900 dark:text-white"><%= log.action_type.humanize %></span>
+                <span class="text-xs text-gray-500 dark:text-gray-400"><%= time_ago_in_words(log.created_at) %> ago</span>
+              </div>
+              
+              <!-- User info -->
+              <div class="flex items-center gap-2">
+                <div class="flex-shrink-0">
+                  <% if log.user.profile.avatar.attached? %>
+                    <%= image_tag(log.user.profile.avatar.variant(resize_to_fill: [32, 32]), class: "w-6 h-6 border-2 border-white rounded-full dark:border-gray-800", alt: "#{log.user.profile.name}'s avatar") %>
+                  <% else %>
+                    <%= image_tag('others/default avatar.png', class: "w-5 h-5 object-cover rounded-full border-gray-800", alt: "#{log.user.profile.name}'s avatar") %>
+                  <% end %>
+                </div>
+                <div>
+                  <div class="text-sm text-gray-700 dark:text-gray-300"><%= log.user.profile.name %></div>
+                  <div class="text-xs text-gray-500 dark:text-gray-400">
+                    <%= log.user.inventory_users.find_by(inventory: log.inventory)&.role&.titleize || 'N/A' %>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Details -->
+              <div class="text-sm text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 p-2 rounded-md">
+                <%= render "activity_logs/details", log: log %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
     </div>
   <% else %>
     <div class="text-center py-4 text-sm text-gray-500 dark:text-gray-400">
