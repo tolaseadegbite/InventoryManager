@@ -1,7 +1,7 @@
 <%= render 'layouts/modal_dialog' do %>
   <div data-controller="modal form description" data-action="turbo:submit-end->modal#submitEnd">
     <h1 class="font-semibold text-xl p-5 border-b">
-      <%= @action == 'add' ? 'Add Stock' : 'Remove Stock' %>
+      <%= @action == 'add' ? 'Add Quantity' : 'Remove Quantity' %>
     </h1>
 
     <%= form_with(url: modify_quantity_inventory_item_path(@inventory, @item, action_type: @action),

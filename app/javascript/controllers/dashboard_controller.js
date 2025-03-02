@@ -253,16 +253,12 @@ export default class extends Controller {
         },
         series: [
           {
-            name: 'Add Stock',
+            name: 'Add Quantity',
             data: actionsData.map(item => item.add)
           },
           {
-            name: 'Remove Stock',
+            name: 'Remove Quantity',
             data: actionsData.map(item => item.remove)
-          },
-          {
-            name: 'Adjust Stock',
-            data: actionsData.map(item => item.adjust)
           }
         ],
         xaxis: {
@@ -298,7 +294,7 @@ export default class extends Controller {
         fill: {
           opacity: 1
         },
-        colors: ['#10B981', '#EF4444', '#F59E0B'],
+        colors: ['#10B981', '#EF4444'],
         dataLabels: {
           enabled: false
         },
