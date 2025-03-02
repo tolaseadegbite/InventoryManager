@@ -1,6 +1,6 @@
 <div class="space-y-4">
   <%# Tabs Navigation - Scrollable on mobile %>
-  <div class="border-b border-gray-200 overflow-x-auto hide-scrollbar">
+  <div class="border-b mb-5 border-gray-200 overflow-x-auto hide-scrollbar">
     <ul class="flex flex-nowrap -mb-px text-sm font-medium text-center text-gray-500 whitespace-nowrap">
       <li class="mr-1">
         <%= link_to inventory_inventory_users_path(@inventory, tab: 'users'), class: "inline-flex items-center justify-center p-1 border-b-2 rounded-t-lg #{@current_tab == 'users' ? 'text-blue-600 border-blue-600 active' : 'border-transparent hover:text-gray-600 hover:border-gray-300'}" do %>
