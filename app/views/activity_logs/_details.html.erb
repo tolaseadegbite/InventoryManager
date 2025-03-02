@@ -1,91 +1,189 @@
 <div class="space-y-1 text-sm dark:text-white">
   <% case log.action_type %>
   <% when 'inventory_created' %>
-    <strong>Created new inventory</strong> <span class="text-blue-700 underline"><%= log.details['name'] %></span>
+    <strong>Created new inventory</strong> 
+    <%= link_to log.details['name'], inventory_path(log.inventory), 
+        class: "text-blue-700 underline",
+        data: { turbo_frame: "_top" } %>
+  
   <% when 'inventory_updated' %>
-    Updated inventory <strong><%= log.trackable&.name || log.details['name'] || '(deleted inventory)' %></strong>
+    Updated inventory 
+    <%= link_to log.trackable&.name || log.details['name'] || '(deleted inventory)', 
+                log.trackable ? inventory_path(log.trackable) : "#", 
+                class: "font-bold #{log.trackable ? 'text-blue-700 underline' : ''}",
+                data: { turbo_frame: "_top" } %>
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
+  
   <% when 'inventory_deleted' %>
     Deleted inventory <strong><%= log.details['name'] %></strong>
+  
   <% when 'item_created' %>
     Created new item 
-    <strong>
-      <% if log.trackable %>
-        <%= log.trackable.name %>
-      <% else %>
-        <%= log.details['name'] || '(deleted item)' %>
-      <% end %>
-    </strong>
-    in category 
-    <% if log.trackable&.category %>
-      <%= log.trackable.category.name %>
+    <% if log.trackable %>
+      <%= link_to log.trackable.name, 
+          inventory_item_path(log.inventory, log.trackable), 
+          class: "font-bold text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+      in category 
+      <%= link_to log.trackable.category.name, 
+          inventory_category_path(log.inventory, log.trackable.category), 
+          class: "text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
     <% else %>
+      <strong><%= log.details['name'] || '(deleted item)' %></strong>
+      in category 
       <%= log.details['category_name'] || '(unknown category)' %>
     <% end %>
+  
   <% when 'item_updated' %>
-    <strong>Updated item</strong> 
-    <span class="text-blue-700 underline">
-      <%= log.trackable&.name || log.details['name'] || '(deleted item)' %>
-    </span>
+    <strong>Updated item</strong>  
+    <% if log.trackable %>
+      <%= link_to log.trackable.name, 
+          inventory_item_path(log.inventory, log.trackable), 
+          class: "text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <span><%= log.details['name'] || '(deleted item)' %></span>
+    <% end %>
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
+  
   <% when 'item_deleted' %>
     Deleted item <strong><%= log.details['name'] %></strong>
+  
   <% when 'quantity_added' %>
     <strong>Added <%= log.details['amount'] %> units</strong> to 
-    <span class="text-blue-700 underline">
-      <%= log.trackable&.name || log.details['item_name'] || '(deleted item)' %>
-    </span>
+    <% if log.trackable %>
+      <%= link_to log.trackable.name, 
+          inventory_item_path(log.inventory, log.trackable), 
+          class: "text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <span><%= log.details['item_name'] || '(deleted item)' %></span>
+    <% end %>
     <strong>(Total: <%= log.details['to'] %>)</strong>
     <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
     
   <% when 'quantity_removed' %>
     <strong>Removed <%= log.details['amount'] %> units</strong> from 
-    <span class="text-blue-700 underline">
-      <%= log.trackable&.name || log.details['item_name'] || '(deleted item)' %>
-    </span>
+    <% if log.trackable %>
+      <%= link_to log.trackable.name, 
+          inventory_item_path(log.inventory, log.trackable), 
+          class: "text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <span><%= log.details['item_name'] || '(deleted item)' %></span>
+    <% end %>
     <strong>(Total: <%= log.details['to'] %>)</strong>
     <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
+  
   <% when 'quantity_changed' %>
     <strong>Changed quantity of</strong> 
-    <span class="text-blue-700 underline">
-      <%= log.trackable&.name || log.details['item_name'] || '(deleted item)' %>
-    </span>
+    <% if log.trackable %>
+      <%= link_to log.trackable.name, 
+          inventory_item_path(log.inventory, log.trackable), 
+          class: "text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <span><%= log.details['item_name'] || '(deleted item)' %></span>
+    <% end %>
     <strong>from <%= log.details['from'] %> to <%= log.details['to'] %></strong>
     <%= "(#{log.details['notes']})" if log.details['notes'].present? %>
+  
   <% when 'category_created' %>
-    Created new category <strong><%= log.trackable&.name || log.details['name'] || '(deleted category)' %></strong>
+    Created new category 
+    <% if log.trackable %>
+      <%= link_to log.trackable.name, 
+          inventory_category_path(log.inventory, log.trackable), 
+          class: "font-bold text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <strong><%= log.details['name'] || '(deleted category)' %></strong>
+    <% end %>
+  
   <% when 'category_updated' %>
-    Updated category <strong><%= log.trackable&.name || log.details['name'] || '(deleted category)' %></strong>
+    Updated category 
+    <% if log.trackable %>
+      <%= link_to log.trackable.name, 
+          inventory_category_path(log.inventory, log.trackable), 
+          class: "font-bold text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <strong><%= log.details['name'] || '(deleted category)' %></strong>
+    <% end %>
     <%= log.details['changes'].map { |attr, values| "#{attr.humanize} from #{values[0]} to #{values[1]}" }.to_sentence %>
+  
   <% when 'category_deleted' %>
     Deleted category <strong><%= log.details['name'] %></strong>
+  
   <% when 'category_permission_granted' %>
     Granted access to category <strong><%= log.details['category_name'] %></strong>
-    for <%= log.details['user_name'] %> (<%= log.details['role'] %>)
+    for 
+    <% if user = User.find_by(email: log.details['email']) %>
+      <%= link_to log.details['user_name'], 
+          inventory_inventory_user_path(log.inventory, log.inventory.inventory_users.find_by(user: user)), 
+          class: "text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <%= log.details['user_name'] %>
+    <% end %>
+    (<%= log.details['role'] %>)
+  
   <% when 'category_permission_revoked' %>
     Revoked access to category <strong><%= log.details['category_name'] %></strong>
-    from <%= log.details['user_name'] %>
-  <% when 'invitation_sent' %>
-    Sent invitation to <strong><%= log.details['recipient_email'] %></strong>
+    from 
+    <% if user = User.find_by(email: log.details['email']) %>
+      <%= link_to log.details['user_name'], 
+          inventory_inventory_user_path(log.inventory, log.inventory.inventory_users.find_by(user: user)), 
+          class: "text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <%= log.details['user_name'] %>
+    <% end %>
+  
+  <% when 'invitation_sent', 'invitation_cancelled' %>
+    <%= log.action_type.humanize %> to <strong><%= log.details['recipient_email'] %></strong>
     for role: <%= log.details['role'] %>
-  <% when 'invitation_accepted' %>
-    <%= log.details['recipient_name'] %> accepted invitation
-    from <%= log.details['sender_name'] %>
-  <% when 'invitation_declined' %>
-    <%= log.details['recipient_name'] %> declined invitation
-    from <%= log.details['sender_name'] %>
-  <% when 'invitation_cancelled' %>
-    Cancelled invitation for <strong><%= log.details['recipient_email'] %></strong>
+  
+  <% when 'invitation_accepted', 'invitation_declined' %>
+    <% if user = User.find_by(email: log.details['recipient_email']) %>
+      <%= link_to log.details['recipient_name'], 
+          inventory_inventory_user_path(log.inventory, log.inventory.inventory_users.find_by(user: user)), 
+          class: "text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <%= log.details['recipient_name'] %>
+    <% end %>
+    <%= log.action_type.humanize.downcase %>
+    invitation from <%= log.details['sender_name'] %>
+  
   <% when 'user_added' %>
-    Added user <strong><%= log.details['user_name'] %></strong>
+    Added user 
+    <% if user = User.find_by(email: log.details['email']) %>
+      <%= link_to log.details['user_name'], 
+          inventory_inventory_user_path(log.inventory, log.inventory.inventory_users.find_by(user: user)), 
+          class: "font-bold text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <strong><%= log.details['user_name'] %></strong>
+    <% end %>
     (<%= log.details['email'] %>) as <%= log.details['role'] %>
     <% if log.details['added_by'] != 'System' %>
       by <%= log.details['added_by'] %>
     <% end %>
+  
   <% when 'role_changed' %>
-    Changed role for <strong><%= log.details['user_name'] %></strong>
+    Changed role for 
+    <% if user = User.find_by(email: log.details['email']) %>
+      <%= link_to log.details['user_name'], 
+          inventory_inventory_user_path(log.inventory, log.inventory.inventory_users.find_by(user: user)), 
+          class: "font-bold text-blue-700 underline",
+          data: { turbo_frame: "_top" } %>
+    <% else %>
+      <strong><%= log.details['user_name'] %></strong>
+    <% end %>
     (<%= log.details['email'] %>) from <%= log.details['old_role'] %>
     to <%= log.details['new_role'] %> by <%= log.details['changed_by'] %>
+  
   <% when 'user_removed' %>
     Removed user <strong><%= log.details['user_name'] %></strong>
     (<%= log.details['email'] %>) with role <%= log.details['role'] %>
