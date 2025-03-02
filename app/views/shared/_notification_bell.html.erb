@@ -20,7 +20,7 @@
       <% unread_count = current_user.notifications.unread.count %>
       <span class="sr-only">Notifications</span>
       <% if unread_count > 0 %>
-        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full top-0.5 end-0.5 dark:border-gray-900"><%= unread_count %></div>
+        <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-blue-500 border-2 border-white rounded-full top-0.5 end-0.5 dark:border-gray-900"><%= unread_count %></div>
       <% end %>
     </button>
   </div>

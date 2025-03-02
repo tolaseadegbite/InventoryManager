@@ -126,7 +126,7 @@
     <% else %>
       <%= log.details['user_name'] %>
     <% end %>
-    (<%= log.details['role'] %>)
+    (<%= log.details['role'].titleize %>)
   
   <% when 'category_permission_revoked' %>
     Revoked access to category <strong><%= log.details['category_name'] %></strong>
@@ -142,7 +142,7 @@
   
   <% when 'invitation_sent', 'invitation_cancelled' %>
     <%= log.action_type.humanize %> to <strong><%= log.details['recipient_email'] %></strong>
-    for role: <%= log.details['role'] %>
+    for role: <%= log.details['role'].titleize %>
   
   <% when 'invitation_accepted', 'invitation_declined' %>
     <% if user = User.find_by(email: log.details['recipient_email']) %>
@@ -166,7 +166,7 @@
     <% else %>
       <strong><%= log.details['user_name'] %></strong>
     <% end %>
-    (<%= log.details['email'] %>) as <%= log.details['role'] %>
+    (<%= log.details['email'] %>) as <%= log.details['role'].titleize %>
     <% if log.details['added_by'] != 'System' %>
       by <%= log.details['added_by'] %>
     <% end %>
@@ -186,7 +186,7 @@
   
   <% when 'user_removed' %>
     Removed user <strong><%= log.details['user_name'] %></strong>
-    (<%= log.details['email'] %>) with role <%= log.details['role'] %>
+    (<%= log.details['email'] %>) with role <%= log.details['role'].titleize %>
     by <%= log.details['removed_by'] %>
   <% end %>
 </div>

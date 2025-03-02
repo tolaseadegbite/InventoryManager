@@ -44,4 +44,8 @@ module ApplicationHelper
       'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
     end
   end
+
+  def formatted_date(date = Date.today)
+    date.strftime("#{date.day.ordinalize} %B, %Y")
+  end
 end

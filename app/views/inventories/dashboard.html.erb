@@ -2,18 +2,21 @@
 
 <div class="grid grid-cols-1 gap-6" data-controller="dashboard">
   <!-- Page Header -->
-  <div class="flex justify-between items-center">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white transition-colors">Dashboard</h1>
+      <p class="text-sm text-gray-500 dark:text-gray-400 transition-colors italic">
+        <%= formatted_date %>
+      </p>
+      <h1 class="mt-2 text-2xl font-bold text-gray-900 dark:text-white transition-colors">Dashboard</h1>
       <p class="mt-1 text-sm text-gray-500 dark:text-gray-400 transition-colors">
         Overview of <%= @inventory.name %> inventory
       </p>
     </div>
-    <div class="sm:flex sm:items-center sm:space-x-3 space-y-3 sm:space-y-0">
+    <div class="w-full sm:w-auto grid grid-cols-2 gap-2 sm:flex sm:items-center sm:space-x-3">
       <div class="relative">
-        <button id="dateRangeDropdown" data-dropdown-toggle="dateRangeMenu" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white transition-colors inline-flex items-center">
-          <span>Last 30 days</span>
-          <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+        <button id="dateRangeDropdown" data-dropdown-toggle="dateRangeMenu" class="w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white transition-colors inline-flex items-center justify-center">
+          <span class="truncate">Last 30 days</span>
+          <svg class="w-2.5 h-2.5 ms-2.5 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
           </svg>
         </button>
@@ -28,12 +31,12 @@
       </div>
       
       <% if @inventory_user.manager? || @inventory_user.item_administrator? %>
-        <%= link_to "#", class: "inline-block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-white-600 dark:hover:bg-white/70 focus:outline-none dark:focus:ring-blue-800 transition-colors" do %>
-          <div class="flex items-center whitespace-nowrap">
-            <svg class="w-4 h-4 mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+        <%= link_to "#", class: "w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-white-600 dark:hover:bg-white/70 focus:outline-none dark:focus:ring-blue-800 transition-colors inline-flex items-center justify-center" do %>
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
-            Export Report
+            <span class="truncate">Export Report</span>
           </div>
         <% end %>
       <% end %>

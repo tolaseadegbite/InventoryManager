@@ -22,7 +22,11 @@
           <% inventory_actions.each do |action| %>
             <tr class="border-b">
               <td class="p-2"><%= action.created_at.strftime("%b %d, %Y | %H:%M") %></td>
-              <td class="p-2"><%= action.action_type.titleize %></td>
+              <td class="p-2">
+                <span class="<%= inventory_action_badge_class(action.action_type) %> text-xs font-medium px-2.5 py-0.5 rounded">
+                  <%= action.action_type.titleize %>
+                </span>
+              </td>
               <td class="p-2"><%= action.quantity %></td>
               <td class="p-2">
                 <% if action.notes.present? %>
@@ -44,7 +48,7 @@
         <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm">
           <div class="flex justify-between items-start mb-2">
             <div>
-              <span class="<%= action_type_badge_class(action.action_type) %> text-xs font-medium px-2.5 py-0.5 rounded">
+              <span class="<%= inventory_action_badge_class(action.action_type) %> text-xs font-medium px-2.5 py-0.5 rounded">
                 <%= action.action_type.titleize %>
               </span>
               <span class="text-sm text-gray-500 dark:text-gray-400 ml-2">
