@@ -1,6 +1,6 @@
 <% provide(:title, "Dashboard") %>
 
-<div class="grid grid-cols-1 gap-6 p-4" data-controller="dashboard">
+<div class="grid grid-cols-1 gap-6" data-controller="dashboard">
   <!-- Page Header -->
   <div class="flex justify-between items-center">
     <div>
@@ -43,7 +43,7 @@
   <!-- Stats Cards -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
     <!-- Total Items Card -->
-    <div class="p-5 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+    <div class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
       <div class="flex items-center justify-between mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Total Items</h5>
@@ -56,12 +56,12 @@
         </div>
       </div>
       <div class="flex items-baseline">
-        <span id="stats_total_items" class="text-3xl text-gray-900 dark:text-white transition-colors"><%= @stats[:total_items] %></span>
+        <span id="stats_total_items" class="text-2xl text-gray-900 dark:text-white transition-colors"><%= @stats[:total_items] %></span>
       </div>
     </div>
 
     <!-- Low Stock Card -->
-    <div class="p-5 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+    <div class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
       <div class="flex items-center justify-between mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Low Stock</h5>
@@ -74,12 +74,12 @@
         </div>
       </div>
       <div class="flex items-baseline">
-        <span id="stats_low_stock" class="text-3xl text-gray-900 dark:text-white transition-colors"><%= @stats[:low_stock_items] %></span>
+        <span id="stats_low_stock" class="text-2xl text-gray-900 dark:text-white transition-colors"><%= @stats[:low_stock_items] %></span>
       </div>
     </div>
 
     <!-- Categories Card -->
-    <div class="p-5 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+    <div class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
       <div class="flex items-center justify-between mb-4">
         <div>
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Categories</h5>
@@ -93,13 +93,13 @@
         </div>
       </div>
       <div class="flex items-baseline">
-        <span id="stats_categories" class="text-3xl text-gray-900 dark:text-white transition-colors"><%= @stats[:categories_count] %></span>
+        <span id="stats_categories" class="text-2xl text-gray-900 dark:text-white transition-colors"><%= @stats[:categories_count] %></span>
       </div>
     </div>
 
     <!-- Users Card (Only visible to managers) -->
     <% if @inventory_user.manager? %>
-      <div class="p-5 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+      <div class="p-5 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
         <div class="flex items-center justify-between mb-4">
           <div>
             <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Users</h5>
@@ -112,7 +112,7 @@
           </div>
         </div>
         <div class="flex items-baseline">
-          <span id="stats_users" class="text-3xl text-gray-900 dark:text-white transition-colors"><%= @stats[:users_count] %></span>
+          <span id="stats_users" class="text-2xl text-gray-900 dark:text-white transition-colors"><%= @stats[:users_count] %></span>
         </div>
       </div>
     <% end %>
@@ -121,7 +121,7 @@
   <!-- Charts Section -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Inventory Trends Chart -->
-    <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+    <div class="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
       <div class="flex justify-between items-center mb-4">
         <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Inventory Trends</h5>
       </div>
@@ -129,7 +129,7 @@
     </div>
 
     <!-- Category Distribution Chart -->
-    <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+    <div class="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
       <div class="flex justify-between items-center mb-4">
         <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Category Distribution</h5>
       </div>
@@ -150,7 +150,7 @@
       <div id="activity_logs" class="flow-root">
         <ul role="list">
           <% @activity_logs.each do |log| %>
-            <li class="p-4 bg-white rounded-3xl shadow-sm mt-2 border border-gray-200 dark:bg-black dark:border-gray-700 transition-colors">
+            <li class="p-4 bg-white rounded-2xl shadow-sm mt-2 border border-gray-200 dark:bg-black dark:border-gray-700 transition-colors">
               <div class="flex justify-between items-center">
                 <div class="flex gap-1 items-center bg-orange-200 dark:bg-orange-900 py-1 px-2 rounded-xl transition-colors">
                   <div class="flex-shrink-0">
@@ -197,7 +197,7 @@
     </div>
 
     <!-- Low Stock Items -->
-    <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+    <div class="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
       <div class="flex justify-between items-center mb-4">
         <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Low Stock Items</h5>
         <%= link_to inventory_items_path(@inventory, q: { low_stock_eq: true }), class: "text-sm font-medium text-blue-600 hover:underline dark:text-blue-500 transition-colors" do %>
@@ -231,16 +231,16 @@
   <!-- Category Overview Table -->
   <% if @category_overview.present? %>
     <div class="mt-6">
-      <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
-        <div class="flex justify-between items-center mb-4">
+      <div class="p-4 sm:p-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
           <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Category Overview</h5>
-          <div class="flex items-center space-x-3">
-            <div class="relative">
-              <input type="text" id="categorySearch" data-action="input->dashboard#searchCategories" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 transition-colors" placeholder="Search categories...">
-            </div>
+          <div class="w-full sm:w-auto">
+            <input type="text" id="categorySearch" data-action="input->dashboard#searchCategories" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-black dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 transition-colors" placeholder="Search categories...">
           </div>
         </div>
-        <div class="relative overflow-x-auto">
+        
+        <!-- Desktop view (table) - hidden on small screens -->
+        <div class="hidden md:block relative overflow-x-auto">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 transition-colors">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-black dark:text-gray-300 transition-colors">
               <tr>
@@ -295,13 +295,70 @@
             </tbody>
           </table>
         </div>
+        
+        <!-- Mobile view (cards) - visible only on small screens -->
+        <div class="md:hidden" data-dashboard-target="categoryTable">
+          <div class="space-y-4">
+            <% @category_overview.each do |category| %>
+              <div class="p-4 bg-gray-50 rounded-lg dark:bg-gray-800 transition-colors" data-category-name="<%= category[:name].downcase %>">
+                <div class="flex justify-between items-start">
+                  <h6 class="font-medium text-gray-900 dark:text-white transition-colors">
+                    <%= link_to category[:name], inventory_category_path(@inventory, category[:id]), class: "hover:underline" %>
+                  </h6>
+                  <div class="text-xs text-gray-500 dark:text-gray-400 transition-colors">
+                    <% if category[:last_activity_at].present? %>
+                      <%= time_ago_in_words(category[:last_activity_at]) %> ago
+                    <% else %>
+                      No activity
+                    <% end %>
+                  </div>
+                </div>
+                
+                <div class="flex items-center justify-between mt-3">
+                  <div>
+                    <p class="text-xs text-gray-500 dark:text-gray-400 transition-colors">Total Items</p>
+                    <p class="font-medium"><%= category[:total_items] %></p>
+                  </div>
+                  
+                  <% if category[:low_stock] > 0 %>
+                    <div class="bg-red-100 dark:bg-red-900/30 px-3 py-1.5 rounded-full">
+                      <p class="text-xs text-red-700 dark:text-red-400 font-medium">
+                        <%= category[:low_stock] %> Low Stock
+                      </p>
+                    </div>
+                  <% end %>
+                </div>
+                
+                <div class="mt-3">
+                  <p class="text-xs text-gray-500 dark:text-gray-400 transition-colors mb-1">Permitted Users</p>
+                  <div class="flex -space-x-4 rtl:space-x-reverse">
+                    <% category[:permitted_users].take(3).each do |user| %>
+                      <%= link_to inventory_inventory_user_path(@inventory, user[:inventory_user_id]) do %>
+                        <% if user[:has_avatar] %>
+                          <%= image_tag(user[:avatar_url], class: "w-8 h-8 border-2 border-white rounded-full dark:border-gray-800 transition-colors", title: user[:name]) %>
+                        <% else %>
+                          <%= image_tag('others/default avatar.png', class: "w-8 h-8 border-2 border-white rounded-full dark:border-gray-800 transition-colors", title: user[:name]) %>
+                        <% end %>
+                      <% end %>
+                    <% end %>
+                    <% if category[:permitted_users].size > 3 %>
+                      <%= link_to inventory_inventory_users_path(@inventory), class: "flex items-center justify-center w-8 h-8 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 dark:border-gray-800 dark:hover:bg-gray-500 transition-colors" do %>
+                        +<%= category[:permitted_users].size - 3 %>
+                      <% end %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   <% end %>
   
   <!-- Quick Access Shortcuts -->
   <div class="mt-6">
-    <div class="p-6 bg-white border border-gray-200 rounded-3xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
+    <div class="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors">
       <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors mb-4">Quick Actions</h5>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
         <% if @inventory_user.manager? %>

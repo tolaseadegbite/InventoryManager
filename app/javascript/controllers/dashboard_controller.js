@@ -183,35 +183,23 @@ export default class extends Controller {
   }
   
   searchCategories(event) {
-    const searchTerm = event.target.value.toLowerCase()
+    const searchTerm = event.target.value.toLowerCase().trim();
     
-    if (!this.hasCategoryTableTarget) return
+    if (!this.hasCategoryTableTarget) return;
     
-    // Use requestAnimationFrame to avoid forced reflow
-    requestAnimationFrame(() => {
-      const rows = this.categoryTableTarget.querySelectorAll('tr')
+    // Get all elements with data-category-name attribute
+    const allCategoryElements = document.querySelectorAll('[data-category-name]');
+    
+    // Filter elements based on search term
+    allCategoryElements.forEach(element => {
+      const categoryName = element.dataset.categoryName;
+      if (!categoryName) return;
       
-      rows.forEach(row => {
-        const categoryName = row.dataset.categoryName
-        if (!categoryName) return
-        
-        if (categoryName.includes(searchTerm)) {
-          row.classList.remove('hidden')
-        } else {
-          row.classList.add('hidden')
-        }
-      })
-    })
-  }
-  
-  disconnect() {
-    // Clean up charts when controller disconnects
-    if (this.inventoryChart) {
-      this.inventoryChart.destroy()
-    }
-    
-    if (this.categoryChart) {
-      this.categoryChart.destroy()
-    }
+      if (categoryName.includes(searchTerm)) {
+        element.classList.remove('hidden');
+      } else {
+        element.classList.add('hidden');
+      }
+    });
   }
 }
