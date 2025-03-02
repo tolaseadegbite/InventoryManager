@@ -1,42 +1,47 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["inventoryChart", "categoryChart", "categoryTable"]
-  
+  static targets = ["inventoryChart", "categoryChart", "categoryTable", "inventoryActionsChart"]
+
   connect() {
     // Load ApexCharts only once when needed
-    if (this.hasInventoryChartTarget || this.hasCategoryChartTarget) {
+    if (this.hasInventoryChartTarget || this.hasCategoryChartTarget || this.hasInventoryActionsChartTarget) {
       this.loadApexCharts()
     }
   }
-  
+
   loadApexCharts() {
     // Check if ApexCharts is already loaded
     if (window.ApexCharts) {
       this.initializeCharts()
       return
     }
-    
-    // Create script element
+
+    // Load ApexCharts dynamically
     const script = document.createElement('script')
-    script.src = "https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.js"
-    script.async = true
-    
-    // Initialize charts once script is loaded
-    script.onload = () => {
-      this.initializeCharts()
-    }
-    
-    // Handle loading errors
-    script.onerror = () => {
-      console.error("Failed to load ApexCharts")
-      this.showChartError()
-    }
-    
-    // Add script to document
+    script.src = 'https://cdn.jsdelivr.net/npm/apexcharts'
+    script.onload = () => this.initializeCharts()
+    script.onerror = () => this.showChartError()
     document.head.appendChild(script)
   }
-  
+
+  searchCategories(event) {
+    const searchTerm = event.target.value.toLowerCase()
+    
+    if (this.hasCategoryTableTarget) {
+      const rows = this.categoryTableTarget.querySelectorAll('[data-category-name]')
+      
+      rows.forEach(row => {
+        const categoryName = row.dataset.categoryName
+        if (categoryName.includes(searchTerm)) {
+          row.classList.remove('hidden')
+        } else {
+          row.classList.add('hidden')
+        }
+      })
+    }
+  }
+
   showChartError() {
     const errorMessage = '<div class="flex items-center justify-center h-full text-gray-500">Unable to load charts</div>'
     
@@ -47,8 +52,12 @@ export default class extends Controller {
     if (this.hasCategoryChartTarget) {
       this.categoryChartTarget.innerHTML = errorMessage
     }
+    
+    if (this.hasInventoryActionsChartTarget) {
+      this.inventoryActionsChartTarget.innerHTML = errorMessage
+    }
   }
-  
+
   initializeCharts() {
     // Use requestAnimationFrame to avoid forced reflow
     requestAnimationFrame(() => {
@@ -59,9 +68,13 @@ export default class extends Controller {
       if (this.hasCategoryChartTarget) {
         this.initializeCategoryChart()
       }
+      
+      if (this.hasInventoryActionsChartTarget) {
+        this.initializeInventoryActionsChart()
+      }
     })
   }
-  
+
   initializeInventoryChart() {
     try {
       const trendsData = JSON.parse(this.inventoryChartTarget.dataset.trends || '[]')
@@ -89,11 +102,19 @@ export default class extends Controller {
           categories: trendsData.map(item => item.month),
           labels: {
             style: {
-              cssClass: 'text-xs font-normal'
+              colors: '#6B7280',
+              fontSize: '12px'
             }
           }
         },
-        colors: ['#3b82f6'],
+        yaxis: {
+          labels: {
+            style: {
+              colors: '#6B7280'
+            }
+          }
+        },
+        colors: ['#3B82F6'],
         stroke: {
           curve: 'smooth',
           width: 2
@@ -103,60 +124,90 @@ export default class extends Controller {
           gradient: {
             shadeIntensity: 1,
             opacityFrom: 0.7,
-            opacityTo: 0.3,
+            opacityTo: 0.2,
             stops: [0, 90, 100]
           }
         },
         dataLabels: {
           enabled: false
         },
+        grid: {
+          borderColor: '#E5E7EB',
+          strokeDashArray: 4,
+          xaxis: {
+            lines: {
+              show: true
+            }
+          }
+        },
         tooltip: {
           theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
         }
       }
       
-      const chart = new window.ApexCharts(this.inventoryChartTarget, options)
-      chart.render()
-      this.inventoryChart = chart
+      new ApexCharts(this.inventoryChartTarget, options).render()
     } catch (error) {
-      console.error("Error initializing inventory chart:", error)
-      this.inventoryChartTarget.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500">Error loading chart</div>'
+      console.error('Error initializing inventory chart:', error)
+      this.showChartError()
     }
   }
-  
+
   initializeCategoryChart() {
     try {
-      const categoriesData = JSON.parse(this.categoryChartTarget.dataset.categories || '[]')
+      const categoryData = JSON.parse(this.categoryChartTarget.dataset.categories || '[]')
       
-      if (!categoriesData.length) {
+      if (!categoryData.length) {
         this.categoryChartTarget.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500">No data available</div>'
         return
       }
       
       const options = {
         chart: {
-          type: 'donut',
+          type: 'pie',
           height: 320,
+          toolbar: { show: false },
           fontFamily: 'Inter, system-ui, sans-serif',
           animations: {
             enabled: false // Disable animations for better performance
           }
         },
-        series: categoriesData.map(item => item.count),
-        labels: categoriesData.map(item => item.name),
-        colors: ['#3b82f6', '#10b981', '#f59e0b', '#6366f1', '#ec4899', '#8b5cf6', '#14b8a6'],
+        series: categoryData.map(item => item.count),
+        labels: categoryData.map(item => item.name),
+        colors: [
+          '#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', 
+          '#EC4899', '#14B8A6', '#F97316', '#6366F1', '#06B6D4'
+        ],
         legend: {
           position: 'bottom',
-          horizontalAlign: 'center',
-          fontSize: '14px'
+          fontSize: '14px',
+          markers: {
+            width: 12,
+            height: 12,
+            radius: 12
+          },
+          itemMargin: {
+            horizontal: 10,
+            vertical: 5
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val, opts) {
+            return opts.w.config.series[opts.seriesIndex]
+          },
+          style: {
+            fontSize: '14px',
+            fontFamily: 'Inter, system-ui, sans-serif',
+            fontWeight: 'bold'
+          },
+          dropShadow: {
+            enabled: false
+          }
         },
         tooltip: {
-          theme: document.documentElement.classList.contains('dark') ? 'dark' : 'light'
-        },
-        plotOptions: {
-          pie: {
-            donut: {
-              size: '60%'
+          y: {
+            formatter: function(value) {
+              return value + ' items'
             }
           }
         },
@@ -164,7 +215,7 @@ export default class extends Controller {
           breakpoint: 480,
           options: {
             chart: {
-              height: 260
+              height: 300
             },
             legend: {
               position: 'bottom'
@@ -173,33 +224,106 @@ export default class extends Controller {
         }]
       }
       
-      const chart = new window.ApexCharts(this.categoryChartTarget, options)
-      chart.render()
-      this.categoryChart = chart
+      new ApexCharts(this.categoryChartTarget, options).render()
     } catch (error) {
-      console.error("Error initializing category chart:", error)
-      this.categoryChartTarget.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500">Error loading chart</div>'
+      console.error('Error initializing category chart:', error)
+      this.showChartError()
     }
   }
   
-  searchCategories(event) {
-    const searchTerm = event.target.value.toLowerCase().trim();
-    
-    if (!this.hasCategoryTableTarget) return;
-    
-    // Get all elements with data-category-name attribute
-    const allCategoryElements = document.querySelectorAll('[data-category-name]');
-    
-    // Filter elements based on search term
-    allCategoryElements.forEach(element => {
-      const categoryName = element.dataset.categoryName;
-      if (!categoryName) return;
+  initializeInventoryActionsChart() {
+    try {
+      const actionsData = JSON.parse(this.inventoryActionsChartTarget.dataset.actions || '[]')
       
-      if (categoryName.includes(searchTerm)) {
-        element.classList.remove('hidden');
-      } else {
-        element.classList.add('hidden');
+      if (!actionsData.length) {
+        this.inventoryActionsChartTarget.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500">No data available</div>'
+        return
       }
-    });
+      
+      const options = {
+        chart: {
+          type: 'bar',
+          height: 320,
+          stacked: true,
+          toolbar: { show: false },
+          fontFamily: 'Inter, system-ui, sans-serif',
+          animations: {
+            enabled: false // Disable animations for better performance
+          }
+        },
+        series: [
+          {
+            name: 'Add Stock',
+            data: actionsData.map(item => item.add)
+          },
+          {
+            name: 'Remove Stock',
+            data: actionsData.map(item => item.remove)
+          },
+          {
+            name: 'Adjust Stock',
+            data: actionsData.map(item => item.adjust)
+          }
+        ],
+        xaxis: {
+          categories: actionsData.map(item => item.date),
+          labels: {
+            style: {
+              colors: '#6B7280',
+              fontSize: '12px'
+            }
+          }
+        },
+        yaxis: {
+          title: {
+            text: 'Number of Actions'
+          },
+          labels: {
+            style: {
+              colors: '#6B7280'
+            }
+          }
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetY: 0,
+          fontSize: '14px',
+          markers: {
+            width: 12,
+            height: 12,
+            radius: 12
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        colors: ['#10B981', '#EF4444', '#F59E0B'],
+        dataLabels: {
+          enabled: false
+        },
+        grid: {
+          borderColor: '#E5E7EB',
+          strokeDashArray: 4,
+          xaxis: {
+            lines: {
+              show: false
+            }
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + " actions"
+            }
+          }
+        }
+      }
+      
+      new ApexCharts(this.inventoryActionsChartTarget, options).render()
+    } catch (error) {
+      console.error('Error initializing inventory actions chart:', error)
+      this.showChartError()
+    }
   }
 }

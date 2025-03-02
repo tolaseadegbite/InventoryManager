@@ -12,10 +12,10 @@ class DashboardService
       activity_logs: cached_activity_logs,
       stats: cached_stats,
       low_stock_items: cached_low_stock_items,
-      # low_stock_items: low_stock_items_query.fetch,
       category_data: cached_category_data,
       inventory_trends: cached_inventory_trends,
-      category_overview: cached_category_overview
+      category_overview: cached_category_overview,
+      inventory_actions_chart: cached_inventory_actions_chart
     }
   end
 
@@ -60,6 +60,12 @@ class DashboardService
     end
   end
 
+  def cached_inventory_actions_chart
+    Rails.cache.fetch(["dashboard_inventory_actions", inventory.id, inventory.inventory_actions.maximum(:created_at)&.to_i], expires_in: 30.minutes) do
+      inventory_actions_chart_query.fetch
+    end
+  end
+
   def activity_logs_query
     ActivityLogsQuery.new(inventory, user, inventory_user, limit: 5)
   end
@@ -82,5 +88,9 @@ class DashboardService
 
   def category_overview_query
     CategoryOverviewQuery.new(inventory, inventory_user)
+  end
+
+  def inventory_actions_chart_query
+    InventoryActionsChartQuery.new(inventory)
   end
 end

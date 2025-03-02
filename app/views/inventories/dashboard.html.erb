@@ -150,6 +150,14 @@
     </div>
   </div>
 
+  <!-- Inventory Actions Chart -->
+  <div class="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm dark:border-gray-700 dark:bg-black transition-colors mt-6">
+    <div class="flex justify-between items-center mb-4">
+      <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white transition-colors">Inventory Actions</h5>
+    </div>
+    <div id="inventory-actions-chart" class="h-80" data-dashboard-target="inventoryActionsChart" data-actions="<%= @inventory_actions_chart.to_json %>"></div>
+  </div>
+
   <!-- Recent Activities and Low Stock Items -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
     <!-- Recent Activities -->

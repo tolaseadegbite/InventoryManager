@@ -77,6 +77,7 @@ class InventoriesController < ApplicationController
     @category_data = dashboard_data[:category_data]
     @inventory_trends = dashboard_data[:inventory_trends]
     @category_overview = dashboard_data[:category_overview]
+    @inventory_actions_chart = dashboard_data[:inventory_actions_chart]
     
     respond_to do |format|
       format.html
