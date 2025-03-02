@@ -1,0 +1,86 @@
+<%= turbo_frame_tag inventory_user do %>
+  <div class="bg-white rounded-lg shadow p-4 mb-2">
+    <div class="flex items-center justify-between">
+      <%= link_to inventory_inventory_user_path(@inventory, inventory_user), data: { turbo_frame: "_top" } do %>
+        <div class="flex items-center">
+          <div class="h-10 w-10 flex-shrink-0">
+            <% if inventory_user.user.profile.avatar.attached? %>
+              <%= image_tag(inventory_user.user.profile.avatar, class: "w-10 h-10 border-2 border-white rounded-full dark:border-gray-800", alt: "inventory user avatar") %>
+            <% else %>
+              <%= image_tag('others/default avatar.png', class: "w-10 h-10 object-cover rounded-full border-gray-800", alt: "inventory user avatar") %>
+            <% end %>
+          </div>
+          <div class="ml-3">
+            <div class="text-sm text-gray-900 font-semibold">
+              <%= inventory_user.user.profile.name %>
+            </div>
+            <div class="text-xs text-gray-500">
+              <%= inventory_user.user.email_address %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      
+      <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full <%= inventory_user.manager? ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' %>">
+        <%= inventory_user.role.titleize %>
+      </span>
+    </div>
+    
+    <div class="mt-3 pt-3 border-t border-gray-100">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-xs text-gray-500 mb-1">Categories</p>
+          <% if inventory_user.permitted_categories.present? %>
+            <div class="flex flex-wrap gap-1">
+              <% inventory_user.permitted_categories.first(2).each do |category| %>
+                <%= link_to category.name, inventory_category_path(@inventory, category), class: "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-600" %>
+              <% end %>
+              <% if inventory_user.permitted_categories.count > 2 %>
+                <%= link_to inventory_inventory_user_path(@inventory, inventory_user, tab: 'categories'), data: { turbo_frame: "_top" }, class: "text-xs" do %>
+                  + <%= inventory_user.permitted_categories.count - 2 %>
+                <% end %>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="text-xs text-gray-600">No assigned categories</p>
+          <% end %>
+        </div>
+        
+        <div class="text-right">
+          <p class="text-xs text-gray-500 mb-1">Joined</p>
+          <p class="text-xs"><%= inventory_user.created_at.strftime("%b %d, %Y") %></p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-3 pt-3 border-t border-gray-100 flex justify-end">
+      <% if inventory_manager?(@inventory) %>
+        <%= link_to edit_inventory_inventory_user_permission_path(@inventory, inventory_user),
+            class: "text-gray-900 bg-white border border-gray-900 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700",
+            data: {action: "click->dialog#open", turbo_frame: :modal} do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />
+          </svg>
+        <% end %>
+        <%= link_to edit_inventory_inventory_user_path(@inventory, inventory_user),
+            class: "text-gray-900 bg-white border border-gray-900 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700",
+            data: {action: "click->dialog#open", turbo_frame: :modal} do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+          </svg>
+        <% end %>
+      <% end %>
+
+            <% if inventory_manager?(@inventory) || inventory_user.user == current_user %>
+        <%= link_to confirm_delete_inventory_inventory_user_path(@inventory, inventory_user),
+            data: { turbo_frame: :modal },
+            class: "inline-flex text-gray-900 bg-white border border-gray-900 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-2 py-2 me-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+          </svg>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>
