@@ -264,27 +264,62 @@ Inventory.all.each do |inventory|
   end
 end
 
-# Perform inventory actions
+# Perform inventory actions with dates spread over time
+puts "Creating inventory actions..."
 Item.all.each do |item|
   # Create some removal actions
   rand(1..3).times do
     action_user = users.sample
     amount = rand(1..10)
+    random_date = random_date_in_last_6_months
     
-    # Use the service to modify quantity
-    manager = Items::ItemManager.new(item, action_user)
-    manager.modify_quantity("remove", amount, "Removed #{amount} units of #{item.name}")
+    # Create the inventory action directly
+    action = InventoryAction.new(
+      inventory: item.inventory,
+      item: item,
+      user: action_user,
+      action_type: "remove",
+      quantity: amount,
+      notes: "Removed #{amount} units of #{item.name}",
+      created_at: random_date,
+      updated_at: random_date
+    )
+    
+    # Save without validation to bypass callbacks
+    action.save(validate: false)
+    
+    # Update the item quantity manually
+    item.update_column(:quantity, [item.quantity - amount, 0].max)
   end
 
   # Create some addition actions
   rand(1..3).times do
     action_user = item.inventory.user
     amount = rand(10..50)
+    random_date = random_date_in_last_6_months
     
-    # Use the service to modify quantity
-    manager = Items::ItemManager.new(item, action_user)
-    manager.modify_quantity("add", amount, "Added #{amount} units of #{item.name}")
+    # Create the inventory action directly
+    action = InventoryAction.new(
+      inventory: item.inventory,
+      item: item,
+      user: action_user,
+      action_type: "add",
+      quantity: amount,
+      notes: "Added #{amount} units of #{item.name}",
+      created_at: random_date,
+      updated_at: random_date
+    )
+    
+    # Save without validation to bypass callbacks
+    action.save(validate: false)
+    
+    # Update the item quantity manually
+    item.update_column(:quantity, item.quantity + amount)
   end
+  
+  # Update the inventory_actions_count counter cache
+  action_count = InventoryAction.where(item: item).count
+  item.update_column(:inventory_actions_count, action_count)
 end
 
 # Set low stock status for about 20% of items in each inventory
