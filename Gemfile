@@ -10,7 +10,7 @@ gem "importmap-rails",                      "2.1.0"
 gem "jbuilder",                              "2.13.0"
 gem "kamal", require: false
 gem "noticed",                              "2.6"
-gem "pagy",                                 "9.3.3"
+gem "pagy",                                 "9.3.4"
 gem "propshaft"
 gem "puma",                                 "6.6.0"
 gem "ransack",                              "4.3.0"
